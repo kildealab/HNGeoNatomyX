@@ -16,6 +16,7 @@ import pydicom as dcm
 import numpy as np
 import rtdsm
 import cv2
+import json
 from matplotlib import pyplot as plt
 
 from skimage.morphology import erosion, dilation, opening, closing, white_tophat  # noqa
@@ -134,6 +135,18 @@ def get_mask_nifti(roi_array,start_x,start_y,pixel_spacing):
         
         x.append(((roi_array[i][0]/pixel_spacing[0]) - (start_x/pixel_spacing[0])))
         y.append(((roi_array[i][1]/pixel_spacing[1]) - (start_y/pixel_spacing[1])))
+        
+    return x, y
+    
+def get_ROI_pixel_array_m(roi_array,start_x,start_y,pixel_spacing):
+ 
+    x = []
+    y = []
+    
+    for i in range(0,len(roi_array)):
+
+        x.append(((roi_array[i][0][0]) + start_x/pixel_spacing[0])*pixel_spacing[0])
+        y.append(((roi_array[i][0][1]) + start_y/pixel_spacing[1])*pixel_spacing[1])
         
     return x, y
     
@@ -283,3 +296,13 @@ for j in range(20,len(ct_files)):
     #ax[1].imshow(img)
     #ax[1].scatter(mask2x_m,mask2y_m,c='r',s=1)
     #plt.show()
+    
+#import pyvista as pv
+
+mesh = pv.PolyData(contour_m)
+mesh.connectivity(largest=True)
+pati = '671'
+mask3 = {'Mask' : contour_m}
+with open("registered/mask/Mask_"+pati+".json", "w") as outfile:
+    json.dump(mask3, outfile)
+print('save at '+ "registered/mask/Mask_"+pati+".json")
