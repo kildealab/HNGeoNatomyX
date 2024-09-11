@@ -33,6 +33,29 @@ def generate_pdf(doc_path, path):
                  doc_path])
     return doc_path
 
+def read_smoking(dir_list,PATH_DOCS):
+    data = []
+    for j in dir_list:
+        doc = textract.process(PATH_DOCS+j)
+        comment = str(doc).lower().replace('|',"").split('\\n')
+        if 'smok' in str(doc).lower():
+            for t in comment:
+
+                if 'smok' in t:
+                
+                  comment2 = tagRe.sub('', t)
+                  data.append([j[0],j[-1].split('.')[0],comment2.replace('\n',"")])
+        elif 'cig' in str(doc).lower():
+        
+            for t in commnt:
+
+                if 'smok' in t:
+                
+                  comment2 = tagRe.sub('', t)
+                  data.append([j[0],j[-1].split('.')[0],comment2.replace('\n',"")])
+    
+    return data
+                
 
 #FUNCTION TO READ THE HABITS OR THE SOCIAL HISTORY OF THE PATIENT, TO EXTRACT RELEVANT INFORMATION
 #SUCH AS IF THE PATIENT IS A SMOKER OR NOT, ALCOHOLIC, ETC.
@@ -83,7 +106,7 @@ def read_docs_habits_and_social_history(dir_list,PATH_DOCS):
                 if 'habits:' in t:
                     data_habits.append([j.split('.')[0],t.replace('\n',"").split(':')[1]])
                 if 'social history:' in t:
-                    data_habits.append([j.split('.')[0],t.replace('\n',"").split(':')[1]])\
+                    data_habits.append([j.split('.')[0],t.replace('\n',"").split(':')[1]])
 
     return data_habits
     
