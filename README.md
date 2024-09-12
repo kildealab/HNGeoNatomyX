@@ -1,1 +1,6 @@
 # HNC_Project_Longitudinal
+
+
+Head and neck cancer patients undergoing radiotherapy may experience significant anatomical changes due to weight loss and tumor shrinkage. These changes can impact the effectiveness of the initial treatment plan, potentially necessitating treatment replanning. However, ad hoc replanning requires additional clinical staff time, which can lead to suboptimal and stressful treatment planning. This interruption in workflow can impact many patients. Furthermore, there is currently no established method for determining the total amount of anatomical variation in the head and neck region to decide whether replanning is necessary.
+
+This research project aimed to identify and create metrics based on patient anatomical structures, that can describe the anatomical alterations that patients may experience over the course of the treatment, and influence decisions regarding treatment replanning. These parameters were used in the development of a machine learning classification model to predict if and when patients should undergo replanning. This model accounts for the progression of the information over time, which was achieved with the creation of an automatic extraction pipeline.
