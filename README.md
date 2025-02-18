@@ -12,8 +12,8 @@ Based on the 3D shape and 2D contours of structures, we defined 43 parameters. W
 
 ### Requirements
   *  [sys]([https://docs.python.org/3/library/sys.html])
-  *  [rtdsm] ([https://github.com/kildealab/rtdsm])
-  *  [time] ([https://docs.python.org/3/library/time.html])
+  *  [rtdsm]([https://github.com/kildealab/rtdsm])
+  *  [time]([https://docs.python.org/3/library/time.html])
   *  [datetime] ([https://docs.python.org/3/library/datetime.html])
   *  [scipy] ([https://scipy.org/])
   *  [skimage] ([https://scikit-image.org/])
