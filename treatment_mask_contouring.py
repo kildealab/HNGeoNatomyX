@@ -1,5 +1,5 @@
 """
-Created on Janury 2024 
+Created on January 2024 
 @author: Odette Rios-Ibacache 
 
 """
