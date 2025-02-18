@@ -26,3 +26,5 @@ Based on the 3D shape and 2D contours of structures, we defined 43 parameters. W
   *  [pydicom](https://pydicom.github.io/pydicom/stable/)
   *  [sklearn](https://scikit-learn.org/stable/index.html)
   *  [shapely](https://shapely.readthedocs.io/en/stable/)
+  *  [OpenCV](https://opencv.org/get-started/)
+  *  [json](https://docs.python.org/3/library/json.html)
