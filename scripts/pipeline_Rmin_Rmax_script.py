@@ -1,5 +1,5 @@
 """
-Created on July 2024 
+Created on Jul 2024 
 @author: Odette Rios-Ibacache & James Manalad
 
 """
