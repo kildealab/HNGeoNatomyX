@@ -1,3 +1,10 @@
+"""
+Created on Janury 2024 
+@author: Odette Rios-Ibacache 
+
+"""
+
+
 from skimage import data
 from skimage.util.dtype import dtype_range
 from skimage.util import img_as_ubyte
