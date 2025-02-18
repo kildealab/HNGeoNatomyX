@@ -1,3 +1,9 @@
+"""
+Created on Jul 2024 
+@author: Odette Rios-Ibacache 
+
+"""
+
 import sys
 sys.path.append('/rtdsm')
 import rtdsm
