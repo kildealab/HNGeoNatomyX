@@ -1,4 +1,4 @@
-# Quantification of head and neck cancer patients’ anatomy and longitudinal analysis: prediction of radiotherapy replanning need
+## Quantification of head and neck cancer patients’ anatomy and longitudinal analysis: prediction of radiotherapy replanning need
 
 Head and neck cancer patients undergoing radiotherapy may experience significant anatomical changes due to weight loss and tumor shrinkage. These changes can impact the effectiveness of the initial treatment plan, potentially necessitating treatment replanning. However, ad hoc replanning requires additional clinical staff time, which can lead to suboptimal and stressful treatment planning. Furthermore, currently, there is no established method for determining the total amount of anatomical variation in the head and neck region to decide whether replanning is necessary. 
 
@@ -6,6 +6,23 @@ This research aimed to identify and create metrics based on patient anatomical s
 
 Based on the 3D shape and 2D contours of structures, we defined 43 parameters. We performed a univariate analysis using linear regression analysis and obtained the variation of each parameter concerning initial values, to provide significant insights for evaluating replanning. 
 
-# This repository contains:
+### This repository contains:
   1. Code for extracting the 43 parameters stored in scripts
   2. Semi-automatic contouring tool for the treatment mask
+
+### Requirements
+  *  [sys]([https://docs.python.org/3/library/sys.html])
+  *  [rtdsm] ([https://github.com/kildealab/rtdsm])
+  *  [time] ([https://docs.python.org/3/library/time.html])
+  *  [datetime] ([https://docs.python.org/3/library/datetime.html])
+  *  [scipy] ([https://scipy.org/])
+  *  [skimage] ([https://scikit-image.org/])
+  *  [numpy] ([https://numpy.org/])
+  *  [os] ([https://docs.python.org/3/library/os.html])
+  *  [gc] ([https://docs.python.org/3/library/gc.html])
+  *  [pyvista] ([https://docs.pyvista.org/])
+  *  [alphashape] ([https://alphashape.readthedocs.io/en/latest/index.html])
+  *  [pandas] ([https://pandas.pydata.org/])
+  *  [pydicom] ([https://pydicom.github.io/pydicom/stable/])
+  *  [sklearn] ([https://scikit-learn.org/stable/index.html])
+  *  [shapely] ([https://shapely.readthedocs.io/en/stable/])
