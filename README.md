@@ -4,10 +4,12 @@
 [Authors](#Authors)  
 
 ## Authors
-Odette Rios-Ibacache and James Manalad \\
-Contact email: [odette.riosibacache@mail.mcgill.ca](odette.riosibacache@mail.mcgill.ca)
-Website: www.kildealab.com
+Odette Rios-Ibacache and James Manalad
 
+Contact email: [odette.riosibacache@mail.mcgill.ca](odette.riosibacache@mail.mcgill.ca)
+
+Website: [www.kildealab.com](www.kildealab.com)
+ 
 ## Motivation
 #### Quantification of head and neck cancer patients’ anatomy and longitudinal analysis and prediction of radiotherapy replanning need
 
