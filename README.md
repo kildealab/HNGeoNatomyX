@@ -8,7 +8,7 @@ Odette Rios-Ibacache and James Manalad
 
 Contact email: <a href="mailto:odette.riosibacache@mail.mcgill.ca">odette.riosibacache@mail.mcgill.ca</a>
 
-Website: www.kildealab.com
+Website:  [www.kildealab.com](https://www.kildealab.com) 
  
 ## Motivation
 #### Quantification of head and neck cancer patients’ anatomy and longitudinal analysis and prediction of radiotherapy replanning need
