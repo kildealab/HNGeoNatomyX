@@ -5,6 +5,7 @@ A python script for calculating geometrical metrics from the 3D and 2D shape of 
   *  [Authors](#Authors)
   *  [Motivation](#Motivation)
   *  [Features](#Features)
+  *  [Dependencies](#Dependencies)
   *  [Usage](#Usage)
   *  [Use Case](#UseCase)
   *  [Acknowledgements](#Acknowledgments)
@@ -25,12 +26,8 @@ Head and neck cancer patients undergoing radiotherapy may experience significant
   ### Semi-automatic contouring tool for the treatment mask
   ![Optional Text](Mask_treatment.jpg)
   ### Code for extracting the 43 parameters stored in scripts
-  
-## Usage
-## Use Case
 
-
-#### Requirements
+## Dependencies
   *  [sys](https://docs.python.org/3/library/sys.html)
   *  [rtdsm](https://github.com/kildealab/rtdsm)
   *  [time](https://docs.python.org/3/library/time.html)
@@ -48,5 +45,10 @@ Head and neck cancer patients undergoing radiotherapy may experience significant
   *  [shapely](https://shapely.readthedocs.io/en/stable/)
   *  [OpenCV](https://opencv.org/get-started/)
   *  [json](https://docs.python.org/3/library/json.html)
+## Usage
+## Use Case
+
+
+
 
     
