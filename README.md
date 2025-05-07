@@ -2,6 +2,7 @@
 
 ## Table of Contents
 [Authors](#Authors)  
+[Motivation](#Motivation) 
 
 ## Authors
 Odette Rios-Ibacache and James Manalad
