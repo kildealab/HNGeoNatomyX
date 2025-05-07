@@ -1,4 +1,4 @@
-## HN-GeoNatomyX tool
+# HN-GeoNatomyX tool
 #### Quantification of head and neck cancer patients’ anatomy and longitudinal analysis: prediction of radiotherapy replanning need
 
 Head and neck cancer patients undergoing radiotherapy may experience significant anatomical changes due to weight loss and tumor shrinkage. These changes can impact the effectiveness of the initial treatment plan, potentially necessitating treatment replanning. However, ad hoc replanning requires additional clinical staff time, which can lead to suboptimal and stressful treatment planning. Furthermore, currently, there is no established method for determining the total amount of anatomical variation in the head and neck region to decide whether replanning is necessary. 
