@@ -6,7 +6,7 @@
 ## Authors
 Odette Rios-Ibacache and James Manalad
 
-Contact email: [odette.riosibacache@mail.mcgill.ca](odette.riosibacache@mail.mcgill.ca)
+Contact email: <a href="mailto:odette.riosibacache@mail.mcgill.ca">odette.riosibacache@mail.mcgill.ca</a>
 
 Website: [www.kildealab.com](www.kildealab.com)
  
