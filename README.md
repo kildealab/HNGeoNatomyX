@@ -2,12 +2,13 @@
 A python script for calculating geometrical metrics from the 3D and 2D shape of Head and Neck Cancer patients taken from planning CTs (CT sims) and Cone Beam CTs (CBCTs) taken during the radiotherapy treatment. This code has been tested on data exported from Eclipse versions 15 and 18. This repository also contains semi-automatic contouring tool for the treatment mask (immobilization device used during the radiotherapy treatment).
 
 ## Table of Contents
-* [Authors](#Authors)
-* [Motivation](#Motivation)
-* [Features](#Features)
-* [Usage](#Usage)
-* [Use Case](#UseCase)
-* [Acknowledgements](#Acknowledgments)
+  *  [sys](https://docs.python.org/3/library/sys.html)
+  *  [Authors](#Authors)
+  *  [Motivation](#Motivation)
+  *  [Features](#Features)
+  *  [Usage](#Usage)
+  *  [Use Case](#UseCase)
+  *  [Acknowledgements](#Acknowledgments)
 
 ## Authors
 Odette Rios-Ibacache and James Manalad
