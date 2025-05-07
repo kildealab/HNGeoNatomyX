@@ -4,7 +4,7 @@
 [Authors](#Authors)  
 
 ## Authors
-Odette Rios-Ibacache and James Manalad
+Odette Rios-Ibacache and James Manalad \\
 Contact email: [odette.riosibacache@mail.mcgill.ca](odette.riosibacache@mail.mcgill.ca)
 Website: www.kildealab.com
 
