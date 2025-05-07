@@ -8,8 +8,9 @@ This research aimed to identify and create metrics based on patient anatomical s
 Based on the 3D shape and 2D contours of structures, we defined 43 parameters. We performed a univariate analysis using linear regression analysis and obtained the variation of each parameter concerning initial values, to provide significant insights for evaluating replanning. 
 
 #### This repository contains:
-  1. Code for extracting the 43 parameters stored in scripts
-  2. Semi-automatic contouring tool for the treatment mask
+  ## Code for extracting the 43 parameters stored in scripts
+  ## Semi-automatic contouring tool for the treatment mask
+  ![Optional Text](Mask_treatment.jpg)
 
 #### Requirements
   *  [sys](https://docs.python.org/3/library/sys.html)
@@ -29,3 +30,5 @@ Based on the 3D shape and 2D contours of structures, we defined 43 parameters. W
   *  [shapely](https://shapely.readthedocs.io/en/stable/)
   *  [OpenCV](https://opencv.org/get-started/)
   *  [json](https://docs.python.org/3/library/json.html)
+
+    
