@@ -5,7 +5,9 @@ A python script for calculating geometrical metrics from the 3D and 2D shape of 
 [Authors](#Authors)  
 [Motivation](#Motivation) 
 [Features](#Features) 
-
+[Usage](#Usage)
+[Use Case](#Use Case)
+[Acknowledgements](#Acknowledgments)
 ## Authors
 Odette Rios-Ibacache and James Manalad
 
