@@ -28,8 +28,7 @@ Head and neck cancer patients undergoing radiotherapy may experience significant
   ### Code for extracting the 43 parameters stored in scripts
 
 ## Dependencies
-  *  [sys](https://docs.python.org/3/library/sys.html)
-  *  [rtdsm](https://github.com/kildealab/rtdsm)
+  *  [sys](https://docs.python.org/3/library/sys.html)   *  [rtdsm](https://github.com/kildealab/rtdsm)
   *  [time](https://docs.python.org/3/library/time.html)
   *  [datetime](https://docs.python.org/3/library/datetime.html)
   *  [scipy](https://scipy.org/)
