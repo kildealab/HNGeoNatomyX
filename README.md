@@ -27,7 +27,7 @@ Head and neck cancer patients undergoing radiotherapy may experience significant
   ![Optional Text](Mask_treatment.jpg)
   ### Code for extracting the 43 parameters stored in scripts
 
-## Dependencie
+## Dependencies
   *  [rtdsm](https://github.com/kildealab/rtdsm)
   *  [scipy](https://scipy.org/)
   *  [skimage](https://scikit-image.org/)
