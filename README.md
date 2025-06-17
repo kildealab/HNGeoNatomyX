@@ -44,10 +44,16 @@ Head and neck cancer patients undergoing radiotherapy may experience significant
   *  [json](https://docs.python.org/3/library/json.html)>=3.13.5
 
 ## Installation
-By pulling the latest version from GitHub. Please note that your Python installation should be 3.6 or later.
+1. By pulling the latest version from GitHub. Please note that your Python installation should be 3.6 or later. 
 ```
 pip install git+https://github.com/kildealab/HN-GeoNatomyX.git
 ```
+2. To install [rtdsm](https://github.com/kildealab/rtdsm)
+
+```
+pip install git+https://github.com/kildealab/HN-GeoNatomyX.git
+```
+
 ## Usage and Examples
 
 ## How to Cite 
