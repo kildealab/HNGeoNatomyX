@@ -45,11 +45,13 @@ Head and neck cancer patients undergoing radiotherapy may experience significant
 ## Usage
 ## Use Case
 ## How to Cite 
+If you publish any work using this package, please make sure you acknowledge us by citing the following paper: Rios-Ibacache O., Manalad J., O'Sullivan-Steben K., Poon E., at al. Quantification of head and neck cancer patients’ anatomical changes: prediction of radiotherapy replanning need.
 ## License 
 This project is provided under the GNU GLPv3 license to preserve open-source access to any derivative works. See the LICENSE file for more information.
 ## References
 * Barker, J. L., Jr, Garden, A. S., Ang, K. K., O'Daniel, J. C., Wang, H., Court, L. E., Morrison, W. H., Rosenthal, D. I., Chao, K. S., Tucker, S. L., Mohan, R., & Dong, L. (2004). Quantification of volumetric and   geometric changes occurring during fractionated radiotherapy for head-and-neck cancer using an integrated CT/linear accelerator system. International journal of radiation oncology, biology, physics, 59(4), 960–970. https://doi.org/10.1016/j.ijrobp.2003.12.024
 * Figen, M., Çolpan Öksüz, D., Duman, E., Prestwich, R., Dyker, K., Cardale, K., Ramasamy, S., Murray, P., & Şen, M. (2020). Radiotherapy for Head and Neck Cancer: Evaluation of Triggered Adaptive Replanning in Routine Practice. Frontiers in oncology, 10, 579917. https://doi.org/10.3389/fonc.2020.579917
+* van Beek, S., Jonker, M., Hamming-Vrieze, O., Al-Mamgani, A., Navran, A., Remeijer, P., & van de Kamer, J. B. (2019). Protocolised way to cope with anatomical changes in head & neck cancer during the course of radiotherapy. Technical innovations & patient support in radiation oncology, 12, 34–40. https://doi.org/10.1016/j.tipsro.2019.11.001
 
 
     
