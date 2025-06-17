@@ -10,7 +10,7 @@ A python script for calculating geometrical metrics from the 3D and 2D shape of 
   *  [Use Case](#UseCase)
   *  [License](#License)
   *  [How to Cite](#How to Cite)
-  *  [Acknowledgements](#Acknowledgments)
+  *  [References](#References)
 
 ## Authors
 Odette Rios-Ibacache and James Manalad
@@ -47,8 +47,9 @@ Head and neck cancer patients undergoing radiotherapy may experience significant
 ## How to Cite 
 ## License 
 This project is provided under the GNU GLPv3 license to preserve open-source access to any derivative works. See the LICENSE file for more information.
-
-
+## References
+* Barker, J. L., Jr, Garden, A. S., Ang, K. K., O'Daniel, J. C., Wang, H., Court, L. E., Morrison, W. H., Rosenthal, D. I., Chao, K. S., Tucker, S. L., Mohan, R., & Dong, L. (2004). Quantification of volumetric and   geometric changes occurring during fractionated radiotherapy for head-and-neck cancer using an integrated CT/linear accelerator system. International journal of radiation oncology, biology, physics, 59(4), 960–970. https://doi.org/10.1016/j.ijrobp.2003.12.024
+* Figen, M., Çolpan Öksüz, D., Duman, E., Prestwich, R., Dyker, K., Cardale, K., Ramasamy, S., Murray, P., & Şen, M. (2020). Radiotherapy for Head and Neck Cancer: Evaluation of Triggered Adaptive Replanning in Routine Practice. Frontiers in oncology, 10, 579917. https://doi.org/10.3389/fonc.2020.579917
 
 
     
