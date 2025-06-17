@@ -29,7 +29,7 @@ Head and neck cancer patients undergoing radiotherapy may experience significant
   ![Optional Text](Mask_treatment.jpg)
   ### Code for extracting the 43 parameters stored in scripts
 
-## > [!IMPORTANT] Dependencies
+## Dependencies
   *  [Python]>=3.8
   *  [rtdsm](https://github.com/kildealab/rtdsm)
   *  [scipy](https://scipy.org/)>=1.6.0
@@ -46,7 +46,7 @@ Head and neck cancer patients undergoing radiotherapy may experience significant
 
 ## Installation
 1. Clone the repository
-   '
+   ```git clone https://github.com/kildealab/HN-GEoNatomyX.git```
 3. Install dependencies
    
 ## Usage and Examples
