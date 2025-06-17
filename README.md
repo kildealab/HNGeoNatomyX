@@ -1,13 +1,13 @@
 # HN-GeoNatomyX tool
-A python script for calculating geometrical metrics from the 3D and 2D shape of Head and Neck Cancer patients taken from planning CTs or simulation CTs (CT sims) and Cone Beam CTs (CBCTs) taken during the radiotherapy treatment. This code has been tested on data exported from Eclipse versions 15 and 18. This repository also contains semi-automatic contouring tool for the treatment mask (immobilization device used during the radiotherapy treatment).
+A Python script for calculating geometrical metrics from the 3D and 2D shape of Head and Neck Cancer patients taken from planning CTs or simulation CTs (CT sims) and Cone Beam CTs (CBCTs) taken during the radiotherapy treatment. This code has been tested on data exported from Eclipse versions 15 and 18. This repository also contains semi-automatic contouring tool for the treatment mask (immobilization device used during the radiotherapy treatment).
 
 ## Table of Contents
   *  [Authors](#Authors)
   *  [Motivation](#Motivation)
   *  [Features](#Features)
   *  [Dependencies](#Dependencies)
-  *  [Usage](#Usage)
-  *  [Use Case](#UseCase)
+  *  [Installation](#Installation)
+  *  [Usage and Examples](#UsageandExamples)
   *  [License](#License)
   *  [How to Cite](#HowtoCite)
   *  [References](#References)
@@ -30,6 +30,7 @@ Head and neck cancer patients undergoing radiotherapy may experience significant
   ### Code for extracting the 43 parameters stored in scripts
 
 ## Dependencies
+  *  [Python]>=3.8
   *  [rtdsm](https://github.com/kildealab/rtdsm)
   *  [scipy](https://scipy.org/)>=1.6.0
   *  [skimage](https://scikit-image.org/)>=0.24.0
@@ -42,8 +43,10 @@ Head and neck cancer patients undergoing radiotherapy may experience significant
   *  [shapely](https://shapely.readthedocs.io/en/stable/)>=2.0.2
   *  [OpenCV](https://opencv.org/get-started/)>=4.9.0.80
   *  [json](https://docs.python.org/3/library/json.html)>=3.13.5
-## Usage
-## Use Case
+
+## Installation
+## Usage and Examples
+
 ## How to Cite 
 If you publish any work using this package, please make sure you acknowledge us by citing the following paper: Rios-Ibacache O., Manalad J., O'Sullivan-Steben K., Poon E., at al. Quantification of head and neck cancer patients’ anatomical changes: prediction of radiotherapy replanning need.
 ## License 
