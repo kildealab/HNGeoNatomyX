@@ -44,6 +44,7 @@ Head and neck cancer patients undergoing radiotherapy may experience significant
   *  [json](https://docs.python.org/3/library/json.html)
 ## Usage
 ## Use Case
+## How to Cite 
 ## License 
 This project is provided under the GNU GLPv3 license to preserve open-source access to any derivative works. See the LICENSE file for more information.
 
