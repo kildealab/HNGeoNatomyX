@@ -10,7 +10,7 @@ setup(
     install_requires=[
         'pydicom', 
         'scipy',
-        'numpy,
+        'numpy',
         'os',
         'pyvista', 
         'scikit-learn',
