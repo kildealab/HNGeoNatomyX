@@ -46,7 +46,9 @@ Head and neck cancer patients undergoing radiotherapy may experience significant
 
 ## Installation
 1. Clone the repository
-   ```git clone https://github.com/kildealab/HN-GEoNatomyX.git```
+   ```
+   git clone https://github.com/kildealab/HN-GEoNatomyX.git
+   ```
 3. Install dependencies
    
 ## Usage and Examples
