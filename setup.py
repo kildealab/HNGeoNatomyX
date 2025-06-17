@@ -11,12 +11,10 @@ setup(
         'pydicom', 
         'scipy',
         'numpy',
-        'os',
         'pyvista', 
         'scikit-learn',
         'shapely',
         'opencv-python',
-        'json',
     ]
    
 )
