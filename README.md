@@ -40,10 +40,14 @@ Head and neck cancer patients undergoing radiotherapy may experience significant
   *  [pydicom](https://pydicom.github.io/pydicom/stable/) >=3.0.1
   *  [sklearn](https://scikit-learn.org/stable/index.html)>=1.5.2
   *  [shapely](https://shapely.readthedocs.io/en/stable/)>=2.0.2
-  *  [OpenCV](https://opencv.org/get-started/)>=4.9.0.80
+  *  [opencv-python](https://opencv.org/get-started/)>=4.10.0.84
   *  [json](https://docs.python.org/3/library/json.html)>=3.13.5
 
 ## Installation
+```
+pip install git+https://github.com/kildealab/HN-GeoNatomyX.git
+```
+
 1. Clone the repository
    ```
    git clone https://github.com/kildealab/HN-GeoNatomyX.git
