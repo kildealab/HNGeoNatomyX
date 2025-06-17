@@ -44,23 +44,10 @@ Head and neck cancer patients undergoing radiotherapy may experience significant
   *  [json](https://docs.python.org/3/library/json.html)>=3.13.5
 
 ## Installation
-a. By pulling the latest version from GitHub. Please note that your Python installation should be 3.6 or later.
+By pulling the latest version from GitHub. Please note that your Python installation should be 3.6 or later.
 ```
 pip install git+https://github.com/kildealab/HN-GeoNatomyX.git
 ```
-b. By cloning the repository
-   1. Clone the repository
-   ```
-   git clone https://github.com/kildealab/HN-GeoNatomyX.git
-   ```
-  2. Install dependencies
-   ```
-   cd HN-GeoNatomyX
-   pip install -r requirements.txt
-   ```
-
-
-   
 ## Usage and Examples
 
 ## How to Cite 
