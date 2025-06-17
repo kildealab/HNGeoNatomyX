@@ -8,7 +8,7 @@ setup(
     author_email='odette.riosibacache@mail.mcgill.ca',
     packages=find_packages(),
     install_requires=[
-        'pydicom','rtdsm','scipy','numpy,'os','pyvista','scikit-learn','shapely','opencv-python','json'
+        'pydicom','scipy','numpy,'os','pyvista','scikit-learn','shapely','opencv-python','json'
     ]
    
 )
