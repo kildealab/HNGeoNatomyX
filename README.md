@@ -35,7 +35,6 @@ Head and neck cancer patients undergoing radiotherapy may experience significant
   *  [scipy](https://scipy.org/)>=1.6.0
   *  [skimage](https://scikit-image.org/)>=0.24.0
   *  [numpy](https://numpy.org/)>=1.19.5
-  *  [os](https://docs.python.org/3/library/os.html)>=2.1.4
   *  [pyvista](https://docs.pyvista.org/) >=0.31.3
   *  [alphashape](https://alphashape.readthedocs.io/en/latest/index.html) >=1.3.1
   *  [pydicom](https://pydicom.github.io/pydicom/stable/) >=3.0.1
