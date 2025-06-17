@@ -51,7 +51,7 @@ Head and neck cancer patients undergoing radiotherapy may experience significant
    ```
 2. Install dependencies
    ```
-   cd HN-GeoNatomyX.git
+   cd HN-GeoNatomyX
    pip install -r requirements.txt
    ```
    
