@@ -31,7 +31,7 @@ Head and neck cancer patients undergoing radiotherapy may experience significant
 
 ## Dependencies
   *  Python>=3.8
-  *  [rtdsm](https://github.com/kildealab/rtdsm)
+  *  [rtdsm](https://github.com/kildealab/rtdsm)==0.1.1
   *  [scipy](https://scipy.org/)>=1.6.0
   *  [skimage](https://scikit-image.org/)>=0.24.0
   *  [numpy](https://numpy.org/)>=1.19.5
