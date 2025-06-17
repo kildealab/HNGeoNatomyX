@@ -9,7 +9,7 @@ A python script for calculating geometrical metrics from the 3D and 2D shape of 
   *  [Usage](#Usage)
   *  [Use Case](#UseCase)
   *  [License](#License)
-  *  [How to Cite](#How to Cite)
+  *  [How to Cite](#HowtoCite)
   *  [References](#References)
 
 ## Authors
