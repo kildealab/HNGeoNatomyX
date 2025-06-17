@@ -40,7 +40,7 @@ Head and neck cancer patients undergoing radiotherapy may experience significant
   *  [pydicom](https://pydicom.github.io/pydicom/stable/) >=3.0.1
   *  [sklearn](https://scikit-learn.org/stable/index.html)>=1.5.2
   *  [shapely](https://shapely.readthedocs.io/en/stable/)>=2.0.2
-  *  [opencv-python](https://opencv.org/get-started/)>=4.10.0.84
+  *  [opencv-python](https://opencv.org/get-started/)>=4.11.0.86
   *  [json](https://docs.python.org/3/library/json.html)>=3.13.5
 
 ## Installation
