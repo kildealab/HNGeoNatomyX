@@ -142,6 +142,8 @@ pip install git+https://github.com/kildealab/HN-GeoNatomyX.git
 ```
 
 ## Usage and Examples
+Patient medical images (CT sims and CBCTs) were stored using the [dicoPath](https://github.com/kildealab/dicoPATH) script. The data must be stored in the following format to streamline the use of the code.
+
 
 ## How to Cite 
 If you publish any work using this package, please make sure you acknowledge us by citing the following paper: Rios-Ibacache O., Manalad J., O'Sullivan-Steben K., Poon E., at al. Quantification of head and neck cancer patients’ anatomical changes: prediction of radiotherapy replanning need.
