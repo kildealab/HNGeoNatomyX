@@ -66,11 +66,11 @@ Based on the 3D anatomy and 2D contours of the body and radiotherapy (RT) struct
 | Chamber neck distance  | $$CD_{Neck}$$ | Average distance between the pair of nearest points between two neck regions. The distances were calculated between the CT sim neck and the CBCTs neck region point clouds|
 | Haussdorff neck distance | $$HD_{Neck}$$ | Maximum distance between the pair of nearest points between two neck regions|
 | Maximum 2D neck distance| $$D_{Neck}$$ | Maximum 2D distance between the pair of nearest points between two neck regions|
-| Median 2D neck distance| $$\tilde{D}_{Neck}$$ | Median 2D distance between the pair nearest points between two neck regions|
-| Average 2D neck distance| $$\bar{D}_{Neck}$$ | Average 2D distance between the pair nearest of points between two neck regions|
+| Median 2D neck distance| $$\tilde{D}_{Neck}$$ | Median 2D distance between the pair of nearest points between two neck regions|
+| Average 2D neck distance| $$\bar{D}_{Neck}$$ | Average 2D distance between the pair of nearest points between two neck regions|
 | Minimum 3D radius| $$R^{3D}_{min}$$ | Minimum 3D radius that can be drawn from the 3D geometric center of the CT sim point cloud to the points in the contour mesh|
-| Maximum 3D radius| $$R^{3D}_{max}$$ | Amount of space that is between the external body contour of the HN region and the treatment mask contour|
-| Average 3D radius| $$R^{3D}_{avg}$$ | Maximum 3D radius that can be drawn from the 3D geometric center of the CT sim point cloud to the points in the contour mesh|
+| Maximum 3D radius| $$R^{3D}_{max}$$ | Maximum 3D radius that can be drawn from the 3D geometric center of the CT sim point cloud to the points in the contour mesh|
+| Average 3D radius| $$R^{3D}_{avg}$$ | Average of all the 3D radius that can be drawn from the 3D geometric center of the CT sim point cloud to the points in the contour mesh|
 | Ratio between minimum and maximum 3D radius | $$\varphi^{3D}_{R}$$ | Ratio between $$R^{3D}_{max}$$ and $$R^{3D}_{min}$$. This metric characterizes the symmetry of the mesh|
 | Average cross-sectional neck area| $$A^{2D}_{avg}$$ | This parameter describes the total space covered the neck region|
 | Surface area | $$SA_{Neck}$$ | This parameter describes the amount of space enclosing the outside of a neck region|
