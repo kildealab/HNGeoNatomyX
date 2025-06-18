@@ -71,7 +71,7 @@ Based on the 3D anatomy and 2D contours of the body and radiotherapy (RT) struct
 | Minimum 3D radius| $$R^{3D}_{min}$$ | Minimum 3D radius that can be drawn from the 3D geometric center of the CT sim point cloud to the points in the contour mesh|
 | Maximum 3D radius| $$R^{3D}_{max}$$ | Maximum 3D radius that can be drawn from the 3D geometric center of the CT sim point cloud to the points in the contour mesh|
 | Average 3D radius| $$R^{3D}_{avg}$$ | Average of all the 3D radius that can be drawn from the 3D geometric center of the CT sim point cloud to the points in the contour mesh|
-| Ratio between minimum and maximum 3D radius | $$\varphi^{3D}_{R}$$ | Ratio between $$R^{3D}_{max}$$ and $$R^{3D}_{min}$$. This metric characterizes the symmetry of the mesh|
+| Ratio between minimum and maximum 3D radius | $$\varphi^{3D}_{R}$$ | Ratio between $$ $$R^{3D}$$$$_{max}$$ and $$R^{3D}_{min}$$. This metric characterizes the symmetry of the mesh|
 | Average cross-sectional neck area| $$A^{2D}_{avg}$$ | This parameter describes the total space covered the neck region|
 | Surface area | $$SA_{Neck}$$ | This parameter describes the amount of space enclosing the outside of a neck region|
 | Compactness| $$C_{Neck}$$ | Inspired by Bribiesca et al. (2008), the compactness describes the shape of the neck, representing the degree to which the neck is compact. It is calculated by the ratio between the enclosing surface area and the volume of a neck region ($$SA^{3}_{Neck}$$/$$V^{2}_{Neck}$$). This metric is dimensionless and minimized by a sphere|
