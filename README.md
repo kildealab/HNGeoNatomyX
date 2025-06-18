@@ -43,7 +43,7 @@ Based on the 3D anatomy and 2D contours of the body and radiotherapy (RT) struct
 | Average 2D distance | $$\bar{D}_{Body}$$| Average distance between a CBCT and the CT sim body contour, across each plane z|
 
 #### Treatment mask-related metrics
-![Optional Text](/diagrams/mask_diagram.png)
+<img src="/diagrams/mask_diagram.png" width="700">
 | Metric  | Symbol | Definition |
 | ------------- | ------------|-----------|
 | Maximum distance from body contour to treatment mask  | $$max$$ { $$B_{mask}$$ } | Maximum distance in 3D between the treatment mask structure and the external body contour of each patient|
