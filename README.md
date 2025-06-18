@@ -44,11 +44,23 @@ Based on the 3D anatomy and 2D contours of the body and radiotherapy (RT) struct
 | Metric  | Symbol | Definition |
 | ------------- | ------------|-----------|
 | Maximum distance from body contour to treatment mask  | $$max$$ { $$B_{mask}$$ } | Maximum distance in 3D between the treatment mask structure and the external body contour of each patient|
-| Average distance from body contour to treatment mask  | $$\bar{B}_{mask}$$ | Considers the average value of the distribution of the 3D distances|
+| Average distance from body contour to treatment mask  | $$\bar{B}_{mask}$$ | Average value of the distribution of the 3D distances|
 | Standard deviation of distances from body contour to treatment mask | $$\sigma_{B_{mask}}$$ | Corresponds to the standard deviation of the distribution of the distances|
 | Air volume between body and treatment mask| $$V^{air}_{Body-to-mask}$$ | Amount of space that is between the external body contour of the HN region and the treatment mask contour|
 
 #### PTV-related metrics
+| Metric  | Symbol | Definition |
+| ------------- | ------------|-----------|
+| Minimum distance from PTV to body  | $$x_{min}$$ } | Shortest distance between the PTV and the body contour, taken from a set of minimum distances between these two contours|
+| Maximum distance from PTV to body  | $$x_{max}$$ | Takes into account the minimum distances from the PTV to the body contour, similar to $x_{min}$ but taking the maximum value instead|
+| Average distance from PTV to body | $$x_{avg}$$ | Average value from a set of minimum distances from PTV to the body contour|
+| Median distance from PTV to body| $$x_{med}$$ | Median value from a set of minimum distances from PTV to the body contour|
+| Standard deviation of the distance between PTV to body| $$x_{std}$$ | This metric uses the standard deviation of the minimum distances between the PTV and the body contour |
+| Volume PTV inner| $$VI_{PTV}$$ | This volume corresponds to the PTV that is inside the body region. The volume was calculated using the same procedure as the calculation of the body volume|
+| Volume PTV outer| $$VO_{PTV}$$ | Amount of space that is between the external body contour of the HN region and the treatment mask contour|
+| Volume PTV inner ratio| $VI_{PTV}:LV_{Body}$ | Amount of space that is between the external body contour of the HN region and the treatment mask contour|
+| Volume PTV outer radio| $VO_{PTV}:LV_{Body}$  | Amount of space that is between the external body contour of the HN region and the treatment mask contour|
+
 #### Mandible-related metrics
 
 | Metric  | Symbol | Definition |
@@ -71,7 +83,7 @@ Based on the 3D anatomy and 2D contours of the body and radiotherapy (RT) struct
 | Minimum 3D radius| $$R^{3D}_{min}$$ | Minimum 3D radius that can be drawn from the 3D geometric center of the CT sim point cloud to the points in the contour mesh|
 | Maximum 3D radius| $$R^{3D}_{max}$$ | Maximum 3D radius that can be drawn from the 3D geometric center of the CT sim point cloud to the points in the contour mesh|
 | Average 3D radius| $$R^{3D}_{avg}$$ | Average of all the 3D radius that can be drawn from the 3D geometric center of the CT sim point cloud to the points in the contour mesh|
-| Ratio between minimum and maximum 3D radius | $$\varphi^{3D}_{R}$$ | Ratio between the $R^3$${}^D_{max}$ and $R^3$${}^D_{min}$. This metric characterizes the symmetry of the mesh|
+| Ratio between minimum and maximum 3D radius | $$\varphi^{3D}_{R}$$ | Ratio between the max. 3D radius and the min. 3D radius. This metric characterizes the symmetry of the mesh|
 | Average cross-sectional neck area| $$A^{2D}_{avg}$$ | This parameter describes the total space covered the neck region|
 | Surface area | $$SA_{Neck}$$ | This parameter describes the amount of space enclosing the outside of a neck region|
 | Compactness| $$C_{Neck}$$ | Inspired by Bribiesca et al. (2008), the compactness describes the shape of the neck, representing the degree to which the neck is compact. It is calculated by the ratio between the enclosing surface area and the volume of a neck region ($$SA^3_{Neck}/V^2_{Neck}$$). This metric is dimensionless and minimized by a sphere|
