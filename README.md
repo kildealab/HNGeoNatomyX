@@ -62,12 +62,12 @@ Based on the 3D anatomy and 2D contours of the body and radiotherapy (RT) struct
 
 | Metric  | Symbol | Definition |
 | ------------- | ------------|-----------|
-| Neck Volume  | $$max$$ { $$B_{mask}$$ } | Maximum distance in 3D between the treatment mask structure and the external body contour of each patient|
-| Chamber neck distance  | $$\bar{B}_{mask}$$ | Considers the average value of the distribution of the 3D distances|
-| Haussdorff neck distance | $$\sigma_{B_{mask}}$$ | Corresponds to the standard deviation of the distribution of the distances|
-| Maximum 2D neck distance| $$D_{Neck}$$ | Amount of space that is between the external body contour of the HN region and the treatment mask contour|
-| Median 2D neck distance| $$\tilde{D}_{Neck}$$ | Amount of space that is between the external body contour of the HN region and the treatment mask contour|
-| Average 2D neck distance| $$\bar{D}_{Neck}$$ | Amount of space that is between the external body contour of the HN region and the treatment mask contour|
+| Neck Volume  | $$V_{Neck}$$  | Volume enclosed by the neck region. The method to calculate the volume was the same as for the body volume|
+| Chamber neck distance  | $$CD_{Neck}$$ | Average distance between the pair of nearest points between two neck regions. The distances were calculated between the CT sim neck and the CBCTs neck region point clouds|
+| Haussdorff neck distance | $$HD_{Neck}$$ | Maximum distance between the pair of nearest points between two neck regions|
+| Maximum 2D neck distance| $$D_{Neck}$$ | Maximum 2D distance between the pair of nearest points between two neck regions|
+| Median 2D neck distance| $$\tilde{D}_{Neck}$$ | Median 2D distance between the pair nearest points between two neck regions|
+| Average 2D neck distance| $$\bar{D}_{Neck}$$ | Average 2D distance between the pair nearest of points between two neck regions|
 | Minimum 3D radius| $$R^{3D}_{min}$$ | Amount of space that is between the external body contour of the HN region and the treatment mask contour|
 | Maximum 3D radius| $$R^{3D}_{max}$$ | Amount of space that is between the external body contour of the HN region and the treatment mask contour|
 | Average 3D radius| $$R^{3D}_{avg}$$ | Average of all the 3D radius that can be drawn from the 3D geometric center of the CT sim point cloud to the points in the mesh|
