@@ -58,7 +58,7 @@ Based on the 3D anatomy and 2D contours of the body and radiotherapy (RT) struct
 
 #### PTV-related metrics
 <p align="center">
-<img src="/diagrams/PTV_diagram.png" width="700">
+<img src="/diagrams/PTV_diagram.png" width="600">
 </p>
 
 | Metric  | Symbol | Definition |
@@ -69,7 +69,7 @@ Based on the 3D anatomy and 2D contours of the body and radiotherapy (RT) struct
 | Median distance from PTV to body| $$x_{med}$$ | Median value from a set of minimum distances from PTV to the body contour|
 | Standard deviation of the distance between PTV to body| $$x_{std}$$ | This metric uses the standard deviation of the minimum distances between the PTV and the body contour |
 <p align="center">
-<img src="/diagrams/PTV_diagram_VO_VI.png" width="700">
+<img src="/diagrams/PTV_diagram_VO_VI.png" width="800">
 </p>
 
 | Metric  | Symbol | Definition |
@@ -80,6 +80,10 @@ Based on the 3D anatomy and 2D contours of the body and radiotherapy (RT) struct
 | Volume PTV outer radio| $VO_{PTV}:LV_{Body}$  | Volume that relies outside the enclosed body region, normalized by the body volume that limits the region of interest|
 
 #### Mandible-related metrics
+<p align="center">
+<img src="/diagrams/submand_diagram_VO_VI.png" width="700">
+</p>
+
 
 | Metric  | Symbol | Definition |
 | ------------- | ------------|-----------|
