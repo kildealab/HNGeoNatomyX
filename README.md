@@ -43,7 +43,7 @@ Based on the 3D anatomy and 2D contours of the body and radiotherapy (RT) struct
 #### Treatment mask-related metrics
 | Metric  | Symbol | Definition |
 | ------------- | ------------|-----------|
-| Maximum distance from body contour to treatment mask  | max{ $$B_{mask}$$ } | Maximum distance in 3D between the treatment mask structure and the external body contour of each patient. |
+| Maximum distance from body contour to treatment mask  | *max*{ $$B_{mask}$$ } | Maximum distance in 3D between the treatment mask structure and the external body contour of each patient. |
 | Average distance from body contour to treatment mask  | $$\bar{B}_{mask}$$ | Considers the average value of the distribution of the 3D distances|
 | Standard deviation of distances from body contour to treatment mask | $$\sigma_{B_{mask}}$$ | Corresponds to the standard deviation of the distribution of the distances.|
 | Air volume between body and treatment mask| $$V^{air}_{Body-to-mask}$$ | Amount of space that is between the external body contour of the HN region and the treatment mask contour|
