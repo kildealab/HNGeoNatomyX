@@ -31,7 +31,6 @@ Head and neck cancer patients undergoing radiotherapy may experience significant
 
 ## Dependencies
   *  Python>=3.6
-  *  [rtdsm](https://github.com/kildealab/rtdsm)==0.1.1
   *  [scipy](https://scipy.org/)>=1.6.0
   *  [skimage](https://scikit-image.org/)>=0.24.0
   *  [numpy](https://numpy.org/)>=1.19.5
@@ -45,11 +44,6 @@ Head and neck cancer patients undergoing radiotherapy may experience significant
 
 ## Installation
 1. By pulling the latest version from GitHub. Please note that your Python installation should be 3.6 or later. 
-```
-pip install git+https://github.com/kildealab/HN-GeoNatomyX.git
-```
-2. To install [rtdsm](https://github.com/kildealab/rtdsm)
-
 ```
 pip install git+https://github.com/kildealab/HN-GeoNatomyX.git
 ```
