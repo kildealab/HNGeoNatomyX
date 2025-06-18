@@ -58,7 +58,7 @@ Based on the 3D anatomy and 2D contours of the body and radiotherapy (RT) struct
 
 #### PTV-related metrics
 <p align="center">
-<img src="/diagrams/PTV_diagram.png" width="600">
+<img src="/diagrams/PTV_diagram.png" width="400">
 </p>
 
 | Metric  | Symbol | Definition |
@@ -68,6 +68,7 @@ Based on the 3D anatomy and 2D contours of the body and radiotherapy (RT) struct
 | Average distance from PTV to body | $$x_{avg}$$ | Average value from a set of minimum distances from PTV to the body contour|
 | Median distance from PTV to body| $$x_{med}$$ | Median value from a set of minimum distances from PTV to the body contour|
 | Standard deviation of the distance between PTV to body| $$x_{std}$$ | This metric uses the standard deviation of the minimum distances between the PTV and the body contour |
+
 <p align="center">
 <img src="/diagrams/PTV_diagram_VO_VI.png" width="900">
 </p>
@@ -111,7 +112,7 @@ Based on the 3D anatomy and 2D contours of the body and radiotherapy (RT) struct
 
 #### Submandibular-related metrics
 <p align="center">
-<img src="/diagrams/submand_diagram.png" width="700">
+<img src="/diagrams/submand_diagram.png" width="750">
 </p>
 
 | Metric  | Symbol | Definition |
