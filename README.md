@@ -58,7 +58,7 @@ Based on the 3D anatomy and 2D contours of the body and radiotherapy (RT) struct
 
 #### PTV-related metrics
 <p align="center">
-<img src="/diagrams/PTV_diagram.png" width="500">
+<img src="/diagrams/PTV_diagram.png" width="480">
 </p>
 
 | Metric  | Symbol | Definition |
@@ -70,7 +70,7 @@ Based on the 3D anatomy and 2D contours of the body and radiotherapy (RT) struct
 | Standard deviation of the distance between PTV to body| $$x_{std}$$ | This metric uses the standard deviation of the minimum distances between the PTV and the body contour |
 
 <p align="center">
-<img src="/diagrams/PTV_diagram_VO_VI.png" width="900">
+<img src="/diagrams/PTV_diagram_VO_VI.png" width="700">
 </p>
 
 | Metric  | Symbol | Definition |
