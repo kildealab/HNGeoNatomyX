@@ -36,6 +36,9 @@ Based on the 3D anatomy and 2D contours of the body and radiotherapy (RT) struct
 | Body Volume  | $$V_{Body}$$ | HN volume enclosed by a body contour  |
 | Chamfer distance (3D) | $$CD_{Body}$$ | Average distance between pair nearest neighbor points from the body contour of the CT sim to the body contour of the CBCTs|
 | Haussdorff distance (3D) | $$HD_{Body}$$ | Maximum distance between the body contour of the CT sim and a body contour|
+| Maximum 2D distance| $$D_{Body}$$ | The maximum 2D distance between a CBCT and the CT sim body contour calculated across each plane z|
+| Median 2D distance| $$\tilde{D}_{Body}$$| The median 2D distance between a CBCT and the CT sim body contour calculated across each z plane | 
+| Average 2D distance | $$\bar{D}_{Body}$$| Average distance between a CBCT and the CT sim body contour, across each plane z|
 
 
 #### Treatment mask-related metrics
