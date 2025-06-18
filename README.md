@@ -57,9 +57,9 @@ Based on the 3D anatomy and 2D contours of the body and radiotherapy (RT) struct
 | Median distance from PTV to body| $$x_{med}$$ | Median value from a set of minimum distances from PTV to the body contour|
 | Standard deviation of the distance between PTV to body| $$x_{std}$$ | This metric uses the standard deviation of the minimum distances between the PTV and the body contour |
 | Volume PTV inner| $$VI_{PTV}$$ | This volume corresponds to the PTV that is inside the body region. The volume was calculated using the same procedure as the calculation of the body volume|
-| Volume PTV outer| $$VO_{PTV}$$ | Amount of space that is between the external body contour of the HN region and the treatment mask contour|
-| Volume PTV inner ratio| $VI_{PTV}:LV_{Body}$ | Amount of space that is between the external body contour of the HN region and the treatment mask contour|
-| Volume PTV outer radio| $VO_{PTV}:LV_{Body}$  | Amount of space that is between the external body contour of the HN region and the treatment mask contour|
+| Volume PTV outer| $$VO_{PTV}$$ | Volume that relies outside the body region|
+| Volume PTV inner ratio| $VI_{PTV}:LV_{Body}$ | Volume that relies inside the enclosed body region, normalized by the body volume that limits the region of interest|
+| Volume PTV outer radio| $VO_{PTV}:LV_{Body}$  | Volume that relies outside the enclosed body region, normalized by the body volume that limits the region of interest|
 
 #### Mandible-related metrics
 
