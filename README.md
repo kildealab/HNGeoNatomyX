@@ -31,7 +31,9 @@ Head and neck (HN) cancer patients undergoing radiotherapy may experience signif
 
 Based on the 3D anatomy and 2D contours of the body and radiotherapy (RT) structures—including the Planning Target Volume (PTV) and mandible—we defined **43 continuous quantitative metrics** to characterize anatomical changes during RT delivery. These changes account for variations observed between the planning CT simulation (CT sim) and CBCT, as well as across sequential CBCTs. **The metrics were organized into six categories**, outlined in the next Table.
 #### Body-related metrics
+<p align="center">
 <img src="/diagrams/body_diagram.png" width="700">
+</p>
 
 | Metric  | Symbol | Definition |
 | ------------- | ------------|-----------|
@@ -44,6 +46,7 @@ Based on the 3D anatomy and 2D contours of the body and radiotherapy (RT) struct
 
 #### Treatment mask-related metrics
 <img src="/diagrams/mask_diagram.png" width="700">
+
 | Metric  | Symbol | Definition |
 | ------------- | ------------|-----------|
 | Maximum distance from body contour to treatment mask  | $$max$$ { $$B_{mask}$$ } | Maximum distance in 3D between the treatment mask structure and the external body contour of each patient|
