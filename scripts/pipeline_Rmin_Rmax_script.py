@@ -49,6 +49,19 @@ def get_body_keys(RS_file_path):
     ROI_keys = get_ROI_keys(RS_file_path)
     return [x for x in ROI_keys if 'body' in x.lower()]
 
+"""Gets the ROI key labels available in the RT dicom file"""
+def get_ROI_keys(RS_file_path):  #Obtiene el ROI image
+    RS_file = pydicom.read_file(RS_file_path)
+    contour_keys = RS_file.StructureSetROISequence
+    return [str(x.ROIName) for x in contour_keys]
+
+"""Gets the PTV label in the keys available in the RT dicom file"""
+"""NOTE: the PTV commonly use is the PTV_All in the RT file"""
+
+def get_PTV_keys(RS_file_path): #de los PTV
+    ROI_keys = get_ROI_keys(RS_file_path)
+    return [x for x in ROI_keys if 'ptv' in x.lower()]
+
 """Sorts the key from least to greatest body keys"""
 def sort_body_keys(keys_body): 
     new_keys_body = []
@@ -99,8 +112,7 @@ def get_domain_from_keys(keys):
             xvals.append(int(split_key[-1]))
     return np.array(xvals)
 
-#---------------------------------------- 
-#---------------------------------------
+
 # column: body keys
 # row: parameter
 def get_param_df_for_patients(path_src, patient_list, param_name, param_row_num=0):
@@ -127,36 +139,6 @@ def get_param_df_for_patients(path_src, patient_list, param_name, param_row_num=
                 data_dict[key].append(np.nan)
     df = pd.DataFrame(data_dict)
     return df
-
-def get_ROI_keys(RS_file_path):  #Obtiene el ROI image
-    RS_file = pydicom.read_file(RS_file_path)
-    contour_keys = RS_file.StructureSetROISequence
-    return [str(x.ROIName) for x in contour_keys]
-
-def get_body_keys(RS_file_path): #obtiene los keys de los body contours.
-    ROI_keys = get_ROI_keys(RS_file_path)
-    return [x for x in ROI_keys if 'body' in x.lower()]
-
-def get_PTV_keys(RS_file_path): #de los PTV
-    ROI_keys = get_ROI_keys(RS_file_path)
-    return [x for x in ROI_keys if 'ptv' in x.lower()]
-
-def sort_body_keys(keys_body): #Ordeer the found body contours key names from the RT structure DICOM file
-    new_keys_body = []
-    nums = []
-    for key in set(keys_body):
-        str_frac_num = key.split('-')[-1]
-        if not str_frac_num.lower() == 'body':
-            nums.append(int(str_frac_num))
-        else:
-            new_keys_body.append(key)
-    nums = sorted(nums)
-    for num in nums:
-        for key in keys_body:
-            if str(num) == key.split('-')[-1]:
-                new_keys_body.append(key)    
-   
-    return new_keys_body
 
 #-------------------------------------
 
@@ -617,13 +599,6 @@ def get_keys_v2(name,patient,path_RS0):
                         pat_h.append(key)
         return pat_h
 
-#def get_min_mandible_slice(s_body,mandible):
-
- #   m_m = min(mandible.points[:,2])
-  #  roi_z = np.argmin(abs((s_body)[:,2] - (m_m)))
-        #print(roi_z)
-   # m_b1 = (s_body)[:,2][roi_z]
-    #return m_b1
     
 def get_min_mandible_slice(body1,mR):
     zs_b = body1[:,2].copy()
@@ -633,8 +608,6 @@ def get_min_mandible_slice(body1,mR):
     roi_zcR = np.argmin(abs(zs_b-mR_min)) 
     cenzcR2 =  zs_b[roi_zcR]
     return cenzcR2
-
-
 
 def get_point_with_max_y_around_given_xv2(x, points):
     target_x = x
@@ -697,19 +670,13 @@ def get_y_min(x, points):
     return min_y
     
 def get_length_bottom(body,z_min):
-    #tree = KDTree(body2.points)
-    #d_kdtree, idx = tree.query(body1.points)
-    #body1["distances"] = d_kdtree
-    #vectors2 = []
-    #for j in d_kdtree:
-    #spacing = get_contour_z_spacing(body.points)
+ 
     points_xy = []
-    
     
     for j in body.points:
         if j[2]==z_min:
             points_xy.append([j[0],j[1]])
-    #print(points_xy)
+
             
     min_x = min(np.array(points_xy)[:,0])
     max_x = max(np.array(points_xy)[:,0])
@@ -720,7 +687,6 @@ def get_length_bottom(body,z_min):
     point3 = get_point_with_max_y_around_given_xv2(0,points_xy)
     #point4 = get_point_with_max_y_around_given_xv2(max_x/2, points_xy)
     point5 = (max_x, get_max_y(max_x, points_xy))
-    #point5 = get_point_with_min_y_around_given_xv2(max_x/2, points_xy)
     point6 = (0,min(np.array(points_xy)[:,1]))
     
     x1, y1 = point1
@@ -873,7 +839,6 @@ def get_length_ly_planev2(body,z_min):
     maxx = sorted(values_ly)[-1]
     return maxx[0]
     
-    
 def get_body_keys_not_RS(file_list):
     body_keys = []
     for k in file_list:
@@ -887,7 +852,7 @@ def get_format(file_list):
     formatt = file_list[0].split('.')[1]    
     return formatt
 
-def get_path_RS_v5(path_CT):   #Obti
+def get_path_RS_v5(path_CT):  
     file_RS = [x for x in os.listdir(path_CT) if 'RS' in x][0]
     return os.path.join(path_CT, file_RS)
 
@@ -896,9 +861,6 @@ def get_path_RS(pat_id, path_src):   #Obtiene el archivo del RT structure
     file_RS = [x for x in os.listdir(path_patient) if 'RS' in x][0]
     return os.path.join(path_patient, file_RS)
 
-def get_body_keys(RS_file_path): #obtiene los keys de los body contours.
-    ROI_keys = get_ROI_keys(RS_file_path)
-    return [x for x in ROI_keys if 'body' in x.lower()]
     
 def get_name_files(patient_path):
     replan = False
@@ -935,6 +897,7 @@ def get_name_files(patient_path):
     else:
         return CT_list[0],CBCT_list
 
+"""Gets the key for the mandible RT structure (contour)"""
 def get_key_mandible(patient,path_RS0):
   
     keys = get_ROI_keys(path_RS0)
@@ -945,9 +908,9 @@ def get_key_mandible(patient,path_RS0):
 
     return key_ff[0]
     
-    
-def get_info_replanned(patient,index,path_k='/mnt/iDriveShare/Kayla/CBCT_images/kayla_extracted/'):
-    patient_path  = path_k + patient+'/'
+
+def get_info_replanned(patient,index,path_CBCT_images):
+    patient_path  = path_CBCT_images + patient+'/'
     CT, CBCT_list = get_name_files(patient_path)
     CTs_names = [CT]+CBCT_list
     path_complete = patient_path+ CTs_names[index]
@@ -959,7 +922,7 @@ def get_start_position_dcm(CT_path):
         d = pydicom.dcmread(CT_path+'/'+f)
         
         positions.append(d.ImagePositionPatient)
-      #  print(d) 
+ 
     positions = sorted(positions, key=lambda x: x[-1])
     start_z = positions[0][2]
     start_x = positions[0][0]
@@ -968,9 +931,9 @@ def get_start_position_dcm(CT_path):
     
     return start_x, start_y, start_z, pixel_spacing
     
-def get_center2(path_k,str_pat_id):
+def get_center2(path_CBCT_images,str_pat_id):
 
-    isos = rtdsm.get_pointcloud('AcqIsocenter', path_k+'/'+str_pat_id+'/iso.dcm', False)[0]
+    isos = rtdsm.get_pointcloud('AcqIsocenter', path_CBCT_images+'/'+str_pat_id+'/iso.dcm', False)[0]
     h = isos[0][0]
     k = isos[0][1]
 
@@ -1071,7 +1034,7 @@ def pipeline_dist_body(param_name='submand metrics',file_ids,path_contours = '/m
                
                 mandiblee = rtdsm.get_pointcloud(key_mandible,path_rs_b0,False)[0] 
             
-            # Initializes dataframe and define output file name
+            # Initializes dataframe and defines output file name
     
             df = pd.DataFrame({param_name : ROWS})
             out_file = param_name + '_' + str_pat_id + '.csv'
@@ -1088,8 +1051,6 @@ def pipeline_dist_body(param_name='submand metrics',file_ids,path_contours = '/m
             for key_body_n in range(0,len(key_bodies_to_save)):
                 params = []
 
-                t1 = process_time()
- 
                 r = get_info_fov(str_pat_id,key_bodies_to_save[1:])
               
                 if key_bodies_to_save[key_body_n]=='BODY':
@@ -1110,11 +1071,9 @@ def pipeline_dist_body(param_name='submand metrics',file_ids,path_contours = '/m
                 else:
                     b1 = contours[key_body_n]
                     b2 = contours[1]
-                    t1 = process_time()
-        
+                   
                     body1 = pv.PolyData(b1)
                     body2 = pv.PolyData(b2)
-
 
                     b2_1,b1_1 = trim_contours_to_match_zs(body2.points,body1.points,z_min,z_max)
 
@@ -1132,15 +1091,13 @@ def pipeline_dist_body(param_name='submand metrics',file_ids,path_contours = '/m
                 Rmin,Rmax,El,Rmean = get_elongation_only_central(s_body1.points,z_m,z_m2,contour0.points)
 
                 
-                print('\tProcess time of parameters (' + key_bodies_to_save[key_body_n] +' '+ str(process_time()-t1) + ' s')
+                print(key_bodies_to_save[key_body_n] + ' Processed')
       
                 params.append(Rmin)
                 params.append(Rmax)
                 params.append(El)
                 params.append(Rmean)
-                
-  #              params.append(ymin/dfx)
-
+            
                 # records calculated values under each body key (RT treatment fraction)
                 df[key_bodies_to_save[key_body_n]] = params
                 # ================================================================================
@@ -1149,7 +1106,7 @@ def pipeline_dist_body(param_name='submand metrics',file_ids,path_contours = '/m
             df.to_csv(out_path, index=False)
             print('\t' + param_name + ' printed to csv: ' + out_path)
             print('Elapsed time for patient: ' + str((process_time()-t0)/60) + ' min')
-        #print('DONE! Elapsed time for pipeline: ' + str((process_time()-t_init)/3600) + ' hours')
+        print('DONE! The metrics are saved in the CSV file')
     
 
 if __name__ == "__main__":
