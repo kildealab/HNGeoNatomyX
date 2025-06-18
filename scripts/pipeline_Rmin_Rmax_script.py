@@ -11,64 +11,46 @@ from time import process_time
 from scipy.stats import sem
 from scipy.spatial import KDTree
 from skimage.measure import marching_cubes
-import numpy
+import numpy as np
 import gc, os
 import matplotlib.pyplot as plt 
 from mpl_toolkits.mplot3d import Axes3D, art3d
 from datetime import date
 
-import numpy as np
-import os
 from pyvista import Cylinder
 import alphashape
 import pandas as pd
 import pyvista as pv
 import pydicom
-from matplotlib import pyplot as plt
-import os
-import pandas as pd
-import numpy as np
 import sympy as sym
 from sklearn.linear_model import LinearRegression
 from scipy.spatial import distance
 from skimage.draw import polygon
 import random
 import sys
-sys.path.append('/rtdsm')
-import rtdsm
-from time import process_time
-from scipy.stats import sem
-from scipy.spatial import KDTree
-from skimage.measure import marching_cubes
-
-import gc, os
-import matplotlib.pyplot as plt 
-from mpl_toolkits.mplot3d import Axes3D, art3d
-
-import numpy as np
-import os
-from pyvista import Cylinder
-
-import pandas as pd
-import pyvista as pv
-import pydicom
-from matplotlib import pyplot as plt
-
-#import circle_fit as cf
 from shapely import Polygon, intersection
+
+import json
+import csv
 
 IMG_RES = [0.51119071245194, 0.51119071245194, 3]
 RADIUS_FRAC = 0.75
 
 from ipywidgets import *
-def get_path_RS(pat_id, path_src):   #Obtiene el archivo del RT structure
-    path_patient = os.path.join(path_src, pat_id)
-    file_RS = [x for x in os.listdir(path_patient) if 'RS' in x][0]
+
+"""Gets the RS path from the RT structure file.  pat_id  is the patient ID and path_src is the path of the folder"""
+def get_path_RS(pat_id, path_src):   
+    path_patient = os.path.join(path_src, pat_id)  """FORMAT: path_src + '/'+pat_id  """
+    file_RS = [x for x in os.listdir(path_patient) if 'RS' in x][0]  """ finds the RS file with the name 'RS.######.dcm'"""
     return os.path.join(path_patient, file_RS)
-def get_body_keys(RS_file_path): #obtiene los keys de los body contours.
+
+"""Gets the body contour key with the labels 'body' in it"""
+def get_body_keys(RS_file_path): 
     ROI_keys = get_ROI_keys(RS_file_path)
     return [x for x in ROI_keys if 'body' in x.lower()]
-def sort_body_keys(keys_body): #Ordena los keys encontrados. de los body contours.
+
+"""Sorts the key from least to greatest body keys"""
+def sort_body_keys(keys_body): 
     new_keys_body = []
     nums = []
     for key in set(keys_body):
@@ -82,10 +64,9 @@ def sort_body_keys(keys_body): #Ordena los keys encontrados. de los body contour
         for key in keys_body:
             if str(num) == key.split('-')[-1]:
                 new_keys_body.append(key)    
-   
     return new_keys_body
 
-def get_patient_csv_filename(path_src, patient_num): #Obtiene el archivo csv file in the path?
+def get_patient_csv_filename(path_src, patient_num):
     for fname in os.listdir(path_src):  
         if fname.split('_')[-1].split('.')[0] == str(patient_num):
             return fname
@@ -103,23 +84,8 @@ def get_param_value_dict_for_patient(path_src, patient_num, param_row_num):
     df = get_patient_data(path_src, patient_num)
     return df.loc[param_row_num][1:]
 
-
 #-----------------------------------------------
-def sort_body_keys(keys_body): #Get body keys de la RT structure
-    new_keys_body = []
-    nums = []
-    for key in set(keys_body):
-        str_frac_num = key.split('-')[-1]
-        if not str_frac_num.lower() == 'body':
-            nums.append(int(str_frac_num))
-        else:
-            new_keys_body.append(key)
-    nums = sorted(nums)
-    for num in nums:
-        for key in keys_body:
-            if str(num) == key.split('-')[-1]:
-                new_keys_body.append(key)        
-    return new_keys_body
+
 
 def get_domain_from_keys(keys):
     xvals = []
@@ -161,11 +127,6 @@ def get_param_df_for_patients(path_src, patient_list, param_name, param_row_num=
                 data_dict[key].append(np.nan)
     df = pd.DataFrame(data_dict)
     return df
-
-def get_path_RS(pat_id, path_src):   #Obtiene el archivo del RT structure
-    path_patient = os.path.join(path_src, pat_id)
-    file_RS = [x for x in os.listdir(path_patient) if 'RS' in x][0]
-    return os.path.join(path_patient, file_RS)
 
 def get_ROI_keys(RS_file_path):  #Obtiene el ROI image
     RS_file = pydicom.read_file(RS_file_path)
@@ -222,12 +183,6 @@ def trim_contours_to_match_z(contours_1, contours_2): # 1: body, 2: PTV
 def get_surface_marching_cubes(contours,IMG_RES):
     img_res = [IMG_RES[0], IMG_RES[1], get_contour_z_spacing(contours)]
     verts, faces, pvfaces = rtdsm.get_cubemarch_surface(contours.copy(), img_res)
-    mesh = pv.PolyData(verts, faces=pvfaces)
-    return mesh.extract_surface()
-
-def get_surface_marching_cubes_clusters(contours,IMG_RES):
-    img_res = [IMG_RES[0], IMG_RES[1], get_contour_z_spacing(contours)]
-    verts, faces, pvfaces = rtdsm.get_cubemarch_surface_clusters(contours.copy(), img_res)
     mesh = pv.PolyData(verts, faces=pvfaces)
     return mesh.extract_surface()
 
@@ -1021,22 +976,17 @@ def get_center2(path_k,str_pat_id):
 
     return h,k 
 
-import os
-import json
-import csv
 
-PATH_DEST = 'Thesis_120_s/Rmin_Rmax_v3_pxv2/'
-if not os.path.isdir(PATH_DEST):
-    os.makedirs(PATH_DEST)
+
+
 ROWS = ['Rmax','Rmin','Rmax/Rmin','Rmean']
 
 
-def pipeline_dist_body(param_name='vectors_body',path_k = '/mnt/iDriveShare/OdetteR/Registration_and_contours/Contours/'):
-    
-    file = '/mnt/iDriveShare/OdetteR/Registration_and_contours/IDS_News_Partial.csv'
+def pipeline_dist_body(param_name='submand metrics',file_ids,path_contours = '/mnt/iDriveShare/OdetteR/Registration_and_contours/Contours/'):
+
     ids_news = []
-    
-    with open(file, newline='') as csvfile:
+    """reads file with the patients ids"""    
+    with open(file_ids, newline='') as csvfile:
         spamreader = csv.reader(csvfile, delimiter=' ', quotechar='|')
         for row in spamreader:
             ids_news.append(row[0])
@@ -1045,14 +995,10 @@ def pipeline_dist_body(param_name='vectors_body',path_k = '/mnt/iDriveShare/Odet
     t_init = process_time()
 
     for str_pat_id in ids_news:
-        #print('Processing patient ' + str_pat_id + '.') 
+        print('Processing patient ' + str_pat_id + '.') 
         patient_path = '/mnt/iDriveShare/OdetteR/Registration_and_contours/Contours/'+str_pat_id
         
-       
-        
-                #bodies.insert(0,'BODY')
-        
-        # check if patient already has csv
+        # Checks if the patient already has a CSV file
         if str_pat_id in existing_patients:
             print('Patient already has csv:' + str_pat_id)
             continue
@@ -1109,7 +1055,7 @@ def pipeline_dist_body(param_name='vectors_body',path_k = '/mnt/iDriveShare/Odet
                              if body_in_folder==bodx:
                                  formatt = bodi.split('.')[-1]
                         path_RS0 = patient_path+'/'+bodx+'.'+formatt
-                        print(path_RS0)
+                      
                         if formatt=='json':
                             f = open(path_RS0)
                             data = json.load(f)
@@ -1122,23 +1068,19 @@ def pipeline_dist_body(param_name='vectors_body',path_k = '/mnt/iDriveShare/Odet
                             
                 key_bodies_to_save = bodies.copy()
                 key_mandible = get_key_mandible(str_pat_id,path_rs_b0)
-                print(path_rs_b0)
                
-                mandiblee = rtdsm.get_pointcloud(key_mandible,path_rs_b0,False)[0]
+                mandiblee = rtdsm.get_pointcloud(key_mandible,path_rs_b0,False)[0] 
             
-                #mandible= get_surface_marching_cubes(mandible1)         
-            
-            # initialize dataframe and define output file name
-            #PARA GUARDAR LOS DATOS, DEFINE LOS NOMBRES. 
+            # Initializes dataframe and define output file name
     
             df = pd.DataFrame({param_name : ROWS})
             out_file = param_name + '_' + str_pat_id + '.csv'
             out_path = os.path.join(PATH_DEST,out_file) 
 
             # ================================================================================
-            # CALCULATE PARAMETERS\
+            # CALCULATE METRICS
         
-            print(key_bodies_to_save)
+            
             z_min,z_max = search_cuts_z(contours)
            
             #contour0 = get_surface_marching_cubes(contours[0])
@@ -1149,22 +1091,21 @@ def pipeline_dist_body(param_name='vectors_body',path_k = '/mnt/iDriveShare/Odet
                 t1 = process_time()
  
                 r = get_info_fov(str_pat_id,key_bodies_to_save[1:])
-                print(r)
+              
                 if key_bodies_to_save[key_body_n]=='BODY':
                     b1 = contours[key_body_n]
                     b2 = contours[1]
                     t1 = process_time()
-                    #distances = get_distances_from_contours(contours_PTV, contours_body)
+                    
                     body1 = pv.PolyData(b1)
                     body2 = pv.PolyData(b2)
  
- #                   h,k = get_center(body1,body2,r)
                     h,k = get_center2(path_k,str_pat_id)
 
                     s_body2,b1_1 = get_equal_bodyv2(body2,body1,z_max,z_min,h,k,r)
                     contour00.append(b1_1)
                     gc.collect()
-         #           dfx = 1
+        
                     
                 else:
                     b1 = contours[key_body_n]
@@ -1180,7 +1121,7 @@ def pipeline_dist_body(param_name='vectors_body',path_k = '/mnt/iDriveShare/Odet
                     gc.collect()
        
                 CT_path = get_info_replanned(str_pat_id,0)
-                print(CT_path)
+            
                 start_x3, start_y3, start_z3, pixel_spacing3 = get_start_position_dcm(CT_path) 
                 s_body1 = get_surface_marching_cubes(b1_1,pixel_spacing3)
                 
@@ -1200,11 +1141,11 @@ def pipeline_dist_body(param_name='vectors_body',path_k = '/mnt/iDriveShare/Odet
                 
   #              params.append(ymin/dfx)
 
-                # record calculated values under body key
+                # records calculated values under each body key (RT treatment fraction)
                 df[key_bodies_to_save[key_body_n]] = params
                 # ================================================================================
                 
-            # write data to csv
+            # writes data to csv
             df.to_csv(out_path, index=False)
             print('\t' + param_name + ' printed to csv: ' + out_path)
             print('Elapsed time for patient: ' + str((process_time()-t0)/60) + ' min')
@@ -1212,6 +1153,9 @@ def pipeline_dist_body(param_name='vectors_body',path_k = '/mnt/iDriveShare/Odet
     
 
 if __name__ == "__main__":
+    PATH_DEST = 'Rmin_Rmax_metrics/'
+    if not os.path.isdir(PATH_DEST):
+        os.makedirs(PATH_DEST)
     pipeline_dist_body()
 
 
