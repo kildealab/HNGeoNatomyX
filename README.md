@@ -58,7 +58,7 @@ Based on the 3D anatomy and 2D contours of the body and radiotherapy (RT) struct
 
 #### PTV-related metrics
 <p align="center">
-<img src="/diagrams/PTV_diagram.png" width="400">
+<img src="/diagrams/PTV_diagram.png" width="500">
 </p>
 
 | Metric  | Symbol | Definition |
