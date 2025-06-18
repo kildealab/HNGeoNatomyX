@@ -43,9 +43,9 @@ Based on the 3D anatomy and 2D contours of the body and radiotherapy (RT) struct
 #### Treatment mask-related metrics
 | Metric  | Symbol | Definition |
 | ------------- | ------------|-----------|
-| Maximum distance from body contour to treatment mask  | $$max$$ { $$B_{mask}$$ } | Maximum distance in 3D between the treatment mask structure and the external body contour of each patient. |
+| Maximum distance from body contour to treatment mask  | $$max$$ { $$B_{mask}$$ } | Maximum distance in 3D between the treatment mask structure and the external body contour of each patient|
 | Average distance from body contour to treatment mask  | $$\bar{B}_{mask}$$ | Considers the average value of the distribution of the 3D distances|
-| Standard deviation of distances from body contour to treatment mask | $$\sigma_{B_{mask}}$$ | Corresponds to the standard deviation of the distribution of the distances.|
+| Standard deviation of distances from body contour to treatment mask | $$\sigma_{B_{mask}}$$ | Corresponds to the standard deviation of the distribution of the distances|
 | Air volume between body and treatment mask| $$V^{air}_{Body-to-mask}$$ | Amount of space that is between the external body contour of the HN region and the treatment mask contour|
 
 #### PTV-related metrics
@@ -62,10 +62,20 @@ Based on the 3D anatomy and 2D contours of the body and radiotherapy (RT) struct
 
 | Metric  | Symbol | Definition |
 | ------------- | ------------|-----------|
-| Maximum distance from body contour to treatment mask  | $$max$$ { $$B_{mask}$$ } | Maximum distance in 3D between the treatment mask structure and the external body contour of each patient. |
-| Average distance from body contour to treatment mask  | $$\bar{B}_{mask}$$ | Considers the average value of the distribution of the 3D distances|
-| Standard deviation of distances from body contour to treatment mask | $$\sigma_{B_{mask}}$$ | Corresponds to the standard deviation of the distribution of the distances.|
-| Air volume between body and treatment mask| $$V^{air}_{Body-to-mask}$$ | Amount of space that is between the external body contour of the HN region and the treatment mask contour|
+| Neck Volume  | $$max$$ { $$B_{mask}$$ } | Maximum distance in 3D between the treatment mask structure and the external body contour of each patient|
+| Chamber neck distance  | $$\bar{B}_{mask}$$ | Considers the average value of the distribution of the 3D distances|
+| Haussdorff neck distance | $$\sigma_{B_{mask}}$$ | Corresponds to the standard deviation of the distribution of the distances|
+| Maximum 2D neck distance| $$V^{air}_{Body-to-mask}$$ | Amount of space that is between the external body contour of the HN region and the treatment mask contour|
+| Median 2D neck distance| $$V^{air}_{Body-to-mask}$$ | Amount of space that is between the external body contour of the HN region and the treatment mask contour|
+| Average 2D neck distance| $$V^{air}_{Body-to-mask}$$ | Amount of space that is between the external body contour of the HN region and the treatment mask contour|
+| Minimum 3D radius| $$V^{air}_{Body-to-mask}$$ | Amount of space that is between the external body contour of the HN region and the treatment mask contour|
+| Maximum 3D radius| $$V^{air}_{Body-to-mask}$$ | Amount of space that is between the external body contour of the HN region and the treatment mask contour|
+| Average 3D radius| $$V^{air}_{Body-to-mask}$$ | Amount of space that is between the external body contour of the HN region and the treatment mask contour|
+| Ratio between minimum and maximum 3D radius | $$V^{air}_{Body-to-mask}$$ | Amount of space that is between the external body contour of the HN region and the treatment mask contour|
+| Average cross-sectional neck area| $$V^{air}_{Body-to-mask}$$ | Amount of space that is between the external body contour of the HN region and the treatment mask contour|
+| Surface area| $$V^{air}_{Body-to-mask}$$ | Amount of space that is between the external body contour of the HN region and the treatment mask contour|
+| Compactness| $$V^{air}_{Body-to-mask}$$ | Amount of space that is between the external body contour of the HN region and the treatment mask contour|
+
 
 #### Submandibular-related metrics
 | Metric  | Symbol | Definition |
@@ -74,7 +84,7 @@ Based on the 3D anatomy and 2D contours of the body and radiotherapy (RT) struct
 | Minimum 2D radius  | $$R_{min}$$ | Minimum 2D radius between the center of the CT sim submandibular body contour plane and a submandibular body contour plane |
 | Maximum 2D radius| $$R_{max}$$ | Maximum 2D radius between the center of the CT sim submandibular body contour plane and a submandibular body contour plane|
 | Average 2D radius| $$R_{avg}$$ | Average 2D radius that can be made between the center of the CT sim submandibular body contour plane and a submandibular body contour plane|
-| Ratio between minimum and maximum 2D radius| $$\varphi^{2D}_{R}$$ | Calculated by the ratio between $$R_{max}$$ and $$R_{min}$$. This metric characterizes the symmetry of the submandibular plane contour.|
+| Ratio between minimum and maximum 2D radius| $$\varphi^{2D}_{R}$$ | Calculated by the ratio between $$R_{max}$$ and $$R_{min}$$. This metric characterizes the symmetry of the submandibular plane contour|
 
 ## Dependencies
   *  Python>=3.6
