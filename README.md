@@ -65,16 +65,16 @@ Based on the 3D anatomy and 2D contours of the body and radiotherapy (RT) struct
 | Neck Volume  | $$max$$ { $$B_{mask}$$ } | Maximum distance in 3D between the treatment mask structure and the external body contour of each patient|
 | Chamber neck distance  | $$\bar{B}_{mask}$$ | Considers the average value of the distribution of the 3D distances|
 | Haussdorff neck distance | $$\sigma_{B_{mask}}$$ | Corresponds to the standard deviation of the distribution of the distances|
-| Maximum 2D neck distance| $$V^{air}_{Body-to-mask}$$ | Amount of space that is between the external body contour of the HN region and the treatment mask contour|
-| Median 2D neck distance| $$V^{air}_{Body-to-mask}$$ | Amount of space that is between the external body contour of the HN region and the treatment mask contour|
-| Average 2D neck distance| $$V^{air}_{Body-to-mask}$$ | Amount of space that is between the external body contour of the HN region and the treatment mask contour|
-| Minimum 3D radius| $$V^{air}_{Body-to-mask}$$ | Amount of space that is between the external body contour of the HN region and the treatment mask contour|
-| Maximum 3D radius| $$V^{air}_{Body-to-mask}$$ | Amount of space that is between the external body contour of the HN region and the treatment mask contour|
-| Average 3D radius| $$V^{air}_{Body-to-mask}$$ | Amount of space that is between the external body contour of the HN region and the treatment mask contour|
+| Maximum 2D neck distance| $$D_{Neck}$$ | Amount of space that is between the external body contour of the HN region and the treatment mask contour|
+| Median 2D neck distance| $$\tilde{D}_{Neck}$$ | Amount of space that is between the external body contour of the HN region and the treatment mask contour|
+| Average 2D neck distance| $$\bar{D}_{Neck}$$ | Amount of space that is between the external body contour of the HN region and the treatment mask contour|
+| Minimum 3D radius| $$R^{3D}_{min}$$ | Amount of space that is between the external body contour of the HN region and the treatment mask contour|
+| Maximum 3D radius| $$R^{3D}_{max}$$ | Amount of space that is between the external body contour of the HN region and the treatment mask contour|
+| Average 3D radius| $$R^{3D}_{avg}$$ | Average of all the 3D radius that can be drawn from the 3D geometric center of the CT sim point cloud to the points in the mesh|
 | Ratio between minimum and maximum 3D radius | $$\varphi^{3D}_{R}$$ | Ratio between $$R^{3D}_{max}$$ and $$R^{3D}_{min}$$. This metric characterizes the symmetry of the mesh|
 | Average cross-sectional neck area| $$A^{2D}_{avg}$$ | This parameter describes the total space covered the neck region|
 | Surface area | $$SA_{Neck}$$ | This parameter describes the amount of space enclosing the outside of a neck region|
-| Compactness| $$C_{Neck}$$ | Inspired by Bribiesca et al. (2008), the compactness describes the shape of the neck, representing the degree to which the neck is compact. It is calculated by the ratio between the enclosing surface area and the volume of a neck region ($$SA^{3}_{Neck}/V^{2}_{Neck}). This metric is dimensionless and minimized by a sphere|
+| Compactness| $$C_{Neck}$$ | Inspired by Bribiesca et al. (2008), the compactness describes the shape of the neck, representing the degree to which the neck is compact. It is calculated by the ratio between the enclosing surface area and the volume of a neck region ($$SA^{3}_{Neck}/V^{2}_{Neck}$$). This metric is dimensionless and minimized by a sphere|
 
 
 #### Submandibular-related metrics
