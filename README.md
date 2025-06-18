@@ -71,10 +71,10 @@ Based on the 3D anatomy and 2D contours of the body and radiotherapy (RT) struct
 | Minimum 3D radius| $$V^{air}_{Body-to-mask}$$ | Amount of space that is between the external body contour of the HN region and the treatment mask contour|
 | Maximum 3D radius| $$V^{air}_{Body-to-mask}$$ | Amount of space that is between the external body contour of the HN region and the treatment mask contour|
 | Average 3D radius| $$V^{air}_{Body-to-mask}$$ | Amount of space that is between the external body contour of the HN region and the treatment mask contour|
-| Ratio between minimum and maximum 3D radius | $$V^{air}_{Body-to-mask}$$ | Amount of space that is between the external body contour of the HN region and the treatment mask contour|
-| Average cross-sectional neck area| $$V^{air}_{Body-to-mask}$$ | Amount of space that is between the external body contour of the HN region and the treatment mask contour|
-| Surface area| $$V^{air}_{Body-to-mask}$$ | Amount of space that is between the external body contour of the HN region and the treatment mask contour|
-| Compactness| $$V^{air}_{Body-to-mask}$$ | Amount of space that is between the external body contour of the HN region and the treatment mask contour|
+| Ratio between minimum and maximum 3D radius | $$\varphi^{3D}_{R}$$ | Ratio between $$R^{3D}_{max}$$ and $$R^{3D}_{min}$$. This metric characterizes the symmetry of the mesh|
+| Average cross-sectional neck area| $$A^{2D}_{avg}$$ | This parameter describes the total space covered the neck region|
+| Surface area | $$SA_{Neck}$$ | This parameter describes the amount of space enclosing the outside of a neck region|
+| Compactness| $$C_{Neck}$$ | Inspired by Bribiesca et al. (2008), the compactness describes the shape of the neck, representing the degree to which the neck is compact. It is calculated by the ratio between the enclosing surface area and the volume of a neck region ($$SA^{3}_{Neck}/V^{2}_{Neck}). This metric is dimensionless and minimized by a sphere|
 
 
 #### Submandibular-related metrics
