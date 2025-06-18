@@ -36,6 +36,16 @@ Based on the 3D anatomy and 2D contours of the body and radiotherapy (RT) struct
 | Body Volume  | $$V_{Body}$$ | HN volume enclosed by a body contour  |
 | Chamfer distance (3D) | $$CD_{Body}$$ | Average distance between pair nearest neighbor points from the body contour of the CT sim to the body contour of the CBCTs|
 | Haussdorff distance (3D) | $$HD_{Body}$$ | Maximum distance between the body contour of the CT sim and a body contour|
+
+
+#### Treatment mask-related metrics
+
+#### PTV-related metrics
+#### Mandible-related metrics
+#### Neck-related metrics
+#### Submandibular-related metrics
+
+
 ## Dependencies
   *  Python>=3.6
   *  [scipy](https://scipy.org/)>=1.6.0
