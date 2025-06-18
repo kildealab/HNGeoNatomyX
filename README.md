@@ -143,7 +143,8 @@ pip install git+https://github.com/kildealab/HN-GeoNatomyX.git
 ```
 
 ## Usage and Examples
-> [!TIP] Patient medical images (CT sims and CBCTs) were stored using the [dicoPATH](https://github.com/kildealab/dicoPATH) script. The data must be stored in the following format to streamline the use of the code. 
+### Data Format
+Patient medical images (CT sims and CBCTs) were stored using the [dicoPATH](https://github.com/kildealab/dicoPATH) script. The data must be stored in the following format to streamline the use of the code. 
 
 <pre> /path/to/patient/directories/ 
 ├── 📁patient ID 1
@@ -163,6 +164,17 @@ pip install git+https://github.com/kildealab/HN-GeoNatomyX.git
 │   └── 📁RT  # RT Treatment Records
 ...
 </pre>
+
+### Running Scripts and Examples
+Several examples are included in Jupyter Notebook format to demonstrate how to run the scripts for contouring and extracting the metrics, as well as to provide context for the methodology used. 
+
+```
+python pipeline_PTV_distances.py 
+```
+
+```
+python pipeline_PTV_volumes.py 
+```
  
 ## How to Cite 
 If you publish any work using this package, please make sure you acknowledge us by citing the following paper: Rios-Ibacache O., Manalad J., O'Sullivan-Steben K., Poon E., at al. Quantification of head and neck cancer patients’ anatomical changes: prediction of radiotherapy replanning need.
