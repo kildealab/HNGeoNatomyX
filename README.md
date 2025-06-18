@@ -143,7 +143,7 @@ pip install git+https://github.com/kildealab/HN-GeoNatomyX.git
 ```
 
 ## Usage and Examples
-Patient medical images (CT sims and CBCTs) were stored using the [dicoPATH](https://github.com/kildealab/dicoPATH) script. The data must be stored in the following format to streamline the use of the code. 
+> [!TIP] Patient medical images (CT sims and CBCTs) were stored using the [dicoPATH](https://github.com/kildealab/dicoPATH) script. The data must be stored in the following format to streamline the use of the code. 
 
 <pre> /path/to/patient/directories/ 
 ├── 📁patient ID 1
