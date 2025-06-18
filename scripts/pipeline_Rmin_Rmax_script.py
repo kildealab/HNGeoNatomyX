@@ -538,29 +538,23 @@ def get_equal_bodyv2(body2,body1,z_max,z_min,h,k,r):
 
     bbody = pv.PolyData(body_crop)
     bbody2,bbody1 = trim_contours_to_match_zs(body_2.points, bbody.points,z_min,z_max)
-    #s_body22 = get_surface_marching_cubes(body2)
-    #s_body2 = pv.PolyData(s_body22).connectivity(largest=True)
-
-    #s_body11 = get_surface_marching_cubes(bbody1)
-    #s_body1 = pv.PolyData(s_body11).connectivity(largest=True)
+ 
     return bbody2,bbody1
 
 def get_keys(name,patient):
         pat_h = []
-    #    for patient in PATIENTS_ALL:\n",
         path_RS = get_path_RS(patient,PATH_SRC)
         keys_body = get_body_keys(path_RS)
         sorted_keys_body = sort_body_keys(keys_body)
         ROI_keys = get_ROI_keys(path_RS)
-    #ROI_keys = get_ROI_keys(path_RS)\n",
+
         for key in ROI_keys:
             try:
                 key2 = key.split('_')
             except:
                 key2 = key.split('-')
             for k in key2:
-               #try k.lower().split('')\n",
-                #print(k)\n",
+              
                 try:
                     #k.split('~')\n",
                     for p in k.lower().split('~'):
@@ -574,21 +568,15 @@ def get_keys(name,patient):
         return pat_h
 
 def get_keys_v2(name,patient,path_RS0):
-        #PATH_K = '/mnt/iDriveShare/Kayla/CBCT_images/kayla_extracted/'+CT+'/'
         pat_h = []
-
         ROI_keys = get_ROI_keys(path_RS0)
-    
         for key in ROI_keys:
             try:
                 key2 = key.split('_')
             except:
                 key2 = key.split('-')
             for k in key2:
-               #try k.lower().split('')\n",
-                #print(k)\n",
                 try:
-                    #k.split('~')\n",
                     for p in k.lower().split('~'):
                         if p==str(name):
                             #if patient not in pat_h:\n",
