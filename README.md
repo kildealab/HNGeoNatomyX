@@ -51,7 +51,7 @@ Based on the 3D anatomy and 2D contours of the body and radiotherapy (RT) struct
 #### PTV-related metrics
 | Metric  | Symbol | Definition |
 | ------------- | ------------|-----------|
-| Minimum distance from PTV to body  | $$x_{min}$$ } | Shortest distance between the PTV and the body contour, taken from a set of minimum distances between these two contours|
+| Minimum distance from PTV to body  | $$x_{min}$$  | Shortest distance between the PTV and the body contour, taken from a set of minimum distances between these two contours|
 | Maximum distance from PTV to body  | $$x_{max}$$ | Takes into account the minimum distances from the PTV to the body contour, similar to $x_{min}$ but taking the maximum value instead|
 | Average distance from PTV to body | $$x_{avg}$$ | Average value from a set of minimum distances from PTV to the body contour|
 | Median distance from PTV to body| $$x_{med}$$ | Median value from a set of minimum distances from PTV to the body contour|
@@ -97,7 +97,8 @@ Based on the 3D anatomy and 2D contours of the body and radiotherapy (RT) struct
 | Maximum 2D radius| $$R_{max}$$ | Maximum 2D radius between the center of the CT sim submandibular body contour plane and a submandibular body contour plane|
 | Average 2D radius| $$R_{avg}$$ | Average 2D radius that can be made between the center of the CT sim submandibular body contour plane and a submandibular body contour plane|
 | Ratio between minimum and maximum 2D radius| $$\varphi^{2D}_{R}$$ | Calculated by the ratio between $$R_{max}$$ and $$R_{min}$$. This metric characterizes the symmetry of the submandibular plane contour|
-
+| Maximum longitudinal chord | $l_{y}$ | Maximum distance that can be drawn from the outermost points of the submandibular body contour plane in a longitudinal direction |
+| Maximum lateral chord | $l_{x}$ | Maximum distance that can be drawn from the outermost points of the submandibular body contour plane in a lateral direction |
 ## Dependencies
   *  Python>=3.6
   *  [scipy](https://scipy.org/)>=1.6.0
