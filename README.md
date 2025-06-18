@@ -50,6 +50,14 @@ Based on the 3D anatomy and 2D contours of the body and radiotherapy (RT) struct
 
 #### PTV-related metrics
 #### Mandible-related metrics
+
+| Metric  | Symbol | Definition |
+| ------------- | ------------|-----------|
+| Minimum distance from the mandible to body contour | $$M_{min}$$ | Defines the minimum distance encountered between the mandible structure and the body contour |
+| Median distance from the mandible to contour body  | $$M_{med}$$ | Defines the median value from the distribution of the distances encountered between the mandible structure and the body contour|
+| Average distance from the mandible to the body | $$M_{avg}$$ | Represents the average distance between the mandible and the external body contour from each medical image|
+| Standard deviation of distances from the mandible to body contour| $$\sigma_{M}$$ | Corresponds to the standard deviation of the distribution of the distances between the mandible and the external body contours|
+
 #### Neck-related metrics
 #### Submandibular-related metrics
 
