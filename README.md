@@ -160,8 +160,6 @@ Patient medical images (CT sims and CBCTs) were stored using the [dicoPATH](http
 │        └── 📄RS....dcm 
 |   ├── 📁DATE_kV_CBCT_3a
 │   ├── ... 
-│   ├── 📁RI  # RT Image + registrations 
-│   └── 📁RT  # RT Treatment Records
 ...
 </pre>
 
