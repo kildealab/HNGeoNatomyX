@@ -142,21 +142,20 @@ pip install git+https://github.com/kildealab/HN-GeoNatomyX.git
 ```
 
 ## Usage and Examples
-Patient medical images (CT sims and CBCTs) were stored using the [dicoPath](https://github.com/kildealab/dicoPATH) script. The data must be stored in the following format to streamline the use of the code.
+Patient medical images (CT sims and CBCTs) were stored using the [dicoPath](https://github.com/kildealab/dicoPATH) script. The data must be stored in the following format to streamline the use of the code. However, as long as the RT dicom file is 
 <pre> /path/to/patient/directories/ 
 ├── 📁patient ID 1
+│   ├── 📁DATE_Planning_CT_name 
 │   ├── 📄CT....dcm 
 │   ├── 📄CT....dcm 
 │   ├── ... 
 │   └── 📄RS....dcm 
-├── 📁patient2
-|   ├── 📄CT....dcm
-|   ├── 📄CT....dcm
-|   ├── ...
-|   └── 📄RS....dcm
+│   ├── 📁DATE_kV_CBCT_1a
+|   ├── 📁DATE_kV_CBCT_3a
+│   ├── ... 
+│   ├── 📁RI  # RT Image + registrations 
+│   └── 📁RT  # RT Treatment Records
 ...
-├── 📁patient ID N
-|    └── ...
 </pre>
  
 ## How to Cite 
