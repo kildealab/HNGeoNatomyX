@@ -122,6 +122,7 @@ Based on the 3D anatomy and 2D contours of the body and radiotherapy (RT) struct
 | Ratio between minimum and maximum 2D radius| $$\varphi^{2D}_{R}$$ | Calculated by the ratio between $$R_{max}$$ and $$R_{min}$$. This metric characterizes the symmetry of the submandibular plane contour|
 | Maximum longitudinal chord | $l_{y}$ | Maximum distance that can be drawn from the outermost points of the submandibular body contour plane in a longitudinal direction |
 | Maximum lateral chord | $l_{x}$ | Maximum distance that can be drawn from the outermost points of the submandibular body contour plane in a lateral direction |
+
 ## Dependencies
   *  Python>=3.6
   *  [scipy](https://scipy.org/)>=1.6.0
