@@ -26,7 +26,7 @@ Head and neck (HN) cancer patients undergoing radiotherapy may experience signif
 
 ## Features
   ### Semi-automatic contouring tool for the treatment mask
-  ![Optional Text](Mask_treatment.jpg)
+  ![Optional Text](/diagrams/Mask_treatment.jpg)
   ### Code for extracting the 43 parameters stored in scripts
 
 Based on the 3D anatomy and 2D contours of the body and radiotherapy (RT) structures—including the Planning Target Volume (PTV) and mandible—we defined **43 continuous quantitative metrics** to characterize anatomical changes during RT delivery. These changes account for variations observed between the planning CT simulation (CT sim) and CBCT, as well as across sequential CBCTs. **The metrics were organized into six categories**, outlined in the next Table.
