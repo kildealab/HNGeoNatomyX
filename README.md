@@ -171,7 +171,7 @@ Several examples are included in Jupyter Notebook format to demonstrate how to r
 | ------------- |-----------|
 | [pipeline_body_volume.py](/scripts/pipeline_body_volume.py) | Calculates $V_{Body}$ in $mm^3$ and saves the results as CSV files labelled *'volumes_'+ID* in a folder called *'body_volumes'*| 
 | [pipeline_body_3D_distances.py](/scripts/pipeline_body_3D_distances.py) | Calculates $CD_{Body}$ and $HD_{Body}$ in $mm$ and saves the results as CSV files labelled *'volumes_'+ID* in a folder called *'body_volumes'* |
-| [pipeline_body_2D_distances.py](/scripts/pipeline_body_2D_distances.py) |  Calculates $D_{Body}$, ![equation](https://latex.codecogs.com/svg.image?%5Cbar%7BD%7D_%7BBody%7D), and $\bar{D}$_{Body}$ in $mm$ and saves the results as CSV files labelled *'body_distances2D_'+ID* in a folder called *'body_2D_distances'*  |
+| [pipeline_body_2D_distances.py](/scripts/pipeline_body_2D_distances.py) |  Calculates $D_{Body}$, ```math \bar{D}_{Body}```, and $\bar{D}_{Body}$ in $mm$ and saves the results as CSV files labelled *'body_distances2D_'+ID* in a folder called *'body_2D_distances'*  |
 
 #### Example 
 ```
