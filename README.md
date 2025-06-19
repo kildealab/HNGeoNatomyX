@@ -51,7 +51,7 @@ Based on the 3D anatomy and 2D contours of the body and radiotherapy (RT) struct
 
 | Metric  | Symbol | Definition |
 | ------------- | ------------|-----------|
-| Maximum distance from body contour to treatment mask  | $$max$$ { $$B_{mask}$$ } | Maximum distance in 3D between the treatment mask structure and the external body contour of each patient|
+| Maximum distance from body contour to treatment mask  | $`max{B_{mask}`$ } | Maximum distance in 3D between the treatment mask structure and the external body contour of each patient|
 | Average distance from body contour to treatment mask  | $$\bar{B}_{mask}$$ | Average value of the distribution of the 3D distances|
 | Standard deviation of distances from body contour to treatment mask | $$\sigma_{B_{mask}}$$ | Corresponds to the standard deviation of the distribution of the distances|
 | Air volume between body and treatment mask| $$V^{air}_{Body-to-mask}$$ | Amount of space that is between the external body contour of the HN region and the treatment mask contour|
@@ -102,7 +102,7 @@ Based on the 3D anatomy and 2D contours of the body and radiotherapy (RT) struct
 | Minimum 3D radius| $$R^{3D}_{min}$$ | Minimum 3D radius that can be drawn from the 3D geometric center of the CT sim point cloud to the points in the contour mesh|
 | Maximum 3D radius| $$R^{3D}_{max}$$ | Maximum 3D radius that can be drawn from the 3D geometric center of the CT sim point cloud to the points in the contour mesh|
 | Average 3D radius| $$R^{3D}_{avg}$$ | Average of all the 3D radius that can be drawn from the 3D geometric center of the CT sim point cloud to the points in the contour mesh|
-| Ratio between minimum and maximum 3D radius | $$\varphi^{3D}_{R}$$ | Ratio between the max. 3D radius and the min. 3D radius. This metric characterizes the symmetry of the mesh|
+| Ratio between minimum and maximum 3D radius | $$\varphi^{3D}_{R}$$ | Ratio between the $`R^{3D}_{max}`$ and $`R^{3D}_{min}`$. This metric characterizes the symmetry of the mesh|
 | Average cross-sectional neck area| $$A^{2D}_{avg}$$ | This parameter describes the total space covered the neck region|
 | Surface area | $$SA_{Neck}$$ | This parameter describes the amount of space enclosing the outside of a neck region|
 | Compactness| $$C_{Neck}$$ | Inspired by Bribiesca et al. (2008), the compactness describes the shape of the neck, representing the degree to which the neck is compact. It is calculated by the ratio between the enclosing surface area and the volume of a neck region ($$SA^3_{Neck}/V^2_{Neck}$$). This metric is dimensionless and minimized by a sphere|
@@ -171,7 +171,7 @@ Several examples are included in Jupyter Notebook format to demonstrate how to r
 | ------------- |-----------|
 | [pipeline_body_volume.py](/scripts/pipeline_body_volume.py) | Calculates $V_{Body}$ in $mm^3$ and saves the results as CSV files labelled *'volumes_'+ID* in a folder called *'body_volumes'*| 
 | [pipeline_body_3D_distances.py](/scripts/pipeline_body_3D_distances.py) | Calculates $CD_{Body}$ and $HD_{Body}$ in $mm$ and saves the results as CSV files labelled *'volumes_'+ID* in a folder called *'body_volumes'* |
-| [pipeline_body_2D_distances.py](/scripts/pipeline_body_2D_distances.py) |  Calculates $D_{Body}$, $`\bar{D}_{Body}`$, and $\bar{D}_{Body}$ in $mm$ and saves the results as CSV files labelled *'body_distances2D_'+ID* in a folder called *'body_2D_distances'*  |
+| [pipeline_body_2D_distances.py](/scripts/pipeline_body_2D_distances.py) |  Calculates $D_{Body}$, $`\bar{D}_{Body}`$, and $`\bar{D}_{Body}`$ in $mm$ and saves the results as CSV files labelled *'body_distances2D_'+ID* in a folder called *'body_2D_distances'*  |
 
 #### Example 
 ```
