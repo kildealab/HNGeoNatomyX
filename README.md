@@ -92,7 +92,7 @@ Based on the 3D anatomy and 2D contours of the body and radiotherapy (RT) struct
 #### Neck-related metrics
 
 | Metric  | Symbol | Definition |
-| ------------- | ------------|-----------|
+| ------------- | ------------|-------------|
 | Neck Volume  | $$V_{Neck}$$  | Volume enclosed by the neck region. The method to calculate the volume was the same as for the body volume|
 | Chamber neck distance  | $$CD_{Neck}$$ | Average distance between the pair of nearest points between two neck regions. The distances were calculated between the CT sim neck and the CBCTs neck region point clouds|
 | Haussdorff neck distance | $$HD_{Neck}$$ | Maximum distance between the pair of nearest points between two neck regions|
