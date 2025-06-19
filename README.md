@@ -166,6 +166,17 @@ Patient medical images (CT sims and CBCTs) were stored using the [dicoPATH](http
 ### Running Scripts and Examples
 Several examples are included in Jupyter Notebook format to demonstrate how to run the scripts for contouring and extracting the metrics, as well as to provide context for the methodology used. 
 
+#### Body-related metrics
+| Script | Desctiption |
+| ------------- |-----------|
+| pipeline_body_volumes.py |  |
+| pipeline_body_distances.py |  |
+
+#### Example 
+```
+python pipeline_body_distances.py 
+```
+#### PTV-related metrics
 ```
 python pipeline_PTV_distances.py 
 ```
@@ -173,7 +184,30 @@ python pipeline_PTV_distances.py
 ```
 python pipeline_PTV_volumes.py 
 ```
- 
+#### Neck-related metrics
+
+```
+python pipeline_PTV_volumes.py 
+```
+
+```
+python pipeline_lx_ly_distances.py 
+```
+#### Submandibular-related metrics
+
+```
+python pipeline_submand_Rmin_Rmax.py 
+```
+
+```
+python pipeline_submandibular_area.py 
+```
+
+```
+python pipeline_lx_ly_distances.py 
+```
+
+
 ## How to Cite 
 If you publish any work using this package, please make sure you acknowledge us by citing the following paper: Rios-Ibacache O., Manalad J., O'Sullivan-Steben K., Poon E., at al. Quantification of head and neck cancer patients’ anatomical changes: prediction of radiotherapy replanning need.
 ## License 
