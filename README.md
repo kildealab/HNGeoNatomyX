@@ -51,7 +51,7 @@ Based on the 3D anatomy and 2D contours of the body and radiotherapy (RT) struct
 
 | Metric  | Symbol | Definition |
 | ------------- | ------------|-----------|
-| Maximum distance from body contour to treatment mask  | $`max{B_{mask}`$ } | Maximum distance in 3D between the treatment mask structure and the external body contour of each patient|
+| Maximum distance from body contour to treatment mask  | $`max{B_{mask}}`$ | Maximum distance in 3D between the treatment mask structure and the external body contour of each patient|
 | Average distance from body contour to treatment mask  | $$\bar{B}_{mask}$$ | Average value of the distribution of the 3D distances|
 | Standard deviation of distances from body contour to treatment mask | $$\sigma_{B_{mask}}$$ | Corresponds to the standard deviation of the distribution of the distances|
 | Air volume between body and treatment mask| $$V^{air}_{Body-to-mask}$$ | Amount of space that is between the external body contour of the HN region and the treatment mask contour|
@@ -171,7 +171,7 @@ Several examples are included in Jupyter Notebook format to demonstrate how to r
 | ------------- |-----------|
 | [pipeline_body_volume.py](/scripts/pipeline_body_volume.py) | Calculates $V_{Body}$ in $mm^3$ and saves the results as CSV files labelled *'volumes_'+ID* in a folder called *'body_volumes'*| 
 | [pipeline_body_3D_distances.py](/scripts/pipeline_body_3D_distances.py) | Calculates $CD_{Body}$ and $HD_{Body}$ in $mm$ and saves the results as CSV files labelled *'volumes_'+ID* in a folder called *'body_volumes'* |
-| [pipeline_body_2D_distances.py](/scripts/pipeline_body_2D_distances.py) |  Calculates $D_{Body}$, $`\bar{D}_{Body}`$, and $`\bar{D}_{Body}`$ in $mm$ and saves the results as CSV files labelled *'body_distances2D_'+ID* in a folder called *'body_2D_distances'*  |
+| [pipeline_body_2D_distances.py](/scripts/pipeline_body_2D_distances.py) |  Calculates $D_{Body}$, $`\tilde{D}_{Body}`$, and $`\bar{D}_{Body}`$ in $mm$ and saves the results as CSV files labelled *'body_distances2D_'+ID* in a folder called *'body_2D_distances'*  |
 
 #### Example 
 ```
