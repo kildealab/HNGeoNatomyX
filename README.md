@@ -169,7 +169,7 @@ Several examples are included in Jupyter Notebook format to demonstrate how to r
 #### Body-related metrics
 | Script | Desctiption |
 | ------------- |-----------|
-| pipeline_body_volumes.py |  |
+| [pipeline_body_volume.py](/scripts/pipeline_body_volume.py) |  Extract  |
 | pipeline_body_distances.py |  |
 
 #### Example 
