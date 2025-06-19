@@ -5,7 +5,7 @@ from time import process_time
 from scipy.stats import sem
 from scipy.spatial import KDTree
 from skimage.measure import marching_cubes
-import numpy
+
 import gc, os
 import matplotlib.pyplot as plt 
 from mpl_toolkits.mplot3d import Axes3D, art3d
@@ -15,43 +15,18 @@ from scipy.spatial.distance import directed_hausdorff
 import cv2 
 import point_cloud_utils as pcu
 import numpy as np
-import os
+
 from pyvista import Cylinder
 import alphashape
 import pandas as pd
 import pyvista as pv
 import pydicom
-from matplotlib import pyplot as plt
-import os
-import pandas as pd
-import numpy as np
+
 import sympy as sym
 from sklearn.linear_model import LinearRegression
 from scipy.spatial import distance
 from skimage.draw import polygon
 import random
-import sys
-sys.path.append('/rtdsm')
-import rtdsm
-from time import process_time
-from scipy.stats import sem
-from scipy.spatial import KDTree
-from skimage.measure import marching_cubes
-
-import gc, os
-import matplotlib.pyplot as plt 
-from mpl_toolkits.mplot3d import Axes3D, art3d
-
-import numpy as np
-import os
-from pyvista import Cylinder
-
-import pandas as pd
-import pyvista as pv
-import pydicom
-from matplotlib import pyplot as plt
-
-#import circle_fit as cf
 from shapely import Polygon, intersection
 
 
@@ -1463,13 +1438,10 @@ import scipy
 from scipy.spatial.distance import directed_hausdorff
 
 
-PATH_DEST = 'Thesis_120/distance2D/'
-if not os.path.isdir(PATH_DEST):
-    os.makedirs(PATH_DEST)
 ROWS = ['d_max2D','d_mean2D','d_median2D']
 
 
-def pipeline_area_body(param_name='distances2D',path_k = '/mnt/iDriveShare/OdetteR/Registration_and_contours/Contours/'):
+def pipeline_area_body(PATH_DEST,param_name='distances2D',path_k = '/mnt/iDriveShare/OdetteR/Registration_and_contours/Contours/'):
 
     file = '/mnt/iDriveShare/OdetteR/Registration_and_contours/IDS_News_Partial.csv'
     ids_news = []
@@ -1672,6 +1644,9 @@ def pipeline_area_body(param_name='distances2D',path_k = '/mnt/iDriveShare/Odett
         print('DONE! Elapsed time for pipeline: ' + str((process_time()-t_init)/3600) + ' hours')
                 
 if __name__ == "__main__":
-    pipeline_area_body()
+    PATH_DEST = 'distance2D/'
+    if not os.path.isdir(PATH_DEST):
+        os.makedirs(PATH_DEST)
+    pipeline_area_body(PATH_DEST)
 
 
