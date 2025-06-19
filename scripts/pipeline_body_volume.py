@@ -7,7 +7,6 @@ Created on Jul 2024
 import sys
 sys.path.append('/rtdsm')
 import rtdsm
-from time import process_time
 from scipy.stats import sem
 from scipy.spatial import KDTree
 from skimage.measure import marching_cubes
@@ -18,55 +17,23 @@ from mpl_toolkits.mplot3d import Axes3D, art3d
 from datetime import date
 
 import numpy as np
-import os
 from pyvista import Cylinder
 import alphashape
 import pandas as pd
 import pyvista as pv
 import pydicom
 from matplotlib import pyplot as plt
-import os
-import pandas as pd
-import numpy as np
+
 import sympy as sym
 from sklearn.linear_model import LinearRegression
 from scipy.spatial import distance
 from skimage.draw import polygon
 import random
-import sys
-sys.path.append('/rtdsm')
-import rtdsm
-from time import process_time
-from scipy.stats import sem
-from scipy.spatial import KDTree
-from skimage.measure import marching_cubes
 
-import gc, os
-import matplotlib.pyplot as plt 
-from mpl_toolkits.mplot3d import Axes3D, art3d
-
-import numpy as np
-import os
-from pyvista import Cylinder
-
-import pandas as pd
-import pyvista as pv
-import pydicom
-from matplotlib import pyplot as plt
-
-#import circle_fit as cf
 from shapely import Polygon, intersection
 
-#PATH_SRC = '/mnt/iDriveShare/James-M/MIM/' # location of RT-struct files
-#PATH_DEST = 'Try/' # location where to save data
-#IMG_RES = [0.51119071245194, 0.51119071245194, 3]
+
 RADIUS_FRAC = 0.75
-
-PATIENTS_R = ["19","35","115","272","447","454","459","462","77","118","467","390","474","476","484","487","490","452","520","22","103","506","439","469","473","478","483","453","471","54","81"]
-PATIENTS_NR = ["464","468","359","169","456","451","443","146","425","432","172","43","509","504","440","153","257","436","466","147","458","503","510","23","424","498","514","515"]
-
-PATIENTS_ALL = PATIENTS_R + PATIENTS_NR
-
 
 from ipywidgets import *
 def get_path_RS(pat_id, path_src):   #Obtiene el archivo del RT structure
@@ -1255,16 +1222,13 @@ import os
 import json
 import csv
 
-PATH_DEST = 'Thesis_120/volumsBody_fixedv2_px/'
-if not os.path.isdir(PATH_DEST):
-    os.makedirs(PATH_DEST)
 ROWS = ['vol_body']
 BIG_AWAY = 400
 SMALL_AWAY = 30
 
 
 
-def pipeline_volumes(param_name='volumes',path_k = '/mnt/iDriveShare/OdetteR/Registration_and_contours/Contours/'):
+def pipeline_volumes(PATH_DEST,param_name='volumes',path_k = '/mnt/iDriveShare/OdetteR/Registration_and_contours/Contours/'):
     
     file = '/mnt/iDriveShare/OdetteR/Registration_and_contours/IDS_News_Partial.csv'
     ids_news = []
@@ -1361,7 +1325,8 @@ def pipeline_volumes(param_name='volumes',path_k = '/mnt/iDriveShare/OdetteR/Reg
 
             # ================================================================================
             # CALCULATE PARAMETERS\
-        
+
+            print('CALCULATING THE VOLUMES FOR THE FOLLOWING FRACTIONS AND CONTOURS')
             print(key_bodies_to_save)
 
     
@@ -1393,7 +1358,7 @@ def pipeline_volumes(param_name='volumes',path_k = '/mnt/iDriveShare/OdetteR/Reg
                     s_body2,s_body11 = get_equal_bodyv2(body2,body1,z_max,z_min,h,k,r)
 
                     gc.collect()
-         #           dfx = 1
+     
                     
                 else:
                     b1 = contours[key_body_n]
@@ -1405,12 +1370,8 @@ def pipeline_volumes(param_name='volumes',path_k = '/mnt/iDriveShare/OdetteR/Reg
 
 
                     b2_1,b1_1 = trim_contours_to_match_zs(body2.points,body1.points,z_min,z_max)
-                    #s_body1 = get_surface_marching_cubes(b1_1)
                     s_body11 = b1_1
-#                    s_body2 = get_surface_marching_cubes(b2_1)
                     gc.collect()
-#                    dfx = abs(int((key_bodies_to_save[key_body_n].split('-'))[1]) - int((key_bodies_to_save[key_body_n+1].split('-'))[1]))
-
                 vol_body  = get_volume_body_from_contours(s_body11,pixel_spacing2)
                 print('\tProcess time of parameters (' + key_bodies_to_save[key_body_n] + '): ' + str(process_time()-t1) + ' s')
                 # except:
@@ -1423,9 +1384,8 @@ def pipeline_volumes(param_name='volumes',path_k = '/mnt/iDriveShare/OdetteR/Reg
                 # keep order same as ROWS!
                 params = []
                 params.append(vol_body)
-               # params.append(vol_PTV_inner)
-                #params.append(vol_PTV_outer)
-                # record calculated values under body key
+                
+                # Records calculated values under body key
                 df[key_bodies_to_save[key_body_n]] = params
                 # ================================================================================
                 
@@ -1437,4 +1397,8 @@ def pipeline_volumes(param_name='volumes',path_k = '/mnt/iDriveShare/OdetteR/Reg
     
 
 if __name__ == "__main__":
-    pipeline_volumes()
+    
+    PATH_DEST = 'body_volumes/'
+    if not os.path.isdir(PATH_DEST):
+    os.makedirs(PATH_DEST)
+    pipeline_volumes(PATH_DEST)
