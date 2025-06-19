@@ -177,7 +177,7 @@ python pipeline_PTV_volumes.py
 ## How to Cite 
 If you publish any work using this package, please make sure you acknowledge us by citing the following paper: Rios-Ibacache O., Manalad J., O'Sullivan-Steben K., Poon E., at al. Quantification of head and neck cancer patients’ anatomical changes: prediction of radiotherapy replanning need.
 ## License 
-This project is provided under the GNU GLPv3 license to preserve open-source access to any derivative works. See the LICENSE file for more information.
+This project is provided under the GNU General Public License version 3 (GPLv3) to preserve open-source access to any derivative works. See the LICENSE file for more information.
 ## References
 * Barker, J. L., Jr, Garden, A. S., Ang, K. K., O'Daniel, J. C., Wang, H., Court, L. E., Morrison, W. H., Rosenthal, D. I., Chao, K. S., Tucker, S. L., Mohan, R., & Dong, L. (2004). Quantification of volumetric and   geometric changes occurring during fractionated radiotherapy for head-and-neck cancer using an integrated CT/linear accelerator system. International journal of radiation oncology, biology, physics, 59(4), 960–970. https://doi.org/10.1016/j.ijrobp.2003.12.024
 * Figen, M., Çolpan Öksüz, D., Duman, E., Prestwich, R., Dyker, K., Cardale, K., Ramasamy, S., Murray, P., & Şen, M. (2020). Radiotherapy for Head and Neck Cancer: Evaluation of Triggered Adaptive Replanning in Routine Practice. Frontiers in oncology, 10, 579917. https://doi.org/10.3389/fonc.2020.579917
