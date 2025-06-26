@@ -178,36 +178,23 @@ Several examples are included in Jupyter Notebook format to demonstrate how to r
 python pipeline_body_distances.py 
 ```
 #### PTV-related metrics
-```
-python pipeline_PTV_distances.py 
-```
+| Script | Desctiption |
+------------------------
+| [pipeline_PTV_distances.py](/scripts/pipeline_PTV_distances.py) |   |  
+| [pipeline_PTV_volumes.py](/scripts/pipeline_PTV_volumes.py) |    |  
 
-```
-python pipeline_PTV_volumes.py 
-```
 #### Neck-related metrics
+| Script | Description | 
+------------------------ 
+| [pipeline_lx_ly_distances.py](/scripts/pipeline_lx_ly_distances.py) |   |
 
-```
-python pipeline_PTV_volumes.py 
-```
-
-```
-python pipeline_lx_ly_distances.py 
-```
 #### Submandibular-related metrics
 
-```
-python pipeline_submand_Rmin_Rmax.py 
-```
-
-```
-python pipeline_submandibular_area.py 
-```
-
-```
-python pipeline_lx_ly_distances.py 
-```
-
+| Script |  Description | 
+--------------------------
+| [pipeline_submandibular_area.py](/scripts/pipeline_submandibular_area.py) | |
+| [pipeline_submand_Rmin_Rmax.py](/scripts/pipeline_submand_Rmin_Rmax.py) |  |
+| [pipeline_lx_ly_distances.py](/scripts/pipeline_lx_ly_distances.py) |   |
 
 ## How to Cite 
 If you publish any work using this package, please make sure you acknowledge us by citing the following paper: Rios-Ibacache O., Manalad J., O'Sullivan-Steben K., Poon E., at al. Quantification of head and neck cancer patients’ anatomical changes: prediction of radiotherapy replanning need.
