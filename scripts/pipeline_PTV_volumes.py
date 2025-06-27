@@ -1308,20 +1308,16 @@ def get_start_position_dcm(CT_path):
     pixel_spacing = d.PixelSpacing
     
     return pixel_spacing 
-import os
-import json
-import csv
 
-PATH_DEST = 'Thesis_120/volumes_PTVs_px2/'
+
+PATH_DEST = 'Thesis_120/volumesPTV/'
 if not os.path.isdir(PATH_DEST):
     os.makedirs(PATH_DEST)
 ROWS = ['vol_PTV_inner', 'vol_PTV_outer','vol_PTV_inner_body_ratio','vol_PTV_outer_body_ratio']
 BIG_AWAY = 400
 SMALL_AWAY = 30
 
-
-
-def pipeline_volumes(param_name='volumes',path_k = '/mnt/iDriveShare/OdetteR/Registration_and_contours/Contours/'):
+def pipeline_volumes(param_name='volumesPTV',path_k = '/mnt/iDriveShare/OdetteR/Registration_and_contours/Contours/'):
     
     file = '/mnt/iDriveShare/OdetteR/Registration_and_contours/IDS_News_Partial.csv'
     ids_news = []
@@ -1337,7 +1333,6 @@ def pipeline_volumes(param_name='volumes',path_k = '/mnt/iDriveShare/OdetteR/Reg
     for str_pat_id in ['630']:
         #print('Processing patient ' + str_pat_id + '.') 
         patient_path = '/mnt/iDriveShare/OdetteR/Registration_and_contours/Contours/'+str_pat_id
-        
     
         # check if patient already has csv
         if str_pat_id in existing_patients:
