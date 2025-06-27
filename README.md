@@ -25,12 +25,12 @@ Website:  [www.kildealab.com](https://www.kildealab.com)
 Head and neck (HN) cancer patients undergoing radiotherapy may experience significant anatomical changes due to weight loss and tumor shrinkage. These changes can impact the effectiveness of the initial treatment plan, potentially necessitating treatment replanning. However, ad hoc replanning requires additional clinical staff time, which can lead to suboptimal and stressful treatment planning. Furthermore, currently, there is no established method for determining the total amount of anatomical variation in the head and neck region to decide whether replanning is necessary. This research aimed to identify and create metrics based on patient anatomical structures that can describe the anatomical alterations that patients may experience throughout the treatment and influence decisions regarding treatment replanning. These parameters were used to develop a machine learning classification model to predict if patients would likely undergo replanning. Based on the 3D shape and 2D contours of structures, we defined 43 parameters. We developed **HN-GeoNatomyX**, an extraction pipeline to automatically calculate the defined 43 parameters over the course of the radiotherapy treatment.
 
 ## Features
-### Semi-automatic contouring tool for the treatment mask
+### Semi-automatic Contouring Tool for the Treatment Mask
   ![Optional Text](/diagrams/Mask_treatment.jpg)
-### Extraction pipelines for the created 43 geometrical metrics
+### Extraction Pipelines for the Created 43 Geometrical Metrics
 
 Based on the 3D anatomy and 2D contours of the body and radiotherapy (RT) structures—including the Planning Target Volume (PTV) and mandible—we defined **43 continuous quantitative metrics** to characterize anatomical changes during RT delivery. These changes account for variations observed between the planning CT simulation (CT sim) and CBCT, as well as across sequential CBCTs. **The metrics were organized into six categories**, as outlined in the tables below.
-#### Body-related metrics
+#### Body-Related Metrics
 <p align="center">
 <img src="/diagrams/body_diagram.png" width="900">
 </p>
@@ -44,7 +44,7 @@ Based on the 3D anatomy and 2D contours of the body and radiotherapy (RT) struct
 | Median 2D distance| $$\tilde{D}_{Body}$$| The median 2D distance between a CBCT and the CT sim body contour calculated across each z plane | 
 | Average 2D distance | $$\bar{D}_{Body}$$| Average distance between a CBCT and the CT sim body contour, across each plane z|
 
-#### Treatment mask-related metrics
+#### Treatment Mask-Related Metrics
 <p align="center">
 <img src="/diagrams/mask_diagram.png" width="700">
 </p>
@@ -56,7 +56,7 @@ Based on the 3D anatomy and 2D contours of the body and radiotherapy (RT) struct
 | Standard deviation of distances from body contour to treatment mask | $$\sigma_{B_{mask}}$$ | Corresponds to the standard deviation of the distribution of the distances|
 | Air volume between body and treatment mask| $$V^{air}_{Body-to-mask}$$ | Amount of space that is between the external body contour of the HN region and the treatment mask contour|
 
-#### PTV-related metrics
+#### PTV-Related Metrics
 <p align="center">
 <img src="/diagrams/PTV_diagram.png" width="480">
 </p>
@@ -80,7 +80,7 @@ Based on the 3D anatomy and 2D contours of the body and radiotherapy (RT) struct
 | Volume PTV inner ratio| $VI_{PTV}:LV_{Body}$ | Volume that relies inside the enclosed body region, normalized by the body volume that limits the region of interest|
 | Volume PTV outer radio| $VO_{PTV}:LV_{Body}$  | Volume that relies outside the enclosed body region, normalized by the body volume that limits the region of interest|
 
-#### Mandible-related metrics
+#### Mandible-Related Metrics
 
 | Metric  | Symbol | Definition |
 | ------------- | ------------|-----------|
@@ -89,7 +89,7 @@ Based on the 3D anatomy and 2D contours of the body and radiotherapy (RT) struct
 | Average distance from the mandible to the body | $$M_{avg}$$ | Represents the average distance between the mandible and the external body contour from each medical image|
 | Standard deviation of distances from the mandible to body contour| $$\sigma_{M}$$ | Corresponds to the standard deviation of the distribution of the distances between the mandible and the external body contours|
 
-#### Neck-related metrics
+#### Neck-Related Metrics
 
 | Metric  | Symbol | Definition |
 | ------------- | ------------|-------------|
@@ -108,7 +108,7 @@ Based on the 3D anatomy and 2D contours of the body and radiotherapy (RT) struct
 | Compactness| $$C_{Neck}$$ | Inspired by Bribiesca et al. (2008), the compactness describes the shape of the neck, representing the degree to which the neck is compact. It is calculated by the ratio between the enclosing surface area and the volume of a neck region ($$SA^3_{Neck}/V^2_{Neck}$$). This metric is dimensionless and minimized by a sphere|
 
 
-#### Submandibular-related metrics
+#### Submandibular-Related Metrics
 <p align="center">
 <img src="/diagrams/submand_diagram.png" width="750">
 </p>
@@ -168,32 +168,30 @@ Several examples are included in Jupyter Notebook format to demonstrate how to r
 
 #### Treatment Mask Contouring 
 
-#### Extraction Pipelines 
-
-##### Body-related metrics
+#### Body-Related Metrics Pipelines
 | Script | Desctiption |
 | ------------- |-----------|
 | [pipeline_body_volume.py](/scripts/pipeline_body_volume.py) | Calculates $V_{Body}$ in $mm^3$ and saves the results as CSV files labelled *'volumes_'+ID* in a folder called *'body_volumes'*| 
 | [pipeline_body_3D_distances.py](/scripts/pipeline_body_3D_distances.py) | Calculates $CD_{Body}$ and $HD_{Body}$ in $mm$ and saves the results as CSV files labelled *'volumes_'+ID* in a folder called *'body_volumes'* |
 | [pipeline_body_2D_distances.py](/scripts/pipeline_body_2D_distances.py) |  Calculates $D_{Body}$, $`\tilde{D}_{Body}`$, and $`\bar{D}_{Body}`$ in $mm$ and saves the results as CSV files labelled *'body_distances2D_'+ID* in a folder called *'body_2D_distances'*  |
-##### Treatment mask-related metrics
+#### Treatment Mask-Related Metrics Pipeline
 | Script | Desctiption |
 |-----------|-------------|
 | [pipeline_treatment_mask_distances.py.py](/scripts/pipeline_treatment_mask_distances.py) |  |
 
-##### PTV-related metrics
+#### PTV-Related Metrics Pipelines
 | Script | Desctiption |
 |-----------|-------------|
 | [pipeline_PTV_distances.py](/scripts/pipeline_PTV_distances.py) |  Calculates $x_{min}$, $`x_{max}`$, $`x_{avg}`$, $`x_{med}`$, and $`x_{std}`$ in $mm$ and saves the results as CSV files labelled *'xvalues_'+ID* in a folder called *'xvalues'*  |  
 | [pipeline_PTV_volumes.py](/scripts/pipeline_PTV_volumes.py) |  Calculates $VI_{PTV}$ and $`VO_{PTV}`$ in in $mm^3$, and  $`VI_{PTV}:LI_{Body}`$ and $`VO_{PTV}:LI_{Body}`$. It saves the results as CSV files labelled *'volumesPTV_'+ID* in a folder called *'volumesPTV'*   |  
 
-##### Mandible-related metrics
+##### Mandible-Related Metrics Pipeline
 
 | Script | Description | 
 |-----------|-------------|
 | [pipeline_mandible_distances.py](/scripts/pipeline_mandible_distances.py) |  |
 
-##### Neck-related metrics
+##### Neck-Related Metrics Pipelines
 
 | Script | Description | 
 |-----------|-------------|
@@ -202,7 +200,7 @@ Several examples are included in Jupyter Notebook format to demonstrate how to r
 | [pipeline_distances2D_neck.py](/scripts/pipeline_distances2D_neck.py) |  |
 | [pipeline_RminRmax3D_neck.py](/scripts/pipeline_RminRmax3D_neck.py) |  |
 
-##### Submandibular-related metrics
+##### Submandibular-Related Metrics Pipelines
 
 | Script |  Description | 
 |--------------|------------|
