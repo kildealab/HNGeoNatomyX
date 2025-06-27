@@ -27,7 +27,7 @@ Head and neck (HN) cancer patients undergoing radiotherapy may experience signif
 ## Features
 ### Semi-automatic contouring tool for the treatment mask
   ![Optional Text](/diagrams/Mask_treatment.jpg)
-### Code for extracting the 43 geometrical metrics
+### Extraction pipelines for the created 43 geometrical metrics
 
 Based on the 3D anatomy and 2D contours of the body and radiotherapy (RT) structures—including the Planning Target Volume (PTV) and mandible—we defined **43 continuous quantitative metrics** to characterize anatomical changes during RT delivery. These changes account for variations observed between the planning CT simulation (CT sim) and CBCT, as well as across sequential CBCTs. **The metrics were organized into six categories**, as outlined in the tables below.
 #### Body-related metrics
@@ -166,30 +166,34 @@ Patient medical images (CT sims and CBCTs) were stored using the [dicoPATH](http
 ### Running Scripts and Example
 Several examples are included in Jupyter Notebook format to demonstrate how to run the scripts for contouring and extracting the metrics, as well as to provide context for the methodology used. 
 
-#### Body-related metrics
+#### Treatment Mask Contouring 
+
+#### Extraction Pipelines 
+
+##### Body-related metrics
 | Script | Desctiption |
 | ------------- |-----------|
 | [pipeline_body_volume.py](/scripts/pipeline_body_volume.py) | Calculates $V_{Body}$ in $mm^3$ and saves the results as CSV files labelled *'volumes_'+ID* in a folder called *'body_volumes'*| 
 | [pipeline_body_3D_distances.py](/scripts/pipeline_body_3D_distances.py) | Calculates $CD_{Body}$ and $HD_{Body}$ in $mm$ and saves the results as CSV files labelled *'volumes_'+ID* in a folder called *'body_volumes'* |
 | [pipeline_body_2D_distances.py](/scripts/pipeline_body_2D_distances.py) |  Calculates $D_{Body}$, $`\tilde{D}_{Body}`$, and $`\bar{D}_{Body}`$ in $mm$ and saves the results as CSV files labelled *'body_distances2D_'+ID* in a folder called *'body_2D_distances'*  |
-#### Treatment mask-related metrics
+##### Treatment mask-related metrics
 | Script | Desctiption |
 |-----------|-------------|
 | [pipeline_treatment_mask_distances.py.py](/scripts/pipeline_treatment_mask_distances.py) |  |
 
-#### PTV-related metrics
+##### PTV-related metrics
 | Script | Desctiption |
 |-----------|-------------|
 | [pipeline_PTV_distances.py](/scripts/pipeline_PTV_distances.py) |  Calculates $x_{min}$, $`x_{max}`$, $`x_{avg}`$, $`x_{med}`$, and $`x_{std}`$ in $mm$ and saves the results as CSV files labelled *'xvalues_'+ID* in a folder called *'xvalues'*  |  
 | [pipeline_PTV_volumes.py](/scripts/pipeline_PTV_volumes.py) |  Calculates $VI_{PTV}$ and $`VO_{PTV}`$ in in $mm^3$, and  $`VI_{PTV}:LI_{Body}`$ and $`VO_{PTV}:LI_{Body}`$. It saves the results as CSV files labelled *'volumesPTV_'+ID* in a folder called *'volumesPTV'*   |  
 
-#### Mandible-related metrics
+##### Mandible-related metrics
 
 | Script | Description | 
 |-----------|-------------|
 | [pipeline_mandible_distances.py](/scripts/pipeline_mandible_distances.py) |  |
 
-#### Neck-related metrics
+##### Neck-related metrics
 
 | Script | Description | 
 |-----------|-------------|
@@ -198,7 +202,7 @@ Several examples are included in Jupyter Notebook format to demonstrate how to r
 | [pipeline_distances2D_neck.py](/scripts/pipeline_distances2D_neck.py) |  |
 | [pipeline_RminRmax3D_neck.py](/scripts/pipeline_RminRmax3D_neck.py) |  |
 
-#### Submandibular-related metrics
+##### Submandibular-related metrics
 
 | Script |  Description | 
 |--------------|------------|
