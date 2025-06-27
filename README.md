@@ -183,7 +183,10 @@ Several examples are included in Jupyter Notebook format to demonstrate how to r
 
 | Script | Description | 
 |-----------|-------------|
-| [pipeline_lx_ly_distances.py](/scripts/pipeline_lx_ly_distances.py) |   |
+| [pipeline_neck_volume_area.py](/scripts/pipeline_neck_volume_area.py) |  |
+| [pipeline_distances3D_neck.py](/scripts/pipeline_distances3D_neck.py) |  |
+| [pipeline_distances2D_neck.py](/scripts/pipeline_distances2D_neck.py) |   |
+| [pipeline_RminRmax3D_neck.py](/scripts/pipeline_RminRmax3D_neck.py) |  |
 
 #### Submandibular-related metrics
 
