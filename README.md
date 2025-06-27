@@ -163,7 +163,7 @@ Patient medical images (CT sims and CBCTs) were stored using the [dicoPATH](http
 ...
 </pre>
 
-### Running Scripts and Examples
+### Running Scripts and Example
 Several examples are included in Jupyter Notebook format to demonstrate how to run the scripts for contouring and extracting the metrics, as well as to provide context for the methodology used. 
 
 #### Body-related metrics
@@ -173,25 +173,22 @@ Several examples are included in Jupyter Notebook format to demonstrate how to r
 | [pipeline_body_3D_distances.py](/scripts/pipeline_body_3D_distances.py) | Calculates $CD_{Body}$ and $HD_{Body}$ in $mm$ and saves the results as CSV files labelled *'volumes_'+ID* in a folder called *'body_volumes'* |
 | [pipeline_body_2D_distances.py](/scripts/pipeline_body_2D_distances.py) |  Calculates $D_{Body}$, $`\tilde{D}_{Body}`$, and $`\bar{D}_{Body}`$ in $mm$ and saves the results as CSV files labelled *'body_distances2D_'+ID* in a folder called *'body_2D_distances'*  |
 
-#### Example 
-```
-python pipeline_body_distances.py 
-```
 #### PTV-related metrics
 | Script | Desctiption |
-------------------------
-| [pipeline_PTV_distances.py](/scripts/pipeline_PTV_distances.py) |   |  
+|-----------|-------------|
+| [pipeline_PTV_distances.py](/scripts/pipeline_PTV_distances.py) |  Calculates $x_{min}$, $`x_{max}`$, $`x_{avg}`$, $`x_{med}`$, and $`x_{std}`$ in $mm$ and saves the results as CSV files labelled *'x_values_'+ID* in a folder called *'x_values'*  |  
 | [pipeline_PTV_volumes.py](/scripts/pipeline_PTV_volumes.py) |    |  
 
 #### Neck-related metrics
+
 | Script | Description | 
------------------------- 
+|-----------|-------------|
 | [pipeline_lx_ly_distances.py](/scripts/pipeline_lx_ly_distances.py) |   |
 
 #### Submandibular-related metrics
 
 | Script |  Description | 
---------------------------
+|--------------|------------|
 | [pipeline_submandibular_area.py](/scripts/pipeline_submandibular_area.py) | |
 | [pipeline_submand_Rmin_Rmax.py](/scripts/pipeline_submand_Rmin_Rmax.py) |  |
 | [pipeline_lx_ly_distances.py](/scripts/pipeline_lx_ly_distances.py) |   |
