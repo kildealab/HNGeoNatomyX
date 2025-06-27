@@ -1305,7 +1305,7 @@ PATH_DEST = 'Thesis_120/xvalues/'
 if not os.path.isdir(PATH_DEST):
     os.makedirs(PATH_DEST)
     
-ROWS = ['xmin', 'xmax', 'xlen', 'xmed', 'xave', 'xstd', 'xsem']
+ROWS = ['xmin', 'xmax', 'xmed', 'xave', 'xstd']
 
 def pipeline_dist_body(param_name='xvalues',path_k = '/mnt/iDriveShare/OdetteR/Registration_and_contours/Contours/'):
     
@@ -1449,11 +1449,10 @@ def pipeline_dist_body(param_name='xvalues',path_k = '/mnt/iDriveShare/OdetteR/R
                 
                 params.append(np.min(distances))
                 params.append(np.max(distances))
-                params.append(np.size(distances))
                 params.append(np.median(distances))
                 params.append(np.mean(distances))
                 params.append(np.std(distances))
-                params.append(sem(distances))
+                
          
 
                 df[key_bodies_to_save[key_body_n]] = params
