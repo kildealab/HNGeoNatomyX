@@ -179,20 +179,26 @@ Several examples are included in Jupyter Notebook format to demonstrate how to r
 | [pipeline_PTV_distances.py](/scripts/pipeline_PTV_distances.py) |  Calculates $x_{min}$, $`x_{max}`$, $`x_{avg}`$, $`x_{med}`$, and $`x_{std}`$ in $mm$ and saves the results as CSV files labelled *'xvalues_'+ID* in a folder called *'xvalues'*  |  
 | [pipeline_PTV_volumes.py](/scripts/pipeline_PTV_volumes.py) |  Calculates $VI_{PTV}$ and $`VO_{PTV}`$ in in $mm^3$, and  $`VI_{PTV}:LI_{Body}`$ and $`VO_{PTV}:LI_{Body}`$. It saves the results as CSV files labelled *'volumesPTV_'+ID* in a folder called *'volumesPTV'*   |  
 
+#### Mandible-related metrics
+
+| Script | Description | 
+|-----------|-------------|
+| [pipeline_mandible_distances.py](/scripts/pipeline_mandible_distances.py) |  |
+
 #### Neck-related metrics
 
 | Script | Description | 
 |-----------|-------------|
 | [pipeline_neck_volume_area.py](/scripts/pipeline_neck_volume_area.py) |  |
 | [pipeline_distances3D_neck.py](/scripts/pipeline_distances3D_neck.py) |  |
-| [pipeline_distances2D_neck.py](/scripts/pipeline_distances2D_neck.py) |   |
+| [pipeline_distances2D_neck.py](/scripts/pipeline_distances2D_neck.py) |  |
 | [pipeline_RminRmax3D_neck.py](/scripts/pipeline_RminRmax3D_neck.py) |  |
 
 #### Submandibular-related metrics
 
 | Script |  Description | 
 |--------------|------------|
-| [pipeline_submandibular_area.py](/scripts/pipeline_submandibular_area.py) | |
+| [pipeline_submand_area.py](/scripts/pipeline_submand_area.py) | |
 | [pipeline_submand_Rmin_Rmax.py](/scripts/pipeline_submand_Rmin_Rmax.py) |  |
 | [pipeline_lx_ly_distances.py](/scripts/pipeline_lx_ly_distances.py) |   |
 
