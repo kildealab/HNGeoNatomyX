@@ -1,6 +1,6 @@
 """
 Created on Jul 2024 
-@author: Odette Rios-Ibacache & James Manalad
+@author: Odette Rios-Ibacache 
 
 """
 
