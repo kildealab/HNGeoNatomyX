@@ -124,7 +124,7 @@ Based on the 3D anatomy and 2D contours of the body and radiotherapy (RT) struct
 | Maximum lateral chord | $l_{x}$ | Maximum distance that can be drawn from the outermost points of the submandibular body contour plane in a lateral direction |
 
 ## Dependencies
-  *  Python>=3.6
+  *  [Python](https://www.python.org/downloads/)>=3.6
   *  [scipy](https://scipy.org/)>=1.6.0
   *  [skimage](https://scikit-image.org/)>=0.24.0
   *  [numpy](https://numpy.org/)>=1.19.5
@@ -172,6 +172,10 @@ Several examples are included in Jupyter Notebook format to demonstrate how to r
 | [pipeline_body_volume.py](/scripts/pipeline_body_volume.py) | Calculates $V_{Body}$ in $mm^3$ and saves the results as CSV files labelled *'volumes_'+ID* in a folder called *'body_volumes'*| 
 | [pipeline_body_3D_distances.py](/scripts/pipeline_body_3D_distances.py) | Calculates $CD_{Body}$ and $HD_{Body}$ in $mm$ and saves the results as CSV files labelled *'volumes_'+ID* in a folder called *'body_volumes'* |
 | [pipeline_body_2D_distances.py](/scripts/pipeline_body_2D_distances.py) |  Calculates $D_{Body}$, $`\tilde{D}_{Body}`$, and $`\bar{D}_{Body}`$ in $mm$ and saves the results as CSV files labelled *'body_distances2D_'+ID* in a folder called *'body_2D_distances'*  |
+#### Treatment mask-related metrics
+| Script | Desctiption |
+|-----------|-------------|
+| [pipeline_treatment_mask_distances.py.py](/scripts/pipeline_treatment_mask_distances.py) |  |
 
 #### PTV-related metrics
 | Script | Desctiption |
@@ -203,7 +207,7 @@ Several examples are included in Jupyter Notebook format to demonstrate how to r
 | [pipeline_lx_ly_distances.py](/scripts/pipeline_lx_ly_distances.py) |   |
 
 ## How to Cite 
-If you publish any work using this package, please make sure you acknowledge us by citing the following paper: Rios-Ibacache O., Manalad J., O'Sullivan-Steben K., Poon E., at al. Quantification of head and neck cancer patients’ anatomical changes: prediction of radiotherapy replanning need.
+If you publish any work using this package, please make sure you acknowledge us by citing the following paper: Rios-Ibacache O., Manalad J., O'Sullivan-Steben K., Poon E., at al. (2025). Quantification of head and neck cancer patients’ anatomical changes: prediction of radiotherapy replanning need.
 ## License 
 This project is provided under the GNU General Public License version 3 (GPLv3) to preserve open-source access to any derivative works. See the LICENSE file for more information.
 ## References
