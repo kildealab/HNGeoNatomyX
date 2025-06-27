@@ -176,8 +176,8 @@ Several examples are included in Jupyter Notebook format to demonstrate how to r
 #### PTV-related metrics
 | Script | Desctiption |
 |-----------|-------------|
-| [pipeline_PTV_distances.py](/scripts/pipeline_PTV_distances.py) |  Calculates $x_{min}$, $`x_{max}`$, $`x_{avg}`$, $`x_{med}`$, and $`x_{std}`$ in $mm$ and saves the results as CSV files labelled *'x_values_'+ID* in a folder called *'x_values'*  |  
-| [pipeline_PTV_volumes.py](/scripts/pipeline_PTV_volumes.py) |    |  
+| [pipeline_PTV_distances.py](/scripts/pipeline_PTV_distances.py) |  Calculates $x_{min}$, $`x_{max}`$, $`x_{avg}`$, $`x_{med}`$, and $`x_{std}`$ in $mm$ and saves the results as CSV files labelled *'xvalues_'+ID* in a folder called *'xvalues'*  |  
+| [pipeline_PTV_volumes.py](/scripts/pipeline_PTV_volumes.py) |  Calculates $VI_{PTV}$ and $`VO_{PTV}`$ in in $mm^3$, and  $`VI_{PTV}:LI_{Body}`$ and $`VO_{PTV}:LI_{Body}`$. It saves the results as CSV files labelled *'volumesPTV_'+ID* in a folder called *'volumesPTV'*   |  
 
 #### Neck-related metrics
 
