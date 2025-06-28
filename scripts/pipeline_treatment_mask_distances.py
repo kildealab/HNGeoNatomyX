@@ -971,12 +971,13 @@ import os
 import json
 import csv
 
-PATH_DEST = 'Thesis_120/mask_paramsv2'
+PATH_DEST = 'disatncesMask'
 if not os.path.isdir(PATH_DEST):
     os.makedirs(PATH_DEST)
+    
 ROWS= ['max_distance','avg_distance','std_distance']
 
-def pipeline_mask(param_name='mask',path_k = '/mnt/iDriveShare/OdetteR/Registration_and_contours/Contours/'):
+def pipeline_mask(param_name='distancesMask',path_k = '/mnt/iDriveShare/OdetteR/Registration_and_contours/Contours/'):
     
     file = '/mnt/iDriveShare/OdetteR/Registration_and_contours/IDS_News_Partial.csv'
     ids_news = []
