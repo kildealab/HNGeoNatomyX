@@ -171,25 +171,25 @@ Several examples are included in Jupyter Notebook format to demonstrate how to r
 #### Body-Related Metrics Pipelines
 | Script | Desctiption |
 | ------------- |-----------|
-| [pipeline_body_volume.py](/scripts/pipeline_body_volume.py) | Calculates $V_{Body}$ in $mm^3$ and saves the results as CSV files labelled *'volumes_'+ID* in a folder called *'body_volumes'*| 
-| [pipeline_body_3D_distances.py](/scripts/pipeline_body_3D_distances.py) | Calculates $CD_{Body}$ and $HD_{Body}$ in $mm$ and saves the results as CSV files labelled *'volumes_'+ID* in a folder called *'body_volumes'* |
-| [pipeline_body_2D_distances.py](/scripts/pipeline_body_2D_distances.py) |  Calculates $D_{Body}$, $`\tilde{D}_{Body}`$, and $`\bar{D}_{Body}`$ in $mm$ and saves the results as CSV files labelled *'body_distances2D_'+ID* in a folder called *'body_2D_distances'*  |
+| [pipeline_body_volume.py](/scripts/pipeline_body_volume.py) | Calculates $V_{Body}$ in $mm^3$ and saves the results as CSV files labelled *'volumes_'+ID* (ID: patient identifier) in a folder called **'body_volumes'**| 
+| [pipeline_body_3D_distances.py](/scripts/pipeline_body_3D_distances.py) | Calculates $CD_{Body}$ and $HD_{Body}$ in $mm$ and saves the results as CSV files labelled *'volumes_'+ID* in a folder called **'body_volumes'** |
+| [pipeline_body_2D_distances.py](/scripts/pipeline_body_2D_distances.py) |  Calculates $D_{Body}$, $`\tilde{D}_{Body}`$, and $`\bar{D}_{Body}`$ in $mm$ and saves the results as CSV files labelled *'body_distances2D_'+ID* in a folder called **'body_2D_distances'**  |
 #### Treatment Mask-Related Metrics Pipeline
 | Script | Desctiption |
 |-----------|-------------|
-| [pipeline_treatment_mask_distances.py.py](/scripts/pipeline_treatment_mask_distances.py) |  |
-
+| [pipeline_treatment_mask_distances.py.py](/scripts/pipeline_treatment_mask_distances.py) | Computes $`max`${$`B_{mask}`$}, $`\bar{B}_{mask}`$, and $`\sigma_{B_{mask}}`$. The results are saved as CSV files labelled 'distancesMask_'+ID* in a folder called **'distancesMask'**|
+| [pipeline_treatment_mask_air.py](/scripts/pipeline_treatment_mask_air.py) |   | 
 #### PTV-Related Metrics Pipelines
 | Script | Desctiption |
 |-----------|-------------|
-| [pipeline_PTV_distances.py](/scripts/pipeline_PTV_distances.py) |  Calculates $x_{min}$, $`x_{max}`$, $`x_{avg}`$, $`x_{med}`$, and $`x_{std}`$ in $mm$ and saves the results as CSV files labelled *'xvalues_'+ID* in a folder called *'xvalues'*  |  
-| [pipeline_PTV_volumes.py](/scripts/pipeline_PTV_volumes.py) |  Calculates $VI_{PTV}$ and $`VO_{PTV}`$ in in $mm^3$, and  $`VI_{PTV}:LI_{Body}`$ and $`VO_{PTV}:LI_{Body}`$. It saves the results as CSV files labelled *'volumesPTV_'+ID* in a folder called *'volumesPTV'*   |  
+| [pipeline_PTV_distances.py](/scripts/pipeline_PTV_distances.py) |  Calculates $x_{min}$, $`x_{max}`$, $`x_{avg}`$, $`x_{med}`$, and $`x_{std}`$ in $mm$ and saves the results as CSV files labelled *'xvalues_'+ID* in a folder called **'xvalues'**  |  
+| [pipeline_PTV_volumes.py](/scripts/pipeline_PTV_volumes.py) |  Calculates $VI_{PTV}$ and $`VO_{PTV}`$ in in $mm^3$, and  $`VI_{PTV}:LI_{Body}`$ and $`VO_{PTV}:LI_{Body}`$. It saves the results as CSV files labelled *'volumesPTV_'+ID* in a folder called **'volumesPTV'**   |  
 
 ##### Mandible-Related Metrics Pipeline
 
 | Script | Description | 
 |-----------|-------------|
-| [pipeline_mandible_distances.py](/scripts/pipeline_mandible_distances.py) | Calculates the metrics $`M_{min}`$, $`M_{med}`$, $`M_{avg}`$, and $`M_{std}`$. The results are saved in a CSV file named *'mandible_'+ID* in a folder called *'mandible_metrics'* |
+| [pipeline_mandible_distances.py](/scripts/pipeline_mandible_distances.py) | Calculates the metrics $`M_{min}`$, $`M_{med}`$, $`M_{avg}`$, and $`M_{std}`$. The results are saved in a CSV file named *'mandible_'+ID* in a folder called **'mandible_metrics'** |
 
 ##### Neck-Related Metrics Pipelines
 
