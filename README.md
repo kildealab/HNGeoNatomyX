@@ -189,7 +189,7 @@ Several examples are included in Jupyter Notebook format to demonstrate how to r
 
 | Script | Description | 
 |-----------|-------------|
-| [pipeline_mandible_distances.py](/scripts/pipeline_mandible_distances.py) |  |
+| [pipeline_mandible_distances.py](/scripts/pipeline_mandible_distances.py) | Calculates the metrics $`M_{min}`$, $`M_{med}`$, $`M_{avg}`$, and $`M_{std}`$. The results are saved in a CSV file named *'mandible_'+ID* in a folder called *'mandible_metrics'* |
 
 ##### Neck-Related Metrics Pipelines
 
