@@ -169,18 +169,18 @@ Several examples are included in Jupyter Notebook format to demonstrate how to r
 #### Treatment Mask Contouring 
 
 #### Body-Related Metrics Pipelines
-| Script | Desctiption |
+| Script | Description |
 | ------------- |-----------|
 | [pipeline_body_volume.py](/scripts/pipeline_body_volume.py) | Calculates $V_{Body}$ in $mm^3$ and saves the results as CSV files labelled *'volumes_'+ID* (ID: patient identifier) in a folder called **'body_volumes'**| 
 | [pipeline_body_3D_distances.py](/scripts/pipeline_body_3D_distances.py) | Calculates $CD_{Body}$ and $HD_{Body}$ in $mm$ and saves the results as CSV files labelled *'volumes_'+ID* in a folder called **'body_volumes'** |
 | [pipeline_body_2D_distances.py](/scripts/pipeline_body_2D_distances.py) |  Calculates $D_{Body}$, $`\tilde{D}_{Body}`$, and $`\bar{D}_{Body}`$ in $mm$ and saves the results as CSV files labelled *'body_distances2D_'+ID* in a folder called **'body_2D_distances'**  |
 #### Treatment Mask-Related Metrics Pipeline
-| Script | Desctiption |
+| Script | Description |
 |-----------|-------------|
 | [pipeline_treatment_mask_distances.py.py](/scripts/pipeline_treatment_mask_distances.py) | Computes $`max`${$`B_{mask}`$}, $`\bar{B}_{mask}`$, and $`\sigma_{B_{mask}}`$. The results are saved as CSV files labelled 'distancesMask_'+ID* in a folder called **'distancesMask'**|
 | [pipeline_treatment_mask_air.py](/scripts/pipeline_treatment_mask_air.py) |   | 
 #### PTV-Related Metrics Pipelines
-| Script | Desctiption |
+| Script | Description |
 |-----------|-------------|
 | [pipeline_PTV_distances.py](/scripts/pipeline_PTV_distances.py) |  Calculates $x_{min}$, $`x_{max}`$, $`x_{avg}`$, $`x_{med}`$, and $`x_{std}`$ in $mm$ and saves the results as CSV files labelled *'xvalues_'+ID* in a folder called **'xvalues'**  |  
 | [pipeline_PTV_volumes.py](/scripts/pipeline_PTV_volumes.py) |  Calculates $VI_{PTV}$ and $`VO_{PTV}`$ in in $mm^3$, and  $`VI_{PTV}:LI_{Body}`$ and $`VO_{PTV}:LI_{Body}`$. It saves the results as CSV files labelled *'volumesPTV_'+ID* in a folder called **'volumesPTV'**   |  
@@ -195,18 +195,18 @@ Several examples are included in Jupyter Notebook format to demonstrate how to r
 
 | Script | Description | 
 |-----------|-------------|
-| [pipeline_neck_volume_area.py](/scripts/pipeline_neck_volume_area.py) |  |
-| [pipeline_distances3D_neck.py](/scripts/pipeline_distances3D_neck.py) |  |
-| [pipeline_distances2D_neck.py](/scripts/pipeline_distances2D_neck.py) |  |
-| [pipeline_RminRmax3D_neck.py](/scripts/pipeline_RminRmax3D_neck.py) |  |
+| [pipeline_neck_volume_area.py](/scripts/pipeline_neck_volume_area.py) | Calculates the metrics $`M_{min}`$, $`M_{med}`$, $`M_{avg}`$, and $`M_{std}`$. The results are saved in a CSV file named *'mandible_'+ID* in a folder called **'mandible_metrics'** |
+| [pipeline_distances3D_neck.py](/scripts/pipeline_distances3D_neck.py) |  Calculates the metrics $`M_{min}`$, $`M_{med}`$, $`M_{avg}`$, and $`M_{std}`$. The results are saved in a CSV file named *'mandible_'+ID* in a folder called **'mandible_metrics'**|
+| [pipeline_distances2D_neck.py](/scripts/pipeline_distances2D_neck.py) | Calculates the metrics $`M_{min}`$, $`M_{med}`$, $`M_{avg}`$, and $`M_{std}`$. The results are saved in a CSV file named *'mandible_'+ID* in a folder called **'mandible_metrics'** |
+| [pipeline_RminRmax3D_neck.py](/scripts/pipeline_RminRmax3D_neck.py) |  Calculates the metrics $`M_{min}`$, $`M_{med}`$, $`M_{avg}`$, and $`M_{std}`$. The results are saved in a CSV file named *'mandible_'+ID* in a folder called **'mandible_metrics'**|
 
 ##### Submandibular-Related Metrics Pipelines
 
 | Script |  Description | 
 |--------------|------------|
-| [pipeline_submand_area.py](/scripts/pipeline_submand_area.py) | |
-| [pipeline_submand_Rmin_Rmax.py](/scripts/pipeline_submand_Rmin_Rmax.py) |  |
-| [pipeline_lx_ly_distances.py](/scripts/pipeline_lx_ly_distances.py) |   |
+| [pipeline_submand_area.py](/scripts/pipeline_submand_area.py) | Calculates the metrics $`A_{sub}`$. The results are saved in a CSV file named *'submand_area_'+ID* in a folder called **'submand_area'** |
+| [pipeline_submand_Rmin_Rmax.py](/scripts/pipeline_submand_Rmin_Rmax.py) | Calculates the metrics $`R_{min}`$, $`R_{max}`$, $`R_{avg}`$, and $`\varphi^{2D}_{R}`$. The results are saved in a CSV file named *'submand_metrics_'+ID* in a folder called **'submand_metrics'** |
+| [pipeline_lx_ly_distances.py](/scripts/pipeline_lx_ly_distances.py) |  Computes the metrics $`l_{x}`$ and $`l_{y}`$. The results are saved in a CSV file named *'lx_ly_'+ID* in a folder called **'lx_ly_metrics'** |
 
 ## How to Cite 
 If you publish any work using this package, please make sure you acknowledge us by citing the following paper: Rios-Ibacache O., Manalad J., O'Sullivan-Steben K., Poon E., at al. (2025). Quantification of head and neck cancer patients’ anatomical changes: prediction of radiotherapy replanning need.
