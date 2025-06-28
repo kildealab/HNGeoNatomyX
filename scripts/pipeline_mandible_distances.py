@@ -1105,7 +1105,7 @@ if not os.path.isdir(PATH_DEST):
     
 ROWS = ['Mmin','Mmed', 'Mavg', 'Mstd']
 
-def pipeline_dist_mandible(param_name='m_mandible',path_k = '/mnt/iDriveShare/OdetteR/Registration_and_contours/Contours/'):
+def pipeline_dist_mandible(param_name='mandible',path_k = '/mnt/iDriveShare/OdetteR/Registration_and_contours/Contours/'):
     
     file = '/mnt/iDriveShare/OdetteR/Registration_and_contours/IDS_News_Partial.csv'
     ids_news = []
