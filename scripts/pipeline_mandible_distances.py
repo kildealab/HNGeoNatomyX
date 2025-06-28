@@ -1,6 +1,6 @@
 """
 Created on Jul 2024 
-@author: Odette Rios-Ibacache & James Manalad
+@author: Odette Rios-Ibacache 
 
 """
 
@@ -1099,13 +1099,13 @@ import json
 import csv
 
 
-PATH_DEST = 'Thesis_120/mandible_to_bodyv1_px/'
+PATH_DEST = '/mandible_metrics/'
 if not os.path.isdir(PATH_DEST):
     os.makedirs(PATH_DEST)
     
-ROWS = ['Mmin','Mmed', 'Mave', 'Mstd']
+ROWS = ['Mmin','Mmed', 'Mavg', 'Mstd']
 
-def pipeline_dist_mandible(param_name='x_mandible',path_k = '/mnt/iDriveShare/OdetteR/Registration_and_contours/Contours/'):
+def pipeline_dist_mandible(param_name='m_mandible',path_k = '/mnt/iDriveShare/OdetteR/Registration_and_contours/Contours/'):
     
     file = '/mnt/iDriveShare/OdetteR/Registration_and_contours/IDS_News_Partial.csv'
     ids_news = []
