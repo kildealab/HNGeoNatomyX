@@ -1289,13 +1289,13 @@ import json
 import csv
 
 import os
-PATH_DEST = 'Thesis_120_s/lx_ly_pxv2/'
+PATH_DEST = 'lx_ly_metrics/'
 if not os.path.isdir(PATH_DEST):
     os.makedirs(PATH_DEST)
 ROWS = ['lx','ly']
 
 
-def pipeline_dist_body(param_name='lx_ly',path_k = '/mnt/iDriveShare/OdetteR/Registration_and_contours/Contours/'):
+def pipeline_dist_body(param_name='lx_ly_metrics',path_k = '/mnt/iDriveShare/OdetteR/Registration_and_contours/Contours/'):
     
     file = '/mnt/iDriveShare/OdetteR/Registration_and_contours/IDS_News_Partial.csv'
     ids_news = []
