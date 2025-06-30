@@ -1265,13 +1265,13 @@ import os
 import csv
 import json 
 
-PATH_DEST = 'Thesis_120/long_neck_distances/'
+PATH_DEST = 'distances3Dneck_metrics/'
 if not os.path.isdir(PATH_DEST):
     os.makedirs(PATH_DEST)
 ROWS = ['dmax_neck','chamfer_neck']
 
 
-def pipeline_params_body(param_name='others', path_k = '/mnt/iDriveShare/OdetteR/Registration_and_contours/Contours/'):
+def pipeline_params_body(param_name='distances3Dneck', path_k = '/mnt/iDriveShare/OdetteR/Registration_and_contours/Contours/'):
     file = '/mnt/iDriveShare/OdetteR/Registration_and_contours/IDS_News_Partial.csv'
     ids_news = []
     
@@ -1414,8 +1414,6 @@ def pipeline_params_body(param_name='others', path_k = '/mnt/iDriveShare/OdetteR
                   min_z = get_z_out_fov(body,h,k,r,z_min)
                   neck_zss.append(min_z)
        
-              print(neck_zss)
-              print(min(neck_zss))
               if min(neck_zss)>=-27:
                   z_neck = -27
               
