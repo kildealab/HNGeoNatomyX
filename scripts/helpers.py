@@ -25,34 +25,34 @@ import sys
 from shapely import Polygon, intersection
 
 
-"""Gets the RS path from the RT structure file.  pat_id  is the patient ID and path_src is the path of the folder"""
+'''Gets the RS path from the RT structure file.  pat_id  is the patient ID and path_src is the path of the folder'''
 def get_path_RS(pat_id, path_src):   
-    path_patient = os.path.join(path_src, pat_id)  """FORMAT: path_src + '/'+pat_id  """
-    file_RS = [x for x in os.listdir(path_patient) if 'RS' in x][0]  """ finds the RS file with the name 'RS.######.dcm'"""
+    path_patient = os.path.join(path_src, pat_id)  '''FORMAT: path_src + '/'+pat_id  '''
+    file_RS = [x for x in os.listdir(path_patient) if 'RS' in x][0]  ''' finds the RS file with the name RS.######.dcm'''
     return os.path.join(path_patient, file_RS)
     
 def get_path_RS_v5(path_CT):  
     file_RS = [x for x in os.listdir(path_CT) if 'RS' in x][0]
     return os.path.join(path_CT, file_RS)
     
-"""Gets the body contour key with the labels 'body' in it"""
+'''Gets the body contour key with the labels 'body' in it'''
 def get_body_keys(RS_file_path): 
     ROI_keys = get_ROI_keys(RS_file_path)
     return [x for x in ROI_keys if 'body' in x.lower()]
 
-"""Gets the ROI key labels available in the RT dicom file"""
+'''Gets the ROI key labels available in the RT dicom file'''
 def get_ROI_keys(RS_file_path):  #Obtiene el ROI image
     RS_file = pydicom.read_file(RS_file_path)
     contour_keys = RS_file.StructureSetROISequence
     return [str(x.ROIName) for x in contour_keys]
 
-"""Gets the PTV label in the keys available in the RT dicom file"""
-"""NOTE: the PTV commonly use is the PTV_All in the RT file"""
+'''Gets the PTV label in the keys available in the RT dicom file'''
+'''NOTE: the PTV commonly use is the PTV_All in the RT file'''
 def get_PTV_keys(RS_file_path): 
     ROI_keys = get_ROI_keys(RS_file_path)
     return [x for x in ROI_keys if 'ptv' in x.lower()]
 
-"""Sorts the key from least to greatest body keys"""
+'''Sorts the key from least to greatest body keys'''
 def sort_body_keys(keys_body): 
     new_keys_body = []
     nums = []
@@ -1037,7 +1037,7 @@ def get_name_files(patient_path):
     else:
         return CT_list[0],CBCT_list
 
-"""Gets the key for the mandible RT structure (contour)"""
+'''Gets the key for the mandible RT structure (contour)'''
 def get_key_mandible(patient,path_RS0):
   
     keys = get_ROI_keys(path_RS0)
