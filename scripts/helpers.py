@@ -65,7 +65,8 @@ def sort_body_keys(keys_body):
             if str(num) == key.split('-')[-1]:
                 new_keys_body.append(key)    
     return new_keys_body
-
+    
+'''Gets CSV file path'''
 def get_patient_csv_filename(path_src, patient_num):
     for fname in os.listdir(path_src):  
         if fname.split('_')[-1].split('.')[0] == str(patient_num):
@@ -73,8 +74,8 @@ def get_patient_csv_filename(path_src, patient_num):
     print('No csv found for patient: ' + str(patient_num))
     return ''
 
-def get_patient_data(path_src, patient_num):  #Obtiene los datos de los pacientes en el directorio? path_src
-    #pero no hay ningún csv?
+'''Gets the data from a CSV file path'''
+def get_patient_data(path_src, patient_num):  
     patient_fname = get_patient_csv_filename(path_src, patient_num)
     path_csv = os.path.join(path_src, patient_fname)
     df = pd.read_csv(path_csv)
@@ -84,9 +85,25 @@ def get_param_value_dict_for_patient(path_src, patient_num, param_row_num):
     df = get_patient_data(path_src, patient_num)
     return df.loc[param_row_num][1:]
 
-#-----------------------------------------------
-
-
+'''Gets the slope values for a given set of metrics'''
+def get_patient_slope_for_num_fx(row_data, num_fx, fx_start=1):
+    # print(row_data)
+    idx_col = num_fx+1 # +1 because fx 1 has column index 2
+    idx_start = fx_start+1
+    row_data_trim = row_data[idx_start-1:idx_col+1].dropna() 
+        # -1 because the previous column is used to calculate the first slope
+        # +1 because the last index specified is excluded
+    xvals = get_domain_from_keys(row_data_trim.keys())
+    yvals = row_data_trim.values
+    assert len(xvals) == len(yvals)
+    if len(xvals) > 0:
+        best_fit = LinearRegression().fit(xvals.reshape(-1, 1), yvals.reshape(-1, 1))
+        slope = best_fit.coef_[0][0]
+    else:
+        slope = np.NAN
+    return slope
+    
+'''Gets the domain keys in the CSV file saved format'''
 def get_domain_from_keys(keys):
     xvals = []
     for key in keys:
@@ -98,7 +115,6 @@ def get_domain_from_keys(keys):
         if len(split_key)>1 and 'body' in split_key[0].lower():
             xvals.append(int(split_key[-1]))
     return np.array(xvals)
-
 
 # column: body keys
 # row: parameter
@@ -112,11 +128,9 @@ def get_param_df_for_patients(path_src, patient_list, param_name, param_row_num=
     for body_key in sorted_body_keys:
         key = param_name + '_' + body_key
         data_dict[key] = []
-    # print(data_dict)
     for patient_num in patient_list:
         data_dict['patient_num'].append(str(patient_num))
         dict_patient = get_param_value_dict_for_patient(path_src, patient_num, param_row_num)
-        # print(dict_patient)
         for body_key in sorted_body_keys:
             key = param_name + '_' + body_key
             # print(body_key)
@@ -127,8 +141,34 @@ def get_param_df_for_patients(path_src, patient_list, param_name, param_row_num=
     df = pd.DataFrame(data_dict)
     return df
 
-#-------------------------------------
+def get_paramSlope_df_from_csv_individual(path_src, patient_list, param_name, param_row_num=0, fx_start=1):
+    df_param = get_param_df_for_patients(path_src, patient_list, param_name, param_row_num)
+    df_slope = get_paramSlope_df_from_param_df(df_param, fx_start)
+    return df_slope
 
+def get_paramSlope_df_from_csv_all(path_src_csv, patient_list, fx_start=1):
+    df_param = pd.read_csv(path_src_csv)
+    df_slope = get_paramSlope_df_from_param_df(df_param, fx_start)
+    return df_slope
+
+def get_paramSlope_df_from_param_df(df_param, fx_start=1):
+    data_dict_slope = {'patient_num':[]}
+    idx_fx_start = fx_start+1
+    for column_name in df_param.keys()[idx_fx_start:]:
+        key = column_name.split('_')[0]+'-slope_' + '_'.join(column_name.split('_')[1:])
+        data_dict_slope[key] = []
+    for idx_patient in range(len(df_param.values)):
+        row_data = df_param.iloc[idx_patient]
+        data_dict_slope['patient_num'].append(row_data['patient_num'])
+        for i, key in enumerate(list(data_dict_slope.keys())[1:]): # key at index 0 is patient_num so we start at 1 
+            num_fx = fx_start + i
+            slope = get_patient_slope_for_num_fx(row_data, num_fx, fx_start)
+            data_dict_slope[key].append(slope)
+    df_slope = pd.DataFrame(data=data_dict_slope)
+    return df_slope
+    
+#-------------------------------------
+'''Gets the resolution in the z direction (height), i.e. the CT slice thickness'''
 def get_contour_z_spacing(contours):
     z_vals = np.array(list(set(contours[:,2])))
     z_vals = z_vals[~(np.isnan(z_vals))]
@@ -137,31 +177,64 @@ def get_contour_z_spacing(contours):
     #print(abs(np.mean(diff_arr)))
     return abs(np.mean(diff_arr))
 
-
+'''Gets the maximum and minimum z values from given contours
+and then cuts them within a selected range and a margin of 
+3 times the z spacing'''
 def trim_contours_to_match_z(contours_1, contours_2): # 1: body, 2: PTV
     spacing_z = get_contour_z_spacing(contours_1)
     #print(spacing_z)
     max_z = max(contours_1[:,2]) - 3*spacing_z
     min_z = min(contours_1[:,2]) + 3*spacing_z
-    
     contours_1 = np.array([x for x in contours_1 if x[2] < max_z and x[2] > min_z])
     contours_2 = np.array([x for x in contours_2 if x[2] < max_z and x[2] > min_z])
-    
     return contours_1, contours_2
 
+def trim_contours_to_match_zsv2(contours_1,contours_2,z_min): 
+   
+    #max_z = z_max 
+    min_z = z_min 
+    
+    contours_1 = np.array([x for x in contours_1 if x[2] >= min_z])
+    contours_2 = np.array([x for x in contours_2 if x[2] >= min_z])
+    return contours_1,contours_2 
+    
+def trim_contours_to_match_zs(contours_1,contours_2,z_min,z_max): 
+    max_z = z_max 
+    min_z = z_min 
+        
+    contours_1 = np.array([x for x in contours_1 if x[2] <= max_z and x[2] >= min_z])
+    contours_2 = np.array([x for x in contours_2 if x[2] <= max_z and x[2] >= min_z])
+    
+    return contours_1,contours_2   
+    
+def trim_contours_to_match_zv3(contours_1, contours_2,z_min,z_max): # 1: body, 2: PTV
+    spacing_z = get_contour_z_spacing(contours_1)
+    #print(spacing_z)
+    max_z = z_max - spacing_z
+    min_z = z_min + spacing_z
+    
+    contours_1 = np.array([x for x in contours_1 if x[2] < max_z and x[2] > min_z])
+    contours_2 = np.array([x for x in contours_2 if x[2] > min_z])
+    
+    return contours_1, contours_2
+    
+'''Gets the surface by using the marching cubes methods and the rtdsm function
+see skidimage marching cubes webpage for more details'''
 def get_surface_marching_cubes(contours,IMG_RES):
     img_res = [IMG_RES[0], IMG_RES[1], get_contour_z_spacing(contours)]
     verts, faces, pvfaces = rtdsm.get_cubemarch_surface(contours.copy(), img_res)
     mesh = pv.PolyData(verts, faces=pvfaces)
     return mesh.extract_surface()
 
+'''Split a point cloud given a surface'''
 def split_cloud_by_surface(cloud, surface):
     cloud.compute_implicit_distance(surface, inplace=True)
     inner_cloud = cloud.threshold(0.0, scalars="implicit_distance", invert=True)  
     outer_cloud = cloud.threshold(0.0, scalars="implicit_distance", invert=False)
     return inner_cloud, outer_cloud
 
-# For a given set of contours and x value, return closest x values that is in one of the contour points
+'''For a given set of contours and x value, it returns
+the closest x values that are in one of the contour points'''
 def get_closest_x(x, contours):
     closest_x = contours[0][0]
     min_abs_diff = 10000
@@ -173,7 +246,7 @@ def get_closest_x(x, contours):
             closest_x = current_x
     return closest_x
 
-# For a given set of contours and x value, return the maximum y value
+'''For a given set of contours and x value, it returns the maximum y value'''
 def get_max_y(x, contours):
     target_x = get_closest_x(x, contours)
     max_y = -1
@@ -191,6 +264,17 @@ def get_point_with_max_y_around_given_x(x, contours):
     for point in contours:
         current_x, current_y = point[0:2]
         if abs(current_x - x) < 2:
+            if current_y > max_y:
+                max_y = current_y
+                target_x = current_x
+    return (target_x, max_y)
+
+def get_point_with_max_y_around_given_x(x, contours):
+    target_x = x
+    max_y = -1
+    for point in contours:
+        current_x, current_y = point[0:2]
+        if abs(current_x - x) < 0.5:
             if current_y > max_y:
                 max_y = current_y
                 target_x = current_x
@@ -243,6 +327,7 @@ def get_h_k_r(point1, point2, point3):
     r = round(np.sqrt(sqr_of_r), 5);
     return [h, k, r]
 
+'''Gets maximum and minimum values in a given contour (bounding box)'''
 def get_bounding_box_dimensions(contours):
     max_x = max(contours[:,0])
     min_x = min(contours[:,0])
@@ -282,6 +367,7 @@ def trim_posterior_PTV(cloud_PTV, contours_body, r_frac=1):
     
     return cloud_PTV_trim, h, k, r*r_frac
 
+'''path_RT_structure: path of the dcm RT file for a given patient'''
 def get_info_fov(keys,path_RT_structure):
     path_patient = path_RT_structure
     file_RS = sorted([x for x in os.listdir(path_patient) if 'kV' in x])
@@ -298,6 +384,13 @@ def get_info_fov(keys,path_RT_structure):
         rs.append(float(r))
     return min(rs)
 
+def get_info_replanned(patient,index,path_k='/mnt/iDriveShare/Kayla/CBCT_images/kayla_extracted/'):
+    patient_path  = path_k + patient+'/'
+    CT, CBCT_list = get_name_files(patient_path)
+    CTs_names = [CT]+CBCT_list
+    path_complete = patient_path+ CTs_names[index]
+    return path_complete
+    
 def centers(x1, y1, x2, y2, r):
     q = np.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)
     x3 = (x1 + x2) / 2
@@ -306,8 +399,7 @@ def centers(x1, y1, x2, y2, r):
     yy = (r ** 2 - (q / 2) ** 2) ** 0.5 * (x2 - x1) / q
     return ((x3 + xx, y3 + yy))
 
-def get_center(body1,body2,r):
-    dd11 = pv.PolyData(body1).connectivity(largest=True)
+def get_center(body2,r):
     d_2 = pv.PolyData(body2).connectivity(largest=True)
     
     max_x = max(d_2.points[:,0])
@@ -329,7 +421,7 @@ def get_center(body1,body2,r):
     y7 = get_point_with_max_y_around_given_x(min_x*7/8,d_2.points)
     
     k3 = y3[1] - np.sqrt(np.abs((r*0.5)**2 - (max_x/2-h)**2))
-    k4 = y4[1] - np.sqrt(np.abs((r*0.5)**2 - (min_x/2-h)**2))
+    k4 = y4[1] - np.sqrt((r*0.5)**2 - (min_x/2-h)**2)
    
     k6 = y6[1] - np.sqrt(np.abs((r*0.5)**2 - (max_x*7/8-h)**2))
     k7 = y7[1] - np.sqrt(np.abs((r*0.5)**2 - (min_x*7/8-h)**2))
@@ -366,7 +458,6 @@ def get_center(body1,body2,r):
     
 def get_equal_body(body2,body1,z_min,z_max,r,h,k):
     bbody2,bbody1 = trim_contours_to_match_zv3(body1.points,body2.points,z_min,z_max)
-    #bbody2,bbody1 = trim_contours_to_match_z2(body2.points, body1.points)
     d2 = pv.PolyData(bbody2).connectivity(largest=True)
 
     c2_3 = get_surface_marching_cubes(d2.points).smooth(n_iter = 0)
@@ -377,12 +468,6 @@ def get_equal_body(body2,body1,z_min,z_max,r,h,k):
 
     cc1 = pv.PolyData(c11).connectivity(largest=True)
     c1 = c11.copy()
-
-    #ax_x = max(c2_3.points[:,0])
-    #in_x = min(c2_3.points[:,0])
-    
-    #h = max_x - ((max_x - (min_x))/2)
-    #k = (max(c2_3.points[:,1]))- r*0.5
 
     max_z = max(c1.points[:,2])
     min_z = min(c1.points[:,2])
@@ -408,16 +493,33 @@ def get_equal_body(body2,body1,z_min,z_max,r,h,k):
     cloud_trim = s_body1.threshold(0.0, scalars="implicit_distance", invert=True)
     
     return cloud_trim,c2_3
+
+def get_min_dist_body(body1,body2):
+    tree = KDTree(body2.points)
+    d_kdtree, idx = tree.query(body1.points)
+    idx_point = np.where(d_kdtree == np.min(d_kdtree))[0][0]
+    idx_cloud = idx[idx_point]
+    point1 = body1.points[idx_point]
+    point2 = body2.points[idx_cloud]
+    
+    return np.min(d_kdtree),point1,point2
+
+def get_max_dist_body(body1,body2):
+    tree = KDTree(body2.points)
+    d_kdtree, idx = tree.query(body1.points)
+    return np.max(d_kdtree)
+
+def get_mean_dist_body(body1,body2):
+    tree = KDTree(body2.points)
+    d_kdtree, idx = tree.query(body1.points)
+    return np.mean(d_kdtree)
     
 def get_elongation_only_central(body,z_m,z_m2,contour0):
     points_xy = []
-    
     for j in body:
         if j[2]==z_m:
             points_xy.append([j[0],j[1]])
-    #print(points_xy)
-
-
+            
     points_xy_0 = []
     for j in contour0:
         if j[2]==z_m2:
@@ -435,17 +537,6 @@ def get_elongation_only_central(body,z_m,z_m2,contour0):
     R_max = (np.max(dists))
 
     return R_max,R_min,R_max/R_min,R_mean
-    
-def trim_contours_to_match_zv3(contours_1, contours_2,z_min,z_max): # 1: body, 2: PTV
-    spacing_z = get_contour_z_spacing(contours_1)
-    #print(spacing_z)
-    max_z = z_max - spacing_z
-    min_z = z_min + spacing_z
-    
-    contours_1 = np.array([x for x in contours_1 if x[2] < max_z and x[2] > min_z])
-    contours_2 = np.array([x for x in contours_2 if x[2] > min_z])
-    
-    return contours_1, contours_2
     
 def search_cuts_z(contours):
     z_maxs = []
@@ -467,16 +558,7 @@ def trim_contours_to_match_zs(contours_1, contours_2,z_min,z_max): # 1: body, 2:
     return contours_1, contours_2
     
     
-def get_point_with_max_y_around_given_x(x, contours):
-    target_x = x
-    max_y = -1
-    for point in contours:
-        current_x, current_y = point[0:2]
-        if abs(current_x - x) < 0.5:
-            if current_y > max_y:
-                max_y = current_y
-                target_x = current_x
-    return (target_x, max_y)
+
 
 
 def get_equal_bodyv2(body2,body1,z_max,z_min,h,k,r):
@@ -819,7 +901,7 @@ def get_body_keys_not_RS(file_list):
     for k in file_list:
         key = k.split('.')[0]
         body_keys.append(key)
-    #body_keys
+
     sorted_keys = sort_body_keys(body_keys)
     return sorted_keys
 
@@ -846,8 +928,6 @@ def get_name_files(patient_path):
 
     elif len(CT_list) > 1: # Set replan to true if > 1 CT
         replan = True
-
-
     if replan==True:
         date_replan = CT_list[1][0:8]
         
@@ -900,13 +980,132 @@ def get_start_position_dcm(CT_path):
     pixel_spacing = d.PixelSpacing
     
     return start_x, start_y, start_z, pixel_spacing
-    
-def get_center2(path_CBCT_images,str_pat_id):
 
+ 
+def get_center2(path_CBCT_images,str_pat_id):
     isos = rtdsm.get_pointcloud('AcqIsocenter', path_CBCT_images+'/'+str_pat_id+'/iso.dcm', False)[0]
     h = isos[0][0]
     k = isos[0][1]
 
-    return h,k 
-import json
+    return h,k
 
+def get_mask_grid(contours, img_res,max_away=400.):
+    #img_res = [IMG_RES[0], IMG_RES[1], get_contour_z_spacing(contours)]
+    #STEP1: Get the min X,Y values to set the top corner of the slices
+    Xmin,Ymin = np.nanmin(contours[:,0]),np.nanmin(contours[:,1])
+    Zmin = np.nanmin(contours[:,2])
+    CornerOrg = [Xmin - 2*img_res[0], Ymin - 2*img_res[1]]
+
+    #STEP2: convert the XY values to index positions in a 3D array 
+    contours[:,0] = np.round((contours[:,0]-CornerOrg[0])/img_res[0])
+    contours[:,1] = np.round((contours[:,1]-CornerOrg[1])/img_res[1])
+
+    #STEP3: Determine how many slices are needed to cover the full structure and make an empty grid
+    uniqueSlices = np.unique(contours[:,2][~np.isnan(contours[:,2])])
+    nSlices = len(uniqueSlices)
+    GridMaxInd = np.nanmax(contours[:,:2])   #the max of the X and Y index values
+    MaskGrid = np.zeros((int(nSlices),int(GridMaxInd +2),int(GridMaxInd+2))) #NOTE: using ZYX here
+    
+    #STEP4: Make a list of the indices where the slice number changes
+    deltaslice = contours[:,2] - np.roll(contours[:,2],1)
+    Slices = np.where(deltaslice != 0)[0] #indexes where a new polygon begins
+    for i in range(len(Slices)):
+        CurrentSlice = contours[Slices[i],2]
+        sliceInd = np.where(uniqueSlices == CurrentSlice)[0]
+        if np.isnan(CurrentSlice):
+            continue
+        #get the list of points for that polygon
+        if i == len(Slices)-1:
+            iPoints = contours[Slices[i]:,:2]
+        else:
+            iPoints = contours[Slices[i]:Slices[i+1],:2] #just need the X and Y points
+        # split iPoints into cluster
+        idx_breaks = [0]
+        if len(iPoints) > 1:
+            for i in range(len(iPoints)-1):
+                if distance.euclidean(iPoints[i], iPoints[i+1]) < max_away:
+                    continue
+                else:
+                    idx_breaks.append(i+1)
+        for i in range(len(idx_breaks)): #Make a polygon mask from the points
+            start = idx_breaks[i]
+            if i == len(idx_breaks)-1:
+                rr, cc = polygon(iPoints[start:,1], iPoints[start:,0])
+            else:
+                end = idx_breaks[i+1]
+                rr, cc = polygon(iPoints[start:end,1], iPoints[start:end,0]) #r AKA row is Y, c AKA col is X
+            MaskGrid[sliceInd,rr, cc] = 1
+    return MaskGrid
+
+def get_volume(contours, img_res, max_away=400.):
+    volume_voxel = img_res[0] * img_res[1] * img_res[2]
+    grid_mask = get_mask_grid(contours.copy(),img_res, max_away)
+    volume = volume_voxel * np.sum(grid_mask)
+    return volume
+
+#MASK METRICS RELATED FUNCTIONS
+def get_dist_mask_body(mask,body):
+    tree = KDTree(body.points)
+    d_kdtree, idx = tree.query(mask.points)
+   
+    return np.max(d_kdtree),np.mean(d_kdtree),np.std(d_kdtree)
+
+def get_equal_body_for_mask(body1,h,k,r):
+    d1 = pv.PolyData(body1).connectivity(largest=True)
+
+    bx = d1.points[:,0]
+    by = d1.points[:,1]
+    bz = d1.points[:,2]
+
+    indexes = (bx-h)**2+(by-k)**2<=(r*0.8)**2
+
+    bx2 = bx[indexes==True]
+    by2 = by[indexes==True]
+    bz2 = bz[indexes==True]
+
+    points22 = list(zip(bx2,by2,bz2))
+    d11 = pv.PolyData(points22)
+
+    theta = np.linspace(0,2*np.pi,300)
+
+    x = r*0.5 * np.cos( theta ) +h
+    y = r*0.5 * np.sin( theta ) +k
+
+    body_crop = [] #array points (cloud)
+    zs = [i for i in d11.points[:,2]]
+    zss = sorted(list(dict.fromkeys(zs)))
+    for z in zss:
+        ptosxy = []
+        for p in d11.points:
+            if z==p[2]:
+                ptosxy.append([float(p[0]),float(p[1])])
+        pp1= Polygon(ptosxy).buffer(0)
+        pp2 = Polygon(list(zip(x,y)))
+        pp3 = intersection(pp1,pp2)
+        try:
+            bx,by = pp3.exterior.coords.xy[0],pp3.exterior.coords.xy[1]
+        except:
+            coords = [[len(list(x.exterior.coords)),list(x.exterior.coords)] for x in pp3.geoms]
+            bx,by = np.array((sorted(coords)[-1][-1]))[:,0],np.array((sorted(coords)[-1][-1]))[:,1]
+
+        for j in range(0,len(bx)):
+            body_crop.append((float(bx[j]),float(by[j]),float(z)))
+
+    bbody = pv.PolyData(body_crop)
+   
+    return bbody
+
+def get_mask_out(trim_mask,r,h,k):
+    mask2 = pv.PolyData(trim_mask)
+    bx = mask2.points[:,0]
+    by = mask2.points[:,1]
+    bz = mask2.points[:,2]
+
+    indexes = (bx-h)**2+(by-k)**2<=(r*0.5)**2
+
+    bx2 = bx[indexes==True]
+    by2 = by[indexes==True]
+    bz2 = bz[indexes==True]
+    points22 = list(zip(bx2,by2,bz2))
+    d11 =pv.PolyData(points22)
+    return d11
