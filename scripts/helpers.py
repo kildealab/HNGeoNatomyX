@@ -27,7 +27,7 @@ from shapely import Polygon, intersection
 
 '''Gets the RS path from the RT structure file.  pat_id  is the patient ID and path_src is the path of the folder'''
 def get_path_RS(pat_id, path_src):   
-    path_patient = os.path.join(path_src, pat_id)  '''FORMAT: path_src + '/'+pat_id  '''
+    path_patient = os.path.join(path_src, pat_id)  #FORMAT: path_src + '/'+pat_id  
     file_RS = [x for x in os.listdir(path_patient) if 'RS' in x][0]  ''' finds the RS file with the name RS.######.dcm'''
     return os.path.join(path_patient, file_RS)
     
