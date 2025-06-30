@@ -1287,13 +1287,13 @@ import os
 import json
 import csv
 
-PATH_DEST = '120_patients/submand_area/'
+PATH_DEST = 'submand_area/'
 if not os.path.isdir(PATH_DEST):
     os.makedirs(PATH_DEST)
 ROWS = ['area']
 
 
-def pipeline_area_body(param_name='area',path_k = '/mnt/iDriveShare/OdetteR/Registration_and_contours/Contours/'):
+def pipeline_area_body(param_name='submand_area',path_k = '/mnt/iDriveShare/OdetteR/Registration_and_contours/Contours/'):
 
     file = '/mnt/iDriveShare/OdetteR/Registration_and_contours/IDS_News_Partial.csv'
     ids_news = []
