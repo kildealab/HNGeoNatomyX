@@ -1331,13 +1331,13 @@ import os
 import csv
 import json 
 
-PATH_DEST = 'Thesis_120distances2D_long_neck/'
+PATH_DEST = 'distances2Dneck_metrics/'
 if not os.path.isdir(PATH_DEST):
     os.makedirs(PATH_DEST)
-ROWS = ['d_max2D_long_neck','d_mean2D_long_neck','d_median2D_long_neck']
+ROWS = ['d_max2D_neck','d_mean2D_neck','d_median2D_neck']
 
 
-def pipeline_params_body(param_name='others', path_k = '/mnt/iDriveShare/OdetteR/Registration_and_contours/Contours/'):
+def pipeline_params_body(param_name='distances2Dneck', path_k = '/mnt/iDriveShare/OdetteR/Registration_and_contours/Contours/'):
     file = '/mnt/iDriveShare/OdetteR/Registration_and_contours/IDS_News_Partial.csv'
     ids_news = []
     
