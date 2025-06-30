@@ -1369,7 +1369,7 @@ def get_center2(path_k,str_pat_id):
 import os
 import csv
 import json 
-PATH_DEST = 'Thesis_patients5/neck_long_volume_area_pxv2/'
+PATH_DEST = 'neck_volume_area/'
 if not os.path.isdir(PATH_DEST):
     os.makedirs(PATH_DEST)
 ROWS = ['volume_neck','surface_area_neck','compactness_neck','area2D_avg']
@@ -1377,7 +1377,7 @@ ROWS = ['volume_neck','surface_area_neck','compactness_neck','area2D_avg']
 BIG_AWAY = 400
 SMALL_AWAY = 30
 
-def pipeline_params_body(param_name='volume_neck', path_k = '/mnt/iDriveShare/OdetteR/Registration_and_contours/Contours/'):
+def pipeline_params_body(param_name='neck_volume_area', path_k = '/mnt/iDriveShare/OdetteR/Registration_and_contours/Contours/'):
     file = '/mnt/iDriveShare/OdetteR/Registration_and_contours/IDS_News_Partial.csv'
     ids_news = []
     
