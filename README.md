@@ -197,7 +197,7 @@ Several examples are included in Jupyter Notebook format to demonstrate how to r
 
 | Script | Description | 
 |-----------|-------------|
-| [pipeline_neck_volume_area.py](/scripts/pipeline_neck_volume_area.py) | Calculates the metrics $`V_{Neck}`$, $`M_{med}`$, $`M_{avg}`$, and $`M_{std}`$. The results are saved in a CSV file named *'neck_volume_area_'+ID* in a folder called **'neck_volume_area'** |
+| [pipeline_neck_volume_area.py](/scripts/pipeline_neck_volume_area.py) | Calculates the metrics $`V_{Neck}`$, $`A^{2D}_{avg}`$, $`SA_{Neck}`$, and $`C_{Neck}`$. The results are saved in a CSV file named *'neck_volume_area_'+ID* in a folder called **'neck_volume_area'** |
 | [pipeline_distances3D_neck.py](/scripts/pipeline_distances3D_neck.py) |  Calculates the metrics $`CD_{Neck}`$, $`HD_{Neck}`$, $`M_{avg}`$, and $`M_{std}`$. The results are saved in a CSV file named *'distances3Dneck_'+ID* in a folder called **'distances3Dneck_metrics'**|
 | [pipeline_distances2D_neck.py](/scripts/pipeline_distances2D_neck.py) | Computes $D_{Neck}$, $`\tilde{D}_{Neck}`$, and $`\bar{D}_{Neck}`$ in $mm$. The results are saved in a CSV file named *'distances2Dneck_'+ID* in a folder called **'distances2Dneck_metrics'** |
 | [pipeline_RminRmax3D_neck.py](/scripts/pipeline_RminRmax3D_neck.py) |  Calculates the metrics $`R^{3D}_{min}`$, $`R^{3D}_{max}`$, $`R^{3D}_{avg}`$, and $`\varphi^{3D}_{R}`$. The results are saved in a CSV file named *'elongation3Dneck_'+ID* in a folder called **'elongation3Dneck_metrics'**|
