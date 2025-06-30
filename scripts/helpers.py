@@ -558,9 +558,6 @@ def trim_contours_to_match_zs(contours_1, contours_2,z_min,z_max): # 1: body, 2:
     return contours_1, contours_2
     
     
-
-
-
 def get_equal_bodyv2(body2,body1,z_max,z_min,h,k,r):
     body_2 = pv.PolyData(body2).connectivity(largest=True)
 
@@ -611,60 +608,51 @@ def get_equal_bodyv2(body2,body1,z_max,z_min,h,k,r):
     return bbody2,bbody1
 
 def get_keys(name,patient):
-        pat_h = []
-        path_RS = get_path_RS(patient,PATH_SRC)
-        keys_body = get_body_keys(path_RS)
-        sorted_keys_body = sort_body_keys(keys_body)
-        ROI_keys = get_ROI_keys(path_RS)
+    pat_h = []
+    path_RS = get_path_RS(patient,PATH_SRC)
+    keys_body = get_body_keys(path_RS)
+    sorted_keys_body = sort_body_keys(keys_body)
+    ROI_keys = get_ROI_keys(path_RS)
 
-        for key in ROI_keys:
+    for key in ROI_keys:
+        try:
+            key2 = key.split('_')
+        except:
+            key2 = key.split('-')
+        for k in key2:
             try:
-                key2 = key.split('_')
-            except:
-                key2 = key.split('-')
-            for k in key2:
-              
-                try:
-                    #k.split('~')\n",
-                    for p in k.lower().split('~'):
-                        if p==str(name):
-                            #if patient not in pat_h:\n",
-                            pat_h.append(key)
-                except:
-                    if k.lower()==str(name):
-                        #if patient not in pat_h:\n",
+                for p in k.lower().split('~'):
+                    if p==str(name)
                         pat_h.append(key)
-        return pat_h
+            except:
+                    if k.lower()==str(name):
+                        pat_h.append(key)
+    return pat_h
 
 def get_keys_v2(name,patient,path_RS0):
-        pat_h = []
-        ROI_keys = get_ROI_keys(path_RS0)
-        for key in ROI_keys:
+    pat_h = []
+    ROI_keys = get_ROI_keys(path_RS0)
+    for key in ROI_keys:
+        try:
+            key2 = key.split('_')
+        except:
+            key2 = key.split('-')
+        for k in key2:
             try:
-                key2 = key.split('_')
-            except:
-                key2 = key.split('-')
-            for k in key2:
-                try:
-                    for p in k.lower().split('~'):
-                        if p==str(name):
-                            #if patient not in pat_h:\n",
-                            pat_h.append(key)
-                except:
-                    if k.lower()==str(name):
-                        #if patient not in pat_h:\n",
+                for p in k.lower().split('~'):
+                    if p==str(name):
                         pat_h.append(key)
-        return pat_h
+            except:
+                if k.lower()==str(name):
+                    pat_h.append(key)
+    return pat_h
 
-    
-def get_min_mandible_slice(body1,mR):
-    zs_b = body1[:,2].copy()
-    zs_b = zs_b[~(np.isnan(zs_b))]
-    zs_m =  mR[:,2].copy()
-    mR_min = min(zs_m)
-    roi_zcR = np.argmin(abs(zs_b-mR_min)) 
-    cenzcR2 =  zs_b[roi_zcR]
-    return cenzcR2
+def get_min_mandible_slice(s_body,mandible):
+    m_m = min(mandible.points[:,2])
+    roi_z = np.argmin(abs((s_body.points)[:,2] - (m_m)))
+        #print(roi_z)
+    m_b1 = (s_body.points)[:,2][roi_z]
+    return m_b1
 
 def get_point_with_max_y_around_given_xv2(x, points):
     target_x = x
@@ -688,17 +676,7 @@ def get_closest_xv2(x, points):
             closest_x = current_x
     return closest_x
     
-#Estas  funciones son las mismas!
-def get_max_yv2(x, points):
-    target_x = get_closest_x(x, points)
-    max_y = -1
-    for point in points:
-        current_x, current_y = point[0:2]
-        if round(current_x,1) == round(target_x,1):
-            if current_y > max_y:
-                max_y = current_y
-    return max_y
-    
+
 def get_x_max(y, points):
     max_x = -10000
     for point in points:
@@ -716,7 +694,17 @@ def get_y_max(x, points):
             if current_y>max_y:
                 max_y = current_y
     return max_y
-
+    
+def get_max_yv2(x, points):
+    target_x = get_closest_x(x, points)
+    max_y = -1
+    for point in points:
+        current_x, current_y = point[0:2]
+        if round(current_x,1) == round(target_x,1):
+            if current_y > max_y:
+                max_y = current_y
+    return max_y
+    
 def get_y_min(x, points):
     min_y = 10000
     for point in points:
@@ -1109,3 +1097,4 @@ def get_mask_out(trim_mask,r,h,k):
     points22 = list(zip(bx2,by2,bz2))
     d11 =pv.PolyData(points22)
     return d11
+
