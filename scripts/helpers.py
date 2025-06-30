@@ -699,7 +699,7 @@ def get_keys(name,patient):
         for k in key2:
             try:
                 for p in k.lower().split('~'):
-                    if p==str(name)
+                    if p==str(name):
                         pat_h.append(key)
             except:
                     if k.lower()==str(name):
