@@ -90,70 +90,6 @@ def get_equal_bodyv2(body2,body1,z_max,z_min,h,k,r):
     s_body1 = pv.PolyData(s_body11).connectivity(largest=True)
     return s_body1,s_body2,bbody1
 
-def get_keys(name,patient):
-        pat_h = []
-    #    for patient in PATIENTS_ALL:\n",
-        path_RS = get_path_RS(patient,PATH_SRC)
-        keys_body = get_body_keys(path_RS)
-        sorted_keys_body = sort_body_keys(keys_body)
-        ROI_keys = get_ROI_keys(path_RS)
-    #ROI_keys = get_ROI_keys(path_RS)\n",
-        for key in ROI_keys:
-            try:
-                key2 = key.split('_')
-            except:
-                key2 = key.split('-')
-            for k in key2:
-               #try k.lower().split('')\n",
-                #print(k)\n",
-                try:
-                    #k.split('~')\n",
-                    for p in k.lower().split('~'):
-                        if p==str(name):
-                            #if patient not in pat_h:\n",
-                            pat_h.append(key)
-                except:
-                    if k.lower()==str(name):
-                        #if patient not in pat_h:\n",
-                        pat_h.append(key)
-        return pat_h
-
-def get_keys_v2(name,patient,path_RS0):
-        #PATH_K = '/mnt/iDriveShare/Kayla/CBCT_images/kayla_extracted/'+CT+'/'
-        pat_h = []
-        
-        keys_body = get_body_keys(path_RS0)
-        sorted_keys_body = sort_body_keys(keys_body)
-        ROI_keys = get_ROI_keys(path_RS0)
-    
-        for key in ROI_keys:
-            try:
-                key2 = key.split('_')
-            except:
-                key2 = key.split('-')
-            for k in key2:
-               #try k.lower().split('')\n",
-                #print(k)\n",
-                try:
-                    #k.split('~')\n",
-                    for p in k.lower().split('~'):
-                        if p==str(name):
-                            #if patient not in pat_h:\n",
-                            pat_h.append(key)
-                except:
-                    if k.lower()==str(name):
-                        #if patient not in pat_h:\n",
-                        pat_h.append(key)
-        return pat_h
-
-def get_min_mandible_slice(s_body,mandible):
-
-    m_m = min(mandible.points[:,2])
-    roi_z = np.argmin(abs((s_body.points)[:,2] - (m_m)))
-        #print(roi_z)
-    m_b1 = (s_body.points)[:,2][roi_z]
-    return m_b1
-
 def get_point_with_max_y_around_given_xv2(x, points):
     target_x = x
     max_y = -1
@@ -165,63 +101,12 @@ def get_point_with_max_y_around_given_xv2(x, points):
                 target_x = current_x
     return (target_x, max_y)
 
-def get_closest_xv2(x, points):
-    closest_x = points[0][0]
-    min_abs_diff = 10000
-    for point in points:
-        current_x = point[0]
-        abs_diff = abs(current_x - x)
-        if abs_diff < min_abs_diff:
-            min_abs_diff = abs_diff
-            closest_x = current_x
-    return closest_x
-    
-#Estas  funciones son las mismas!
-def get_max_yv2(x, points):
-    target_x = get_closest_x(x, points)
-    max_y = -1
-    for point in points:
-        current_x, current_y = point[0:2]
-        if round(current_x,1) == round(target_x,1):
-            if current_y > max_y:
-                max_y = current_y
-    return max_y
-    
-def get_x_max(y, points):
-    max_x = -10000
-    for point in points:
-        current_x, current_y = point[0:2]
-        if round(current_y,1) == round(y,1):
-            if current_x>max_x:
-                max_x = current_x
-    return max_x
-
-def get_y_max(x, points):
-    max_y = -10000
-    for point in points:
-        current_x, current_y = point[0:2]
-        if round(current_x,1) == round(x,1):
-            if current_y>max_y:
-                max_y = current_y
-    return max_y
-
-def get_y_min(x, points):
-    min_y = 10000
-    for point in points:
-        current_x, current_y = point[0:2]
-        if round(current_x,1) == round(x,1):
-            if current_y<min_y:
-                min_y = current_y
-    return min_y
-               
-
-
-PATH_DEST = 'Thesis_120/air_mask'
+PATH_DEST = 'air_mask/'
 if not os.path.isdir(PATH_DEST):
     os.makedirs(PATH_DEST)
 ROWS= ['volume_air']
 
-def pipeline_mask(param_name='mask',path_k = '/mnt/iDriveShare/OdetteR/Registration_and_contours/Contours/'):
+def pipeline_mask(param_name='air_mask',path_k = '/mnt/iDriveShare/OdetteR/Registration_and_contours/Contours/'):
     
     file = '/mnt/iDriveShare/OdetteR/Registration_and_contours/IDS_News_Partial.csv'
     ids_news = []
