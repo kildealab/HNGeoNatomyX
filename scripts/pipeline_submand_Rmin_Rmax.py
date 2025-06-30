@@ -931,9 +931,12 @@ def get_center2(path_CBCT_images,str_pat_id):
 
 
 ROWS = ['Rmax','Rmin','Rmax/Rmin','Rmean']
+PATH_DEST = 'elongationsubmand_metrics/'
+if not os.path.isdir(PATH_DEST):
+    os.makedirs(PATH_DEST)
 
 
-def pipeline_dist_body(param_name='submand metrics',file_ids,path_contours = '/mnt/iDriveShare/OdetteR/Registration_and_contours/Contours/'):
+def pipeline_dist_body(param_name='elongationsubmand',file_ids,path_contours = '/mnt/iDriveShare/OdetteR/Registration_and_contours/Contours/'):
 
     ids_news = []
     """reads file with the patients ids"""    
