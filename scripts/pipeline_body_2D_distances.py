@@ -2,230 +2,11 @@ import sys
 sys.path.append('/rtdsm')
 import rtdsm
 from time import process_time
-from scipy.stats import sem
-from scipy.spatial import KDTree
-from skimage.measure import marching_cubes
-
-import gc, os
-import matplotlib.pyplot as plt 
-from mpl_toolkits.mplot3d import Axes3D, art3d
-from datetime import date
-import scipy
-from scipy.spatial.distance import directed_hausdorff
-import cv2 
-import point_cloud_utils as pcu
-import numpy as np
-
-from pyvista import Cylinder
-import alphashape
-import pandas as pd
-import pyvista as pv
-import pydicom
-
-import sympy as sym
-from sklearn.linear_model import LinearRegression
-from scipy.spatial import distance
-from skimage.draw import polygon
-import random
-from shapely import Polygon, intersection
-
-
+import gc, os, csv
 #IMG_RES = [0.51119071245194, 0.51119071245194, 3]
 RADIUS_FRAC = 0.75
 
-from ipywidgets import *
-def get_path_RS(pat_id, path_src):   #Obtiene el archivo del RT structure
-    path_patient = os.path.join(path_src, pat_id)
-    file_RS = [x for x in os.listdir(path_patient) if 'RS' in x][0]
-    return os.path.join(path_patient, file_RS)
-def get_body_keys(RS_file_path): #obtiene los keys de los body contours.
-    ROI_keys = get_ROI_keys(RS_file_path)
-    return [x for x in ROI_keys if 'body' in x.lower()]
-def sort_body_keys(keys_body): #Ordena los keys encontrados. de los body contours.
-    new_keys_body = []
-    nums = []
-    for key in set(keys_body):
-        str_frac_num = key.split('-')[-1]
-        if not str_frac_num.lower() == 'body':
-            nums.append(int(str_frac_num))
-        else:
-            new_keys_body.append(key)
-    nums = sorted(nums)
-    for num in nums:
-        for key in keys_body:
-            if str(num) == key.split('-')[-1]:
-                new_keys_body.append(key)    
-   
-    return new_keys_body
 
-def get_patient_csv_filename(path_src, patient_num): #Obtiene el archivo csv file in the path?
-    for fname in os.listdir(path_src):  
-        if fname.split('_')[-1].split('.')[0] == str(patient_num):
-            return fname
-    print('No csv found for patient: ' + str(patient_num))
-    return ''
-
-def get_patient_data(path_src, patient_num):  #Obtiene los datos de los pacientes en el directorio? path_src
-    #pero no hay ningún csv?
-    patient_fname = get_patient_csv_filename(path_src, patient_num)
-    path_csv = os.path.join(path_src, patient_fname)
-    df = pd.read_csv(path_csv)
-    return df
-
-def get_param_value_dict_for_patient(path_src, patient_num, param_row_num):  
-    df = get_patient_data(path_src, patient_num)
-    return df.loc[param_row_num][1:]
-
-
-#-----------------------------------------------
-def sort_body_keys(keys_body): #Get body keys de la RT structure
-    new_keys_body = []
-    nums = []
-    for key in set(keys_body):
-        str_frac_num = key.split('-')[-1]
-        if not str_frac_num.lower() == 'body':
-            nums.append(int(str_frac_num))
-        else:
-            new_keys_body.append(key)
-    nums = sorted(nums)
-    for num in nums:
-        for key in keys_body:
-            if str(num) == key.split('-')[-1]:
-                new_keys_body.append(key)        
-    return new_keys_body
-
-def get_domain_from_keys(keys):
-    xvals = []
-    for key in keys:
-        if 'body' not in key.lower():
-            print('Key does not contain the word \'body\': ' + key)
-        split_key = key.split('_')[-1].split('-')
-        if len(split_key)==1 and 'body' in split_key[0].lower():
-            xvals.append(0)
-        if len(split_key)>1 and 'body' in split_key[0].lower():
-            xvals.append(int(split_key[-1]))
-    return np.array(xvals)
-
-#----------------------------------------  
-def get_patient_slope_for_num_fx(row_data, num_fx, fx_start=1):
-    # print(row_data)
-    idx_col = num_fx+1 # +1 because fx 1 has column index 2
-    idx_start = fx_start+1
-    row_data_trim = row_data[idx_start-1:idx_col+1].dropna() 
-        # -1 because previous column is used to calculate first slope
-        # +1 because last index specified is excluded
-    # print(row_data_trim)
-    xvals = get_domain_from_keys(row_data_trim.keys())
-    print(xvals)
-    yvals = row_data_trim.values
-    print(yvals)
-    # print(xvals, yvals)
-    assert len(xvals) == len(yvals)
-    if len(xvals) > 0:
-        best_fit = LinearRegression().fit(xvals.reshape(-1, 1), yvals.reshape(-1, 1))
-        slope = best_fit.coef_[0][0]
-    else:
-        slope = np.NAN
-    return slope
-
-#---------------------------------------
-# column: body keys
-# row: parameter
-def get_param_df_for_patients(path_src, patient_list, param_name, param_row_num=0):
-    data_dict = {'patient_num':[]}
-    body_keys = []
-    for patient_num in patient_list:
-        dict_patient = get_param_value_dict_for_patient(path_src, patient_num, param_row_num)
-        body_keys = list(set(body_keys + list(dict_patient.keys())))
-    sorted_body_keys = sort_body_keys(body_keys)
-    for body_key in sorted_body_keys:
-        key = param_name + '_' + body_key
-        data_dict[key] = []
-    # print(data_dict)
-    for patient_num in patient_list:
-        data_dict['patient_num'].append(str(patient_num))
-        dict_patient = get_param_value_dict_for_patient(path_src, patient_num, param_row_num)
-        # print(dict_patient)
-        for body_key in sorted_body_keys:
-            key = param_name + '_' + body_key
-            # print(body_key)
-            if body_key in dict_patient.keys():
-                data_dict[key].append(dict_patient[body_key])
-            else:
-                data_dict[key].append(np.nan)
-    df = pd.DataFrame(data_dict)
-    return df
-
-def get_paramSlope_df_from_csv_individual(path_src, patient_list, param_name, param_row_num=0, fx_start=1):
-    df_param = get_param_df_for_patients(path_src, patient_list, param_name, param_row_num)
-    df_slope = get_paramSlope_df_from_param_df(df_param, fx_start)
-    return df_slope
-
-def get_paramSlope_df_from_csv_all(path_src_csv, patient_list, fx_start=1):
-    df_param = pd.read_csv(path_src_csv)
-    df_slope = get_paramSlope_df_from_param_df(df_param, fx_start)
-    return df_slope
-
-def get_paramSlope_df_from_param_df(df_param, fx_start=1):
-    data_dict_slope = {'patient_num':[]}
-    idx_fx_start = fx_start+1
-    for column_name in df_param.keys()[idx_fx_start:]:
-        key = column_name.split('_')[0]+'-slope_' + '_'.join(column_name.split('_')[1:])
-        data_dict_slope[key] = []
-    for idx_patient in range(len(df_param.values)):
-        row_data = df_param.iloc[idx_patient]
-        data_dict_slope['patient_num'].append(row_data['patient_num'])
-        for i, key in enumerate(list(data_dict_slope.keys())[1:]): # key at index 0 is patient_num so we start at 1 
-            num_fx = fx_start + i
-            slope = get_patient_slope_for_num_fx(row_data, num_fx, fx_start)
-            data_dict_slope[key].append(slope)
-    df_slope = pd.DataFrame(data=data_dict_slope)
-    return df_slope
-
-def get_resultant_vector(vectors):
-    vectors = np.array(vectors)
-    resultant_vec = np.array([0.,0.,0.])
-    for vector in vectors:
-        resultant_vec += vector
-    return resultant_vec
-
-def asSpherical(xyz):    #Para convertir a coordenadas esfericas
-    #takes list xyz (single coord)
-    x, y, z = xyz
-    r = np.sqrt(x*x + y*y + z*z)
-    theta = sym.acos(z/r)#*180/ sym.pi #to degrees
-    phi = sym.atan2(y,x)#*180/ sym.pi
-    return r, theta.evalf(), phi.evalf()
-
-def get_bounding_radius(points, centre):
-    distances_bound = []
-    for point in points:
-        dist = distance.euclidean(point, centre)
-        distances_bound.append(dist)
-    r_bound = np.max(distances_bound)
-    return r_bound
-
-
-def get_path_RS(pat_id, path_src):   #Obtiene el archivo del RT structure
-    path_patient = os.path.join(path_src, pat_id)
-    file_RS = [x for x in os.listdir(path_patient) if 'RS' in x][0]
-    return os.path.join(path_patient, file_RS)
-
-def get_ROI_keys(RS_file_path):  #Obtiene el ROI image
-    RS_file = pydicom.read_file(RS_file_path)
-    contour_keys = RS_file.StructureSetROISequence
-    return [str(x.ROIName) for x in contour_keys]
-
-def get_body_keys(RS_file_path): #obtiene los keys de los body contours.
-    ROI_keys = get_ROI_keys(RS_file_path)
-    return [x for x in ROI_keys if 'body' in x.lower()]
-
-def get_PTV_keys(RS_file_path): #de los PTV
-    ROI_keys = get_ROI_keys(RS_file_path)
-    return [x for x in ROI_keys if 'ptv' in x.lower()]
-
-
-#------------------------
 
 def sort_body_keys(keys_body): #Ordena los keys encontrados. de los body contours.
     new_keys_body = []
@@ -267,163 +48,6 @@ def trim_contours_to_match_z(contours_1, contours_2): # 1: body, 2: PTV
     
     return contours_1, contours_2
 
-def get_surface_marching_cubes(contours):
-    
-    img_res = [IMG_RES[0], IMG_RES[1], get_contour_z_spacing(contours)]
-  
-    verts, faces, pvfaces = rtdsm.get_cubemarch_surface(contours.copy(), img_res)
-  
-    mesh = pv.PolyData(verts, faces=pvfaces)
-    
-    return mesh.extract_surface()
-
-def get_surface_marching_cubes_clusters(contours):
-    img_res = [IMG_RES[0], IMG_RES[1], get_contour_z_spacing(contours)]
-    verts, faces, pvfaces = rtdsm.get_cubemarch_surface_clusters(contours.copy(), img_res)
-    mesh = pv.PolyData(verts, faces=pvfaces)
-    return mesh.extract_surface()
-
-#VE que lo es que esta dentro y afuera de del body contour.
-def split_cloud_by_surface(cloud, surface):
-    cloud.compute_implicit_distance(surface, inplace=True)
-    inner_cloud = cloud.threshold(0.0, scalars="implicit_distance", invert=True)
-  
-    outer_cloud = cloud.threshold(0.0, scalars="implicit_distance", invert=False)
-   
-    return inner_cloud, outer_cloud
-
-# For a given set of contours and x value, return closest x values that is in one of the contour points
-def get_closest_x(x, contours):
-    closest_x = contours[0][0]
-    min_abs_diff = 10000
-    for point in contours:
-        current_x = point[0]
-        abs_diff = abs(current_x - x)
-        if abs_diff < min_abs_diff:
-            min_abs_diff = abs_diff
-            closest_x = current_x
-    return closest_x
-
-# For a given set of contours and x value, return the maximum y value
-def get_max_y(x, contours):
-    target_x = get_closest_x(x, contours)
-    max_y = -1
-    for point in contours:
-        current_x, current_y = point[0:2]
-        if round(current_x,1) == round(target_x,1):
-            if current_y > max_y:
-                max_y = current_y
-    return max_y
-
-# For a given set of contours and x value, return point with maximum y value
-def get_point_with_max_y_around_given_x(x, contours):
-    target_x = x
-    max_y = -1
-    for point in contours:
-        current_x, current_y = point[0:2]
-        if abs(current_x - x) < 2:
-            if current_y > max_y:
-                max_y = current_y
-                target_x = current_x
-    return (target_x, max_y)
-
-# For 3 given points in a circle, return the center (h,k) and radius r
-def get_h_k_r(point1, point2, point3):
-    x1, y1 = point1
-    x2, y2 = point2
-    x3, y3 = point3
-    
-    x12 = x1 - x2;
-    x13 = x1 - x3;
-    y12 = y1 - y2;
-    y13 = y1 - y3;
-    y31 = y3 - y1;
-    y21 = y2 - y1;
-    x31 = x3 - x1;
-    x21 = x2 - x1;
- 
-    # x1^2 - x3^2
-    sx13 = pow(x1, 2) - pow(x3, 2);
- 
-    # y1^2 - y3^2
-    sy13 = pow(y1, 2) - pow(y3, 2);
- 
-    sx21 = pow(x2, 2) - pow(x1, 2);
-    sy21 = pow(y2, 2) - pow(y1, 2);
- 
-    f = (((sx13) * (x12) + (sy13) *
-          (x12) + (sx21) * (x13) +
-          (sy21) * (x13)) // (2 *
-          ((y31) * (x12) - (y21) * (x13))));
-             
-    g = (((sx13) * (y12) + (sy13) * (y12) +
-          (sx21) * (y13) + (sy21) * (y13)) //
-          (2 * ((x31) * (y12) - (x21) * (y13))));
- 
-    c = (-pow(x1, 2) - pow(y1, 2) -
-         2 * g * x1 - 2 * f * y1);
- 
-    # eqn of circle be x^2 + y^2 + 2*g*x + 2*f*y + c = 0
-    # where centre is (h = -g, k = -f) and
-    # radius r as r^2 = h^2 + k^2 - c
-    h = -g;
-    k = -f;
-    sqr_of_r = h * h + k * k - c;
- 
-    # r is the radius
-    r = round(np.sqrt(sqr_of_r), 5);
-    return [h, k, r]
-
-#Maximos y minimos valores para encontrar el bounding boz de los contours.
-def get_bounding_box_dimensions(contours):
-    max_x = max(contours[:,0])
-    min_x = min(contours[:,0])
-    diff_x = max_x - min_x
-
-    max_y = max(contours[:,1])
-    min_y = min(contours[:,1])
-    diff_y = max_y - min_y
-    
-    return [diff_x, diff_y]
-
-
-def get_time_body_body(str_pad_id):
-    time = []
-    data = pd.read_csv('CT_CBCT_dates.csv')  
-    #for str_pat_id in PATIENTS_ALL:
-    dates = np.array(data[str_pad_id])
-    new_dates = [element for element in dates if str(element) != "nan"]
-    
-    return new_dates,dates
-
-def trim_posterior_PTV(cloud_PTV, contours_body, r_frac=1):    
-    max_x = max(contours_body[:,0])
-    min_x = min(contours_body[:,0])
-
-    point0 = (min_x, get_max_y(min_x, contours_body))
-    point1 = get_point_with_max_y_around_given_x(min_x/2, contours_body)
-    point2 = get_point_with_max_y_around_given_x(0, contours_body)
-    point3 = get_point_with_max_y_around_given_x(max_x/2, contours_body)
-    point4 = (max_x, get_max_y(max_x, contours_body))
-
-    h1,k1,r1 = get_h_k_r(point0, point1, point4)
-    h2,k2,r2 = get_h_k_r(point0, point3, point4)
-    # h3,k3,r3 = get_h_k_r(point0, point2, point4)
-    h = np.mean([h1,h2])
-    k = np.mean([k1,k2])
-    r = np.mean([r1,r2])
-    
-    max_z = max(contours_body[:,2])
-    min_z = min(contours_body[:,2])
-    z = np.mean([min_z,max_z])
-    spacing_z = get_contour_z_spacing(contours_body)
-    height = (max_z - min_z) + 2*spacing_z
-
-    bounding_cylinder = Cylinder(center=[h,k,z], direction=[0,0,1], radius=r*r_frac, height=height)
-    cloud_PTV.compute_implicit_distance(bounding_cylinder, inplace=True)
-    cloud_PTV_trim = cloud_PTV.threshold(0.0, scalars="implicit_distance", invert=True)
-    
-    return cloud_PTV_trim, h, k, r*r_frac
 
 def get_info_fov(patient,path_k = '/mnt/iDriveShare/Kayla/CBCT_images/kayla_extracted/'):
     path_patient = path_k+patient
@@ -436,41 +60,7 @@ def get_info_fov(patient,path_k = '/mnt/iDriveShare/Kayla/CBCT_images/kayla_extr
     dc_file = pydicom.read_file(files2[0])
     return dc_file.ReconstructionDiameter
     
-    
-def get_name_files(patient_path):
-    replan = False
-    CT_list = [d for d in os.listdir(patient_path) if d[9:11] == 'CT' and len(d) == 23]
-    CT_list.sort()
-
-    CBCT_list_replan = []
-    CBCT_list = [d for d in os.listdir(patient_path) if d[9:11] == 'kV']
-    CBCT_list.sort()
-
-    if len(CT_list) == 0:
-        raise NotADirectoryError('No CT directories were found. Please ensure the following naming convention was used: "YYYYMMDD_CT_DD_MMM_YYYY".')
-
-    elif len(CT_list) > 1: # Set replan to true if > 1 CT
-        replan = True
-
-
-    if replan==True:
-        date_replan = CT_list[1][0:8]
-        
-        CBCT_list_replan = [CBCT for CBCT in CBCT_list if int(CBCT[0:8]) > int(date_replan)]
-        CBCT_list_same_date = [CBCT for CBCT in CBCT_list if int(CBCT[0:8]) == int(date_replan)]
-        CBCT_list =  [CBCT for CBCT in CBCT_list if int(CBCT[0:8]) < int(date_replan)]
-
-        # Organizing CBCTs with same date as replan CT into pre-post replan		
-        for CBCT in CBCT_list_same_date:
-            fx = CBCT.split('_')[-1][:-1]
-            if int(fx) > int(CBCT_list[-1].split('_')[-1][:-1]):
-                CBCT_list.append(CBCT)
-            else:
-                CBCT_list_replan.insert(0,CBCT)
-                
-        return CT_list[0],CBCT_list
-    else:
-        return CT_list[0],CBCT_list
+   
         
 def get_info_replanned(patient,index,path_k='/mnt/iDriveShare/Kayla/CBCT_images/kayla_extracted/'):
     patient_path  = path_k + patient+'/'
@@ -478,78 +68,8 @@ def get_info_replanned(patient,index,path_k='/mnt/iDriveShare/Kayla/CBCT_images/
     CTs_names = [CT]+CBCT_list
     path_complete = patient_path+ CTs_names[index]
     return path_complete
-    
-def centers(x1, y1, x2, y2, r):
-    q = np.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)
-    x3 = (x1 + x2) / 2
-    y3 = (y1 + y2) / 2
+  
 
-    xx = (r ** 2 - (q / 2) ** 2) ** 0.5 * (y1 - y2) / q
-    yy = (r ** 2 - (q / 2) ** 2) ** 0.5 * (x2 - x1) / q
-    
-    return ((x3 + xx, y3 + yy))
-
-def get_center(body1,body2,r):
-
-    dd11 = pv.PolyData(body1).connectivity(largest=True)
-    d_2 = pv.PolyData(body2).connectivity(largest=True)
-    
-    max_x = max(d_2.points[:,0])
-    min_x = min(d_2.points[:,0])
-    max_y = max(d_2.points[:,1])
-    
-    h = np.mean([max_x,min_x])
-    y1 = get_point_with_max_y_around_given_x(max_x,d_2.points)
-    y2 = get_point_with_max_y_around_given_x(min_x,d_2.points)
-    k1 = y1[1] - np.sqrt(np.abs((r*0.5)**2 - (max_x-h)**2))
-    k2 = y2[1] - np.sqrt(np.abs((r*0.5)**2 - (min_x-h)**2))
-    
-
-    
-    y9 = get_point_with_max_y_around_given_x(max_x/4,d_2.points)
-    y10 = get_point_with_max_y_around_given_x(min_x/4,d_2.points)
-    y3 = get_point_with_max_y_around_given_x(max_x/2,d_2.points)
-    y4 = get_point_with_max_y_around_given_x(min_x/2,d_2.points)
-    y5 = get_point_with_max_y_around_given_x(0,d_2.points)
-    y6 = get_point_with_max_y_around_given_x(max_x*7/8,d_2.points)
-    y7 = get_point_with_max_y_around_given_x(min_x*7/8,d_2.points)
-    
-    k3 = y3[1] - np.sqrt(np.abs((r*0.5)**2 - (max_x/2-h)**2))
-    k4 = y4[1] - np.sqrt(np.abs((r*0.5)**2 - (min_x/2-h)**2))
-   
-    k6 = y6[1] - np.sqrt(np.abs((r*0.5)**2 - (max_x*7/8-h)**2))
-    k7 = y7[1] - np.sqrt(np.abs((r*0.5)**2 - (min_x*7/8-h)**2))
-    
-    theta = np.linspace(0,2*np.pi,300)
- 
-    radius = r*0.5
-    k = np.mean([k1,k2,k3,k4,k6,k7])
-   
-    xx1,yy1 = y6 
-    xx2,yy2 = y7
-    
-    xx3,yy3 = y1
-    xx4,yy4 = y2
-    
-    xx5,yy5 = y3
-    xx6,yy6 = y4
-
-    xx9,yy9 = y9
-    xx10,yy10 = y10
-    xx55,yy55 = y5    
-
-    cp = centers(xx9,yy9,xx4,yy4,r*0.5)
-    cd = centers(xx2,yy2,xx4,yy4,r*0.5)
-
-    chh = centers(xx9,yy9,xx2,yy2,r*0.5)
-
-    hc = np.mean([chh[0],cp[0],cd[0]])
-    kc = np.mean([cp[1],chh[1],cd[1]])
-    
-    h2 = hc
-    k2 = np.max([kc,k])
-    return h2,k2
-    
 def get_center2(path_k,str_pat_id):
 
     isos = rtdsm.get_pointcloud('AcqIsocenter', path_k+'/'+str_pat_id+'/iso.dcm', False)[0]
@@ -716,15 +236,7 @@ def get_center_vectors(body1,body2):
 #    z = np.max(np.abs((np.array(vectors)[:,2])))
     return x,y,r,xmin,ymin,xmed,ymed
 
-def get_elongation_only_central3D(body,contour0):
-    iso = contour0.center
-    dists = np.sqrt((np.array(body.points)[:,0]-iso[0])**2+(np.array(body.points)[:,1]-iso[1])**2+(np.array(body.points)[:,2]-iso[2])**2)
-    R_mean = (np.mean(dists))
-
-    R_min = (np.min(dists))
-    R_max = (np.max(dists))
-        
-    return R_max,R_min,R_mean 
+ 
 
 def get_elongation_only_central(body,z_m,z_m2,contour0):
 
@@ -1156,29 +668,7 @@ def get_start_position_dcm(CT_path):
     pixel_spacing = d.PixelSpacing
     
     return start_x, start_y, start_z, pixel_spacing 
-    
-    
-def get_area(body_slice,start_x2,start_y2,pixel_spacing2):
-    
-    px,py = get_mask_nifti(body_slice,start_x2,start_y2,pixel_spacing2)
-    slicee = list(zip(px,py))
-    ctr = np.array(slicee).reshape((-1,1,2)).astype(np.int32)
-    mask = np.zeros((800,800), np.uint8)
-    cv2.fillPoly(mask,pts=ctr,color=(255,255,255))
-    
-    ret, thresh = cv2.threshold(mask,0, 255, cv2.THRESH_BINARY)
-    
-    contours, hierarchy = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
-    cnt = sorted(contours, key=lambda x: cv2.contourArea(x),reverse=True)
-    mask2 = np.zeros((800,800), np.uint8)
-    cv2.drawContours(mask2, cnt, 0, 255, -1)
-    
-    pixel_area_i=pixel_spacing2[0]*pixel_spacing2[1] #Get area of each pixel
-    
-    area_i_cm2 = (np.sum(mask2)/255)*pixel_area_i*0.01
-    #area_i = cv2.contourArea(ctr)
-    #area_i_cm2=area_i*0.01 #Pass to cm2
-    return area_i_cm2
+
     
     
 def get_keys_v2(name,patient,path_RS0):
@@ -1207,68 +697,6 @@ def get_keys_v2(name,patient,path_RS0):
                         #if patient not in pat_h:\n",
                         pat_h.append(key)
         return pat_h
-        
-
-def get_body_keys_not_RS(file_list):
-    body_keys = []
-    for k in file_list:
-        key = k.split('.')[0]
-        body_keys.append(key)
-    #body_keys
-    sorted_keys = sort_body_keys(body_keys)
-    return sorted_keys
-
-def get_format(file_list):
-    formatt = file_list[0].split('.')[1]    
-    return formatt
-
-def get_path_RS_v5(path_CT):   #Obti
-    file_RS = [x for x in os.listdir(path_CT) if 'RS' in x][0]
-    return os.path.join(path_CT, file_RS)
-
-def get_path_RS(pat_id, path_src):   #Obtiene el archivo del RT structure
-    path_patient = os.path.join(path_src, pat_id)
-    file_RS = [x for x in os.listdir(path_patient) if 'RS' in x][0]
-    return os.path.join(path_patient, file_RS)
-
-def get_body_keys(RS_file_path): #obtiene los keys de los body contours.
-    ROI_keys = get_ROI_keys(RS_file_path)
-    return [x for x in ROI_keys if 'body' in x.lower()]
-    
-def get_name_files(patient_path):
-    replan = False
-    CT_list = [d for d in os.listdir(patient_path) if d[9:11] == 'CT' and len(d) == 23]
-    CT_list.sort()
-
-    CBCT_list_replan = []
-    CBCT_list = [d for d in os.listdir(patient_path) if d[9:11] == 'kV']
-    CBCT_list.sort()
-
-    if len(CT_list) == 0:
-        raise NotADirectoryError('No CT directories were found. Please ensure the following naming convention was used: "YYYYMMDD_CT_DD_MMM_YYYY".')
-
-    elif len(CT_list) > 1: # Set replan to true if > 1 CT
-        replan = True
-
-    if replan==True:
-        date_replan = CT_list[1][0:8]
-        
-        CBCT_list_replan = [CBCT for CBCT in CBCT_list if int(CBCT[0:8]) > int(date_replan)]
-        CBCT_list_same_date = [CBCT for CBCT in CBCT_list if int(CBCT[0:8]) == int(date_replan)]
-        CBCT_list =  [CBCT for CBCT in CBCT_list if int(CBCT[0:8]) < int(date_replan)]
-
-        # Organizing CBCTs with same date as replan CT into pre-post replan		
-        for CBCT in CBCT_list_same_date:
-            fx = CBCT.split('_')[-1][:-1]
-            if int(fx) > int(CBCT_list[-1].split('_')[-1][:-1]):
-                CBCT_list.append(CBCT)
-            else:
-                CBCT_list_replan.insert(0,CBCT)
-                
-        return CT_list[0],CBCT_list
-    else:
-        return CT_list[0],CBCT_list
-
 
 
 def trim_contours_to_match_zs(contours_1,contours_2,z_min,z_max): 
@@ -1430,37 +858,29 @@ def get_key_mandible(patient,path_RS0):
 
     return key_ff[0]
 
-import os
-import json
-import csv
-
-import scipy
-from scipy.spatial.distance import directed_hausdorff
 
 
+ PATH_DEST = 'distance2D/'
+    if not os.path.isdir(PATH_DEST):
+        os.makedirs(PATH_DEST)
 ROWS = ['d_max2D','d_mean2D','d_median2D']
-
-
-def pipeline_area_body(PATH_DEST,param_name='distances2D',path_k = '/mnt/iDriveShare/OdetteR/Registration_and_contours/Contours/'):
-
-    file = '/mnt/iDriveShare/OdetteR/Registration_and_contours/IDS_News_Partial.csv'
-    ids_news = []
+def pipeline_area_body(param_name='distances2D',path_contours,CSV_patients_ids,path_CBCTs):
+    t_init = process_time()
+    #CSV_patient_ids = '/mnt/iDriveShare/OdetteR/Registration_and_contours/IDS_News_Partial.csv'
+    ids_patients = []
     
+    #READ THE CSV IDS FILE
     with open(file, newline='') as csvfile:
         spamreader = csv.reader(csvfile, delimiter=' ', quotechar='|')
         for row in spamreader:
-            ids_news.append(row[0])
+            ids_patients.append(row[0])
     
+    #CHECK IF THE PATIENT ALREADY HAS A CSV FILE IN THE DESTINATION FOLDER
     existing_patients = [csv_filename.split('_')[-1].split('.')[0] for csv_filename in os.listdir(PATH_DEST)]
-    t_init = process_time()
 
-    for str_pat_id in ids_news:
-        #print('Processing patient ' + str_pat_id + '.') 
+    for str_pat_id in ids_patients:
         patient_path = '/mnt/iDriveShare/OdetteR/Registration_and_contours/Contours/'+str_pat_id
-        
-        
-        
-                #bodies.insert(0,'BODY')
+
         # check if patient already has csv
         if str_pat_id in existing_patients:
             print('Patient already has csv:' + str_pat_id)
@@ -1473,79 +893,63 @@ def pipeline_area_body(PATH_DEST,param_name='distances2D',path_k = '/mnt/iDriveS
             key_bodies_to_save = []
             
             body_list = [d for d in os.listdir(patient_path) if d[0:4] == 'Body']
-            
+
+            # e.g. path_full_CBCT_id = '/mnt/iDriveShare/Kayla/CBCT_images/kayla_extracted/'+str_pat_id+'/'
+            path_full_CBCT_id = path_CBCTs+str_pat_id+'/'
+         
+            #GETS THE NAME FILES OF EACH CT OR CBCT MEDICAL IMAGE
+            CT,CBCTs = get_name_files(path_full_CBCT_id)
+                
+            #SET THE PATH OF THE CT 
+            path_CT = path_full_CBCT_id+CT
             
             if len(body_list)==0:
-                path_rs = get_path_RS(str_pat_id, path_k)
+                path_rs = get_path_RS(str_pat_id, path_CBCT)
                 bodies_rs = get_body_keys(path_rs)
                 bodies_sorted_rs = sort_body_keys(bodies_rs)
+                
                 for body in bodies_sorted_rs:
                     body_contour = rtdsm.get_pointcloud(body, path_rs, False)[0]
                     if len(body_contour)==0:
                         print('\tSkipping ' +body + '. Body contours array is empty.')
-            
                     else:
                         if body not in key_bodies_to_save:
                             key_bodies_to_save.append(body)
                             contours.append(body_contour)
-                            
-                #key_mandible = get_key_mandible(str_pat_id,path_rs)
-                #mandible1 = rtdsm.get_pointcloud(key_mandible,path_rs,False)[0]
-            
-                #mandible= get_surface_marching_cubes(mandible1)
             else:
                     
                 bodies = get_body_keys_not_RS(body_list)
-                #formatt = get_format(body_list)
-        
-                path_k1 = '/mnt/iDriveShare/Kayla/CBCT_images/kayla_extracted/'+str_pat_id+'/'
-                CT,CBCTs = get_name_files(path_k1)
-                path_CT = path_k1+CT
-                path_rs_b0 = get_path_RS_v5(path_CT)
-        
+                #SET THE PATH FOR THE RS FILE FOR THE FRACTION 0 (CT SIM IMAGE)
+                path_rs_b0 = get_path_RS_CT(path_CT)
                 bodies.insert(0,'BODY')
-                
-                #key_mandible = get_key_mandible(str_pat_id,path_rs_b0)
-                #mandible1 = rtdsm.get_pointcloud(key_mandible,path_rs_b0,False)[0]
-            
-                #mandible= get_surface_marching_cubes(mandible1)
+                body_list.insert(0,'BODY')
                 
                 for bodx in bodies:
                     if bodx=='BODY':
                         body_contour = rtdsm.get_pointcloud('BODY', path_rs_b0, False)[0]
                         contours.append(body_contour)
-                         
                     else:
-                        for bodi in body_list:
-                             body_in_folder = bodi.split('.')[0]
-                             
-                             if body_in_folder==bodx:
-                                 formatt = bodi.split('.')[-1]
-                    
-                    
-                        path_RS0 = patient_path+'/'+bodx+'.'+formatt
-                        print(path_RS0)
-                        if formatt=='json':
+                        body_in_folder = body_list[bodx].split('.')[0]
+                        format_single_contour = body_list[bodx].split('.')[-1]
+                        path_RS0 = patient_path+'/'+bodies[bodx]+'.'+format_single_contour
+
+                        if format_single_contour=='json':
                             f = open(path_RS0)
                             data = json.load(f)
                             f.close()
-                            body_contour = np.array(data[bodx])
+                            body_contour = np.array(data[bodies[bodx]])
                             contours.append(body_contour)
                         else:
-                            body_contour = rtdsm.get_pointcloud(bodx, path_RS0, False)[0]
+                            body_contour = rtdsm.get_pointcloud(bodies[bodx], path_RS0, False)[0]
                             contours.append(body_contour)
-                            
+
                 key_bodies_to_save = bodies.copy()
                             
-            
+
             # initialize dataframe and define output file name
             #PARA GUARDAR LOS DATOS, DEFINE LOS NOMBRES. 
             
-            path_k1 = '/mnt/iDriveShare/Kayla/CBCT_images/kayla_extracted/'+str_pat_id+'/'
-            CT,CBCTs = get_name_files(path_k1)
-            path_CT = path_k1+CT
-            path_rs_b0 = get_path_RS_v5(path_CT)
-        
+
             df = pd.DataFrame({param_name : ROWS})
             out_file = param_name + '_' + str_pat_id + '.csv'
             out_path = os.path.join(PATH_DEST,out_file) 
@@ -1555,81 +959,53 @@ def pipeline_area_body(PATH_DEST,param_name='distances2D',path_k = '/mnt/iDriveS
         
             print(key_bodies_to_save)
             z_min,z_max = search_cuts_z(contours)
-
-            
-            #contour0 = get_surface_marching_cubes(contours[0])
-            
-            
-            z_min,z_max = search_cuts_z(contours)
-
             r = get_info_fov(str_pat_id)
             
-            for key_body in key_bodies_to_save:
-        
-                #contour_body = rtdsm.get_pointcloud(key_body, path_RS, False)[0]
-                q = key_bodies_to_save.index(key_body)
-                print('working on '+key_bodies_to_save[q])
-                contour_body = contours[q]
+            for key_body in range(0,len(key_bodies_to_save)):
+                print('Working on '+key_bodies_to_save[key_body])
+                contour_body = contours[key_body]
                 params=[]
                 if len(contour_body) == 0:
-                    print('\tSkipping ' + key_body + '. Body contours array is empty.')
+                    print('\tSkipping ' + key_bodies_to_save[key_body] + '. Body contours array is empty.')
                     continue
                 else:
-                   
-                    if key_body=='BODY':
+                    if key_bodies_to_save[key_body]=='BODY':
                         contour_body = contours[0]
                         contour_body2 = contours[1]
-                        
-                        h,k = get_center2(path_k,str_pat_id) #Maybe hacer el FOV promedio? y aplicarlos a todos.
-                        
+
+                        h,k = get_center_fov(path_CBCT_images,str_pat_id) 
                         body_sim = get_equal_body_fov(contour_body,h,k,r)
                         gc.collect()
                         
                         trim_body,trim_body2 = trim_contours_to_match_zs(body_sim.points,body_sim.points,z_min,z_max)            
-                        #d_max = get_max_dist_body(pv.PolyData(trim_body),pv.PolyData(trim_body2))
-                        #chamber = get_chamber(trim_body,trim_body2)
-                        #b1_b2,b2_b1 = get_hauss(trim_body,trim_body2)
-                        #gc.collect()
-                        #hd,max_index,hd2,max_index2 = get_max_between_contours_by2Dv2(trim_body,trim_body2)
-                        gc.collect()
-                        #print('\t' + key_body + 'done.')
-                        
+                        gc.collect()                        
                         d_max,d_mean,d_median = get_max_between_contours_by2Dv2(trim_body,trim_body2)
-                        #hd,max_index,hd2,max_index2  = get_max_between_contours_by2Dv2(trim_body,trim_body2)
+                        print('\tProcess time of parameters (' + key_bodies_to_save[key_body_n] + '): ' + str(process_time()-t1) + ' s')
+
                         gc.collect()
-                   #     params.append(hd)
-                    #    params.append(hd2)
+                 
                         params.append(d_max)
                         params.append(d_mean)
                         params.append(d_median)
-                        #params.append(b2_b1)
-                        
-                        
                     else:
                            
                         contour_body_0 = contours[0]
                         contour_body_1 = contours[1]
                         
-                        #h,k = get_center(contour_body_0,contour_body_1,r) #Maybe hacer el FOV promedio? y aplicarlos a todos.
-                        h,k = get_center2(path_k,str_pat_id)                       
+                        h,k =  get_center_fov(path_CBCT_images,str_pat_id)                       
                         
                         body_sim = get_equal_body_fov(contour_body_0,h,k,r)
                         gc.collect()
                         trim_body,trim_body2 = trim_contours_to_match_zs(body_sim.points,contour_body,z_min,z_max)            
-                        #gc.collect()
-                        #d_max = get_max_dist_body(pv.PolyData(trim_body),pv.PolyData(trim_body2))
-                        #chamber = get_chamber(trim_body,trim_body2)
-                        #b1_b2,b2_b1 = get_hauss(trim_body,trim_body2)
+                        
                         d_max,d_mean,d_median = get_max_between_contours_by2Dv2(trim_body,trim_body2)
-                        #hd,max_index,hd2,max_index2  = get_max_between_contours_by2Dv2(trim_body,trim_body2)
                         gc.collect()
-                        print('\t' + key_body + 'done.')
+                        print('\tProcess time of parameters (' + key_bodies_to_save[key_body_n] + '): ' + str(process_time()-t1) + ' s')
+
                         params.append(d_max)
                         params.append(d_mean)
                         params.append(d_median)
-                        #params.append(b2_b1)
-                        #params.append(hd)
-                        #params.append(hd2)
+                      
         
         
                     df[key_body] = params
@@ -1644,9 +1020,7 @@ def pipeline_area_body(PATH_DEST,param_name='distances2D',path_k = '/mnt/iDriveS
         print('DONE! Elapsed time for pipeline: ' + str((process_time()-t_init)/3600) + ' hours')
                 
 if __name__ == "__main__":
-    PATH_DEST = 'distance2D/'
-    if not os.path.isdir(PATH_DEST):
-        os.makedirs(PATH_DEST)
+   
     pipeline_area_body(PATH_DEST)
 
 
