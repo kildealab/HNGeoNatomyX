@@ -10,12 +10,12 @@ from helpers import get_name_files, get_body_keys_not_RS, get_info_fov
 from helpers import get_path_RS_CT,  search_cuts_z, get_center_fov
 from helpers import get_max_between_contours_by2Dv2, trim_contours_to_match_zs
 
-PATH_DEST = 'distance2D/'
+PATH_DEST = 'body2D_distances/'
     if not os.path.isdir(PATH_DEST):
         os.makedirs(PATH_DEST)
         
-ROWS = ['d_max2D','d_mean2D','d_median2D']
-def pipeline_area_body(param_name='distances2D',path_contours,CSV_patients_ids,path_CBCTs):
+ROWS = ['dmax2D','dmean2D','dmedian2D']
+def pipeline_area_body(param_name='body2D_distances',path_contours,CSV_patients_ids,path_CBCTs):
     t_init = process_time()
     #CSV_patient_ids = '/mnt/iDriveShare/OdetteR/Registration_and_contours/IDS_News_Partial.csv'
     ids_patients = []
@@ -24,7 +24,7 @@ def pipeline_area_body(param_name='distances2D',path_contours,CSV_patients_ids,p
     with open(file, newline='') as csvfile:
         spamreader = csv.reader(csvfile, delimiter=' ', quotechar='|')
         for row in spamreader:
-            ids_patients.append(row[0])
+            ids_patients.append(str(row[0]))
     
     #CHECK IF THE PATIENT ALREADY HAS A CSV FILE IN THE DESTINATION FOLDER
     existing_patients = [csv_filename.split('_')[-1].split('.')[0] for csv_filename in os.listdir(PATH_DEST)]
@@ -55,7 +55,7 @@ def pipeline_area_body(param_name='distances2D',path_contours,CSV_patients_ids,p
             path_CT = path_full_CBCT_id+CT
             
             if len(body_list)==0:
-                path_rs = get_path_RS(str_pat_id, path_CBCT)
+                path_rs = get_path_RS(str_pat_id, path_contours)
                 bodies_rs = get_body_keys(path_rs)
                 bodies_sorted_rs = sort_body_keys(bodies_rs)
                 
@@ -124,7 +124,7 @@ def pipeline_area_body(param_name='distances2D',path_contours,CSV_patients_ids,p
                         contour_body = contours[0]
                         contour_body2 = contours[1]
 
-                        h,k = get_center_fov(path_CBCT_images,str_pat_id) 
+                        h,k = get_center_fov(path_CBCTs,str_pat_id) 
                         body_sim = get_equal_body_fov(contour_body,h,k,r)
                         gc.collect()
                         
@@ -143,7 +143,7 @@ def pipeline_area_body(param_name='distances2D',path_contours,CSV_patients_ids,p
                         contour_body_0 = contours[0]
                         contour_body_1 = contours[1]
                         
-                        h,k =  get_center_fov(path_CBCT_images,str_pat_id)                       
+                        h,k =  get_center_fov(path_CBCTs,str_pat_id)                       
                         
                         body_sim = get_equal_body_fov(contour_body_0,h,k,r)
                         gc.collect()
