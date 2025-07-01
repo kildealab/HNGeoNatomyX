@@ -141,6 +141,7 @@ def pipeline_area_body(param_name='submand_area',path_contours,CSV_patient_ids,p
             z_min,z_max = search_cuts_z(contours)
           
             for key_body_n in range(0,len(key_bodies_to_save)):
+                t1 = process_time()
                 params = []
                 #GETS FOV RADIUS FROM THE PATH 
                 r = get_info_fov(str_pat_id)
