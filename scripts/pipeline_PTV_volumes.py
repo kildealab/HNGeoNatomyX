@@ -90,7 +90,8 @@ def pipeline_volumes(param_name='volumesPTV',path_contours,CSV_patients_ids,path
                 #SET THE PATH FOR THE RS FILE FOR THE FRACTION 0 (CT SIM IMAGE)
                 path_rs_b0 = get_path_RS_CT(path_CT)
                 bodies.insert(0,'BODY')
-           
+                body_list.insert(0,'BODY')
+                
                 for bodx in range(0,len(bodies)):
                     if bodies[bodx]=='BODY':
                         body_contour = rtdsm.get_pointcloud('BODY', path_rs_b0, False)[0]
