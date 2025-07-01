@@ -10,12 +10,7 @@ from helpers import get_name_files, get_body_keys_not_RS, get_info_fov
 from helpers import get_path_RS_CT,  search_cuts_z, get_center_fov
 from helpers import get_max_between_contours_by2Dv2, trim_contours_to_match_zs
 
-
-#IMG_RES = [0.51119071245194, 0.51119071245194, 3]
-RADIUS_FRAC = 0.75
-
-
- PATH_DEST = 'distance2D/'
+PATH_DEST = 'distance2D/'
     if not os.path.isdir(PATH_DEST):
         os.makedirs(PATH_DEST)
         
