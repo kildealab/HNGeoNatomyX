@@ -7,6 +7,9 @@ Created on Jul 2024
 import sys
 sys.path.append('/rtdsm')
 import rtdsm
+import pandas as pd
+from time import process_time
+import gc
 
 import helpers 
 from helpers import get_path_RS, get_body_keys, sort_body_keys
@@ -14,8 +17,7 @@ from helpers import get_key_mandible, get_body_keys_not_RS, get_format, get_name
 from helpers import get_path_RS_CT,  search_cuts_z, get_info_fov, get_center_fov, get_CT_CBCT_equal_body
 from helpers import get_min_mandible_slice, trim_contours_to_match_zs, get_contour_submand
 from helpers import get_start_position_dcm, get_area, get_info_replanned
-from time import process_time
-import gc
+
 
 IMG_RES = [0.51119071245194, 0.51119071245194, 3]
 RADIUS_FRAC = 0.75
@@ -50,7 +52,7 @@ def pipeline_area_body(param_name='submand_area',path_contours,CSV_patient_ids,p
     #READ THE IDS AND CREATE THE CSV FILE TO SAVE 
     for str_pat_id in ids_patients:
         #e.g. path_contours = '/mnt/iDriveShare/OdetteR/Registration_and_contours'
-        patient_path = path_contours+str_pat_id
+        patient_contours_path = path_contours+str_pat_id
 
         # Check if the patient already has csv
         if str_pat_id in existing_patients:
@@ -65,7 +67,7 @@ def pipeline_area_body(param_name='submand_area',path_contours,CSV_patient_ids,p
             key_bodies_to_save = []
 
             #GETS THE BODY KEYS FROM THE PATH FOLDER WITH THE CONTOURS
-            body_list = [d for d in os.listdir(patient_path) if d[0:4] == 'Body']
+            body_list = [d for d in os.listdir(patient_contours_path) if d[0:4] == 'Body']
 
             # e.g. path_full_CBCT_id = '/mnt/iDriveShare/Kayla/CBCT_images/kayla_extracted/'+str_pat_id+'/'
             path_full_CBCT_id = path_CBCTs+str_pat_id+'/'
@@ -103,29 +105,26 @@ def pipeline_area_body(param_name='submand_area',path_contours,CSV_patient_ids,p
                 bodies.insert(0,'BODY')
 
                 gc.collect()
-                for bodx in bodies:
-                    if bodx=='BODY':
+                for bodx in range(0,len(bodies)):
+                    if bodies[bodx]=='BODY':
                         body_contour = rtdsm.get_pointcloud('BODY', path_rs_CT, False)[0]
                         contours.append(body_contour)
                     else:
-                        for bodi in body_list:
-                             body_in_folder = bodi.split('.')[0]
-                             
-                             if body_in_folder==bodx:
-                                 format_single_contour = bodi.split('.')[-1]
+                        body_in_folder = body_list[bodx].split('.')[0]
+                        format_single_contour = body_list[bodx].split('.')[-1]
 
-                                 #SET RS PATH FOR THE 
-                                 path_RS0 = patient_path+'/'+bodx+'.'+format_contours 
+                        #SET RS PATH FOR THE BODY CONTOUR
+                        path_RS0 = patient_path+'/'+bodx+'.'+format_contours 
                         
-                                 if format_contours=='json':
-                                    f = open(path_RS0)
-                                    data = json.load(f)
-                                    f.close()
-                                    body_contour = np.array(data[bodx])
-                                    contours.append(body_contour)
-                                else:
-                                    body_contour = rtdsm.get_pointcloud(bodx, path_RS0, False)[0]
-                                    contours.append(body_contour)
+                        if format_single_contour=='json':
+                            f = open(path_RS0)
+                            data = json.load(f)
+                            f.close()
+                            body_contour = np.array(data[bodies[bodx]])
+                            contours.append(body_contour)
+                        else:
+                            body_contour = rtdsm.get_pointcloud(bodies[bodx], path_RS0, False)[0]
+                            contours.append(body_contour)
         
             #GETS THE KEY LABEL FOR THE MANDIBLE CONTOUR            
             key_mandible = get_key_mandible(str_pat_id,path_rs)
