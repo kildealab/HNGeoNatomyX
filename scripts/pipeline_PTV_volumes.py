@@ -16,9 +16,13 @@ import helpers
 from helpers import get_path_RS, get_body_keys, sort_body_keys, get_keysall
 from helpers import get_name_files, get_body_keys_not_RS, get_info_replanned
 from helpers import search_cuts_z, get_start_position_dcm, get_info_fov
+from helpers import get_path_RS_CT, get_volumes_from_contours, 
 
+#SET THE RESOLUTION OF THE VOXEL IN THE CT MEDICAL IMAGE (CT SIM)
+#IN OUR CENTRE WAS THE FOLLOWING (ALL SHOULD BE THE SAME)
 IMG_RES = [0.51119071245194, 0.51119071245194, 3]
-RADIUS_FRAC = 0.75
+RADIUS_FRAC = 0.75 #CHANGE THIS PARAMETER ONLY IF THE METRICS ARE NOT PROPERLY CALCULATED
+#I.E., IF YOU GET AN ERROR. THIS RADIUS IS TO CALCULATE THE RELATIVE PTV CHANGES
 
 PATH_DEST = 'volumesPTV/'
 if not os.path.isdir(PATH_DEST):
@@ -120,9 +124,7 @@ def pipeline_volumes(param_name='volumesPTV',path_contours,CSV_patients_ids,path
             ptv_key = [i for i in keys_all if i=='z_PTV_ALL' or i=='z_PTVAll' or i=='z_PTV_All' or i=='PTV_ALL' or i=='PTV_All']
             contour_ptv = rtdsm.get_pointcloud(ptv_key[0], path_rs_CT, False)[0]
             ptv.append(contour_ptv)
-  
-            z_min,z_max = search_cuts_z(contours)           
-            
+                        
             df = pd.DataFrame({param_name : ROWS})
             out_file = param_name + '_' + str_pat_id + '.csv'
             out_path = os.path.join(PATH_DEST,out_file) 
