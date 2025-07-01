@@ -2,6 +2,8 @@ import sys
 sys.path.append('/rtdsm')
 import rtdsm
 from time import process_time
+import scipy
+import json
 from scipy.stats import sem
 from scipy.spatial import KDTree
 from skimage.measure import marching_cubes
@@ -10,7 +12,7 @@ import gc, os
 import matplotlib.pyplot as plt 
 from mpl_toolkits.mplot3d import Axes3D, art3d
 from datetime import date
-
+import cv2
 from pyvista import Cylinder
 import alphashape
 import pandas as pd
@@ -21,9 +23,7 @@ from sklearn.linear_model import LinearRegression
 from scipy.spatial import distance
 from skimage.draw import polygon
 import random
-import sys
 from shapely import Polygon, intersection
-import scipy
 from scipy.spatial.distance import directed_hausdorff
 import point_cloud_utils as pcu
 
@@ -205,7 +205,7 @@ def trim_contours_to_match_zsv2(contours_1,contours_2,z_min):
     contours_2 = np.array([x for x in contours_2 if x[2] >= min_z])
     return contours_1,contours_2 
     
-def trim_contours_to_match_zs(contours_1,contours_2,z_min,z_max): 
+def trim_contours_to_match_zs_edge(contours_1,contours_2,z_min,z_max): 
     max_z = z_max 
     min_z = z_min 
         
@@ -304,52 +304,6 @@ def get_point_with_max_y_around_given_x(x, contours):
                 target_x = current_x
     return (target_x, max_y)
 
-# For 3 given points in a circle, return the center (h,k) and radius r
-def get_h_k_r(point1, point2, point3):
-    x1, y1 = point1
-    x2, y2 = point2
-    x3, y3 = point3
-    
-    x12 = x1 - x2;
-    x13 = x1 - x3;
-    y12 = y1 - y2;
-    y13 = y1 - y3;
-    y31 = y3 - y1;
-    y21 = y2 - y1;
-    x31 = x3 - x1;
-    x21 = x2 - x1;
- 
-    # x1^2 - x3^2
-    sx13 = pow(x1, 2) - pow(x3, 2);
- 
-    # y1^2 - y3^2
-    sy13 = pow(y1, 2) - pow(y3, 2);
- 
-    sx21 = pow(x2, 2) - pow(x1, 2);
-    sy21 = pow(y2, 2) - pow(y1, 2);
- 
-    f = (((sx13) * (x12) + (sy13) *
-          (x12) + (sx21) * (x13) +
-          (sy21) * (x13)) // (2 *
-          ((y31) * (x12) - (y21) * (x13))));
-             
-    g = (((sx13) * (y12) + (sy13) * (y12) +
-          (sx21) * (y13) + (sy21) * (y13)) //
-          (2 * ((x31) * (y12) - (x21) * (y13))));
- 
-    c = (-pow(x1, 2) - pow(y1, 2) -
-         2 * g * x1 - 2 * f * y1);
- 
-    # eqn of circle be x^2 + y^2 + 2*g*x + 2*f*y + c = 0
-    # where centre is (h = -g, k = -f) and
-    # radius r as r^2 = h^2 + k^2 - c
-    h = -g;
-    k = -f;
-    sqr_of_r = h * h + k * k - c;
- 
-    # r is the radius
-    r = round(np.sqrt(sqr_of_r), 5);
-    return [h, k, r]
 
 '''Gets maximum and minimum values in a given contour (bounding box)'''
 def get_bounding_box_dimensions(contours):
@@ -362,34 +316,6 @@ def get_bounding_box_dimensions(contours):
     
     return [diff_x, diff_y]
     
-def trim_posterior_PTV(cloud_PTV, contours_body, r_frac=1):    
-    max_x = max(contours_body[:,0])
-    min_x = min(contours_body[:,0])
-
-    point0 = (min_x, get_max_y(min_x, contours_body))
-    point1 = get_point_with_max_y_around_given_x(min_x/2, contours_body)
-    point2 = get_point_with_max_y_around_given_x(0, contours_body)
-    point3 = get_point_with_max_y_around_given_x(max_x/2, contours_body)
-    point4 = (max_x, get_max_y(max_x, contours_body))
-
-    h1,k1,r1 = get_h_k_r(point0, point1, point4)
-    h2,k2,r2 = get_h_k_r(point0, point3, point4)
-    # h3,k3,r3 = get_h_k_r(point0, point2, point4)
-    h = np.mean([h1,h2])
-    k = np.mean([k1,k2])
-    r = np.mean([r1,r2])
-    
-    max_z = max(contours_body[:,2])
-    min_z = min(contours_body[:,2])
-    z = np.mean([min_z,max_z])
-    spacing_z = get_contour_z_spacing(contours_body)
-    height = (max_z - min_z) + 2*spacing_z
-
-    bounding_cylinder = Cylinder(center=[h,k,z], direction=[0,0,1], radius=r*r_frac, height=height)
-    cloud_PTV.compute_implicit_distance(bounding_cylinder, inplace=True)
-    cloud_PTV_trim = cloud_PTV.threshold(0.0, scalars="implicit_distance", invert=True)
-    
-    return cloud_PTV_trim, h, k, r*r_frac
 
 '''path_RT_structure: path of the dcm RT file for a given patient'''
 def get_info_fov(path_patient):
@@ -466,44 +392,7 @@ def get_center(body2,r):
     h2 = hc
     k2 = np.max([kc,k])
     return h2,k2
-    
-def get_equal_body(body2,body1,z_min,z_max,r,h,k):
-    bbody2,bbody1 = trim_contours_to_match_zv3(body1.points,body2.points,z_min,z_max)
-    d2 = pv.PolyData(bbody2).connectivity(largest=True)
 
-    c2_3 = get_surface_marching_cubes(d2.points).smooth(n_iter = 0)
-    cc2 = pv.PolyData(c2_3).connectivity(largest=True)
-    
-    d1 = pv.PolyData(bbody1).connectivity(largest=True)
-    c11 = get_surface_marching_cubes(d1.points).smooth(n_iter = 0)
-
-    cc1 = pv.PolyData(c11).connectivity(largest=True)
-    c1 = c11.copy()
-
-    max_z = max(c1.points[:,2])
-    min_z = min(c1.points[:,2])
-    
-    spacing_z = get_contour_z_spacing(c1.points)
-    height = (max_z - min_z)  #+ 3*spacing_z
-   
-    z = np.mean([min_z,max_z])
-    mesh = pv.CylinderStructured(center=[h,k,z], direction=[0,0,1], theta_resolution=50,z_resolution=80,radius=r*0.5, height=height)
-    bounding_cylinder3 = get_surface_marching_cubes(mesh.points).smooth(n_iter = 0)
-    s_body1 = cc1.copy().boolean_intersection(bounding_cylinder3.copy())
-
-    max_z2 = max(c2_3.points[:,2])
-    min_z2 = min(c2_3.points[:,2])
-    spacing_z2 = get_contour_z_spacing(c1.points)
-    height2 = (max_z2 - min_z2) + 2*spacing_z2
-   
-    z2 = np.mean([min_z2,max_z2])
-    
-    bounding_cylinder = Cylinder(center=[h,k,z2], direction=[0,0,1], radius=r*2, height=height2)
-    
-    s_body1.compute_implicit_distance(bounding_cylinder, inplace=True)
-    cloud_trim = s_body1.threshold(0.0, scalars="implicit_distance", invert=True)
-    
-    return cloud_trim,c2_3
 
 def get_min_dist_body(body1,body2):
     tree = KDTree(body2.points)
@@ -1355,6 +1244,7 @@ def get_contour_submand(body,z_min):
             points_xy.append([j[0],j[1]])
     return points_xy
 
+
 ################
 #  PTV RELATED METRICS FUNCTIONS
 ############
@@ -1379,6 +1269,82 @@ def get_distances_of_points_from_cloud(points, cloud):
     dist_points, idxes_cloud = tree.query(points.points)
     return dist_points
 
+
+# For 3 given points in a circle, return the center (h,k) and radius r
+def get_h_k_r(point1, point2, point3):
+    x1, y1 = point1
+    x2, y2 = point2
+    x3, y3 = point3
+    
+    x12 = x1 - x2;
+    x13 = x1 - x3;
+    y12 = y1 - y2;
+    y13 = y1 - y3;
+    y31 = y3 - y1;
+    y21 = y2 - y1;
+    x31 = x3 - x1;
+    x21 = x2 - x1;
+ 
+    # x1^2 - x3^2
+    sx13 = pow(x1, 2) - pow(x3, 2);
+ 
+    # y1^2 - y3^2
+    sy13 = pow(y1, 2) - pow(y3, 2);
+ 
+    sx21 = pow(x2, 2) - pow(x1, 2);
+    sy21 = pow(y2, 2) - pow(y1, 2);
+ 
+    f = (((sx13) * (x12) + (sy13) *
+          (x12) + (sx21) * (x13) +
+          (sy21) * (x13)) // (2 *
+          ((y31) * (x12) - (y21) * (x13))));
+             
+    g = (((sx13) * (y12) + (sy13) * (y12) +
+          (sx21) * (y13) + (sy21) * (y13)) //
+          (2 * ((x31) * (y12) - (x21) * (y13))));
+ 
+    c = (-pow(x1, 2) - pow(y1, 2) -
+         2 * g * x1 - 2 * f * y1);
+ 
+    # eqn of circle be x^2 + y^2 + 2*g*x + 2*f*y + c = 0
+    # where centre is (h = -g, k = -f) and
+    # radius r as r^2 = h^2 + k^2 - c
+    h = -g;
+    k = -f;
+    sqr_of_r = h * h + k * k - c;
+ 
+    # r is the radius
+    r = round(np.sqrt(sqr_of_r), 5);
+    return [h, k, r]
+    
+def trim_posterior_PTV(cloud_PTV, contours_body, r_frac=1):    
+    max_x = max(contours_body[:,0])
+    min_x = min(contours_body[:,0])
+
+    point0 = (min_x, get_max_y(min_x, contours_body))
+    point1 = get_point_with_max_y_around_given_x(min_x/2, contours_body)
+    point2 = get_point_with_max_y_around_given_x(0, contours_body)
+    point3 = get_point_with_max_y_around_given_x(max_x/2, contours_body)
+    point4 = (max_x, get_max_y(max_x, contours_body))
+
+    h1,k1,r1 = get_h_k_r(point0, point1, point4)
+    h2,k2,r2 = get_h_k_r(point0, point3, point4)
+    # h3,k3,r3 = get_h_k_r(point0, point2, point4)
+    h = np.mean([h1,h2])
+    k = np.mean([k1,k2])
+    r = np.mean([r1,r2])
+    
+    max_z = max(contours_body[:,2])
+    min_z = min(contours_body[:,2])
+    z = np.mean([min_z,max_z])
+    spacing_z = get_contour_z_spacing(contours_body)
+    height = (max_z - min_z) + 2*spacing_z
+
+    bounding_cylinder = Cylinder(center=[h,k,z], direction=[0,0,1], radius=r*r_frac, height=height)
+    cloud_PTV.compute_implicit_distance(bounding_cylinder, inplace=True)
+    cloud_PTV_trim = cloud_PTV.threshold(0.0, scalars="implicit_distance", invert=True)
+    
+    return cloud_PTV_trim, h, k, r*r_frac
 
 def get_distances_from_contours(contours_PTV, contours_body,IMG_RES, r_frac=RADIUS_FRAC, smooth_iter=0):
     # ================================================================================
@@ -1510,4 +1476,83 @@ def get_volumes_from_contours(contours_PTV, contours_body,IMG_RES,r_frac=RADIUS_
         vol_PTV_inner = vol_PTV
     return vol_body, vol_PTV_inner, vol_PTV_outer
 
+################################################################
+# BODY RELATED METRIC
+################################################################
+
+def get_equal_body_fov(body1,h,k,r):
+    d1 = pv.PolyData(body1).connectivity(largest=True)
+
+    bx = d1.points[:,0]
+    by = d1.points[:,1]
+    bz = d1.points[:,2]
+
+    indexes = (bx-h)**2+(by-k)**2<=(r*0.8)**2
+
+    bx2 = bx[indexes==True]
+    by2 = by[indexes==True]
+    bz2 = bz[indexes==True]
+
+    points22 = list(zip(bx2,by2,bz2))
+    d11 =pv.PolyData(points22)
+
+    theta = np.linspace(0,2*np.pi,300)
+
+    x = r*0.5 * np.cos( theta ) +h
+    y = r*0.5 * np.sin( theta ) +k
+
+    body_crop = [] #array points (cloud)
+    zs = [i for i in d11.points[:,2]]
+    zss = sorted(list(dict.fromkeys(zs)))
+    for z in zss:
+        ptosxy = []
+        for p in d11.points:
+            if z==p[2]:
+                ptosxy.append([float(p[0]),float(p[1])])
+        #pp1= Polygon(ptosxy)
+        pp1= Polygon(ptosxy).buffer(0)
+        pp2 = Polygon(list(zip(x,y)))
+        pp3 = intersection(pp1,pp2)
+        try:
+            bx,by = pp3.exterior.coords.xy[0],pp3.exterior.coords.xy[1]
+        except:
+            coords = [[len(list(x.exterior.coords)),list(x.exterior.coords)] for x in pp3.geoms]
+            bx,by = np.array((sorted(coords)[-1][-1]))[:,0],np.array((sorted(coords)[-1][-1]))[:,1]
+
+        for j in range(0,len(bx)):
+            body_crop.append((float(bx[j]),float(by[j]),float(z)))
+
+    bbody = pv.PolyData(body_crop)
+    return bbody
+
+def get_max_between_contours_by2Dv2(body1,body2):
+    z_vals = np.array(list(set(body1[:,2])))
+    z_vals = z_vals[~(np.isnan(z_vals))]
+    sorted_z = np.array(sorted(z_vals))
     
+    z_vals2 = np.array(list(set(body2[:,2])))
+    z_vals2 = z_vals2[~(np.isnan(z_vals2))]
+    sorted_z2 = np.array(sorted(z_vals2))
+  
+    slices_body1 = []
+    for z in z_vals:
+        ptosxy = []
+        for p in body1:
+            if z==p[2]:
+                ptosxy.append([float(p[0]),float(p[1])])
+        slices_body1.append(ptosxy)
+        
+    slices_body2 = []
+    for z in z_vals2:
+        ptosxy = []
+        for p in body2:
+            if z==p[2]:
+                ptosxy.append([float(p[0]),float(p[1])])
+        slices_body2.append(ptosxy)
+    
+    distances = []
+    for k in range(0,len(slices_body2)):
+        distance = directed_hausdorff(slices_body1[k], slices_body2[k])
+        distances.append(distance[0])
+    max_index = distances.index(np.max(distances))
+    return np.max(distances),np.mean(distances),np.median(distances)
