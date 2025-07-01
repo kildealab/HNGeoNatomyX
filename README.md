@@ -142,7 +142,7 @@ By pulling the latest version from GitHub. Please note that your Python installa
 pip install git+https://github.com/kildealab/HN-GeoNatomyX.git
 ```
 
-## Usage and Examples
+## Usage
 ### Data Format
 Patient medical images (CT sims and CBCTs) were stored using the [dicoPATH](https://github.com/kildealab/dicoPATH) script. The data must be stored in the following format to streamline the use of the code. 
 
