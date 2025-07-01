@@ -7,7 +7,7 @@ A Python script for calculating geometrical metrics from the 3D and 2D shape of 
   *  [Features](#Features)
   *  [Dependencies](#Dependencies)
   *  [Installation](#Installation)
-  *  [Usage and Examples](#UsageandExamples)
+  *  [Usage](#Usage)
   *  [License](#License)
   *  [How to Cite](#HowtoCite)
   *  [References](#References)
