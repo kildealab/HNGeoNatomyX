@@ -114,7 +114,7 @@ def pipeline_area_body(param_name='submand_area',path_contours,CSV_patient_ids,p
                         format_single_contour = body_list[bodx].split('.')[-1]
 
                         #SET RS PATH FOR THE BODY CONTOUR
-                        path_RS0 = patient_path+'/'+bodx+'.'+format_contours 
+                        path_RS0 = patient_path+'/'+bodx+'.'+format_single_contour
                         
                         if format_single_contour=='json':
                             f = open(path_RS0)
