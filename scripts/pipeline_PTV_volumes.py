@@ -8,7 +8,7 @@ import sys
 sys.path.append('/rtdsm')
 import rtdsm
 from time import process_time
-import gc, os
+import gc, os, csv
 import helpers
 import pandas as pd
 
