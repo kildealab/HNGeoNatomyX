@@ -9,7 +9,7 @@ sys.path.append('/rtdsm')
 import rtdsm
 import pandas as pd
 from time import process_time
-import gc
+import gc, os, csv
 
 import helpers 
 from helpers import get_path_RS, get_body_keys, sort_body_keys
