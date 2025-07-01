@@ -16,7 +16,7 @@ import helpers
 from helpers import get_path_RS, get_body_keys, sort_body_keys, get_keysall
 from helpers import get_name_files, get_body_keys_not_RS, get_info_replanned
 from helpers import search_cuts_z, get_start_position_dcm, get_info_fov
-from helpers import get_path_RS_CT, get_volumes_from_contours, 
+from helpers import get_path_RS_CT, get_volumes_from_contours
 
 #SET THE RESOLUTION OF THE VOXEL IN THE CT MEDICAL IMAGE (CT SIM)
 #IN OUR CENTRE WAS THE FOLLOWING (ALL SHOULD BE THE SAME)
@@ -74,7 +74,7 @@ def pipeline_volumes(param_name='volumesPTV',path_contours,CSV_patients_ids,path
          
             if len(body_list)==0:
                 #GETS THE RT STRUCTURE FILE (RS FILE)
-                path_rs = get_path_RS(str_pat_id, path_CBCT)
+                path_rs = get_path_RS(str_pat_id, path_contours)
                 bodies_rs = get_body_keys(path_rs)
                 bodies_sorted_rs = sort_body_keys(bodies_rs)
              
