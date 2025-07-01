@@ -172,7 +172,11 @@ def pipeline_area_body(param_name='distances2D',path_contours,CSV_patients_ids,p
         print('DONE! Elapsed time for pipeline: ' + str((process_time()-t_init)/3600) + ' hours')
                 
 if __name__ == "__main__":
+    #e.g. paths
+    path_contours = '/mnt/iDriveShare/OdetteR/Registration_and_contours'
+    CSV_patient_ids =  '/mnt/iDriveShare/OdetteR/Registration_and_contours/IDS_News_Partial.csv'
+    path_CBCTs = '/mnt/iDriveShare/Kayla/CBCT_images/kayla_extracted/'
    
-    pipeline_area_body(PATH_DEST)
+    pipeline_area_body(path_contours,CSV_patients_ids,path_CBCTs)
 
 
