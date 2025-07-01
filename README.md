@@ -172,8 +172,8 @@ Several examples are included in Jupyter Notebook format to demonstrate how to r
 | Script | Description |
 | ------------- |-----------|
 | [pipeline_body_volume.py](/scripts/pipeline_body_volume.py) | Calculates $V_{Body}$ in $mm^3$ and saves the results as CSV files labelled *'body_volume_'+ID* (ID: patient identifier) in a folder called **'body_volume'**| 
-| [pipeline_body_3D_distances.py](/scripts/pipeline_body_3D_distances.py) | Calculates $CD_{Body}$ and $HD_{Body}$ in $mm$ and saves the results as CSV files labelled *'body3Ddistances_'+ID* in a folder called **'body3D_distances'** |
-| [pipeline_body_2D_distances.py](/scripts/pipeline_body_2D_distances.py) |  Calculates $D_{Body}$, $`\tilde{D}_{Body}`$, and $`\bar{D}_{Body}`$ in $mm$ and saves the results as CSV files labelled *'body2Ddistances'+ID* in a folder called **'body2D_distances'**  |
+| [pipeline_body_3D_distances.py](/scripts/pipeline_body_3D_distances.py) | Calculates $CD_{Body}$ and $HD_{Body}$ in $mm$ and saves the results as CSV files labelled *'body3D_distances_'+ID* in a folder called **'body3D_distances'** |
+| [pipeline_body_2D_distances.py](/scripts/pipeline_body_2D_distances.py) |  Calculates $D_{Body}$, $`\tilde{D}_{Body}`$, and $`\bar{D}_{Body}`$ in $mm$ and saves the results as CSV files labelled *'body2D_distances_'+ID* in a folder called **'body2D_distances'**  |
 
 #### Treatment Mask-Related Metrics Pipeline
 | Script | Description |
