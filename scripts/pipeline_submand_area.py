@@ -7,8 +7,11 @@ Created on Jul 2024
 import helpers 
 from helpers import get_path_RS, get_body_keys, sort_body_keys
 from helpers import get_key_mandible, get_body_keys_not_RS, get_format, get_name_files
-from helpers import get_path_RS_CT,  search_cuts_z
+from helpers import get_path_RS_CT,  search_cuts_z, get_info_fov, get_center_fov, get_CT_CBCT_equal_body
+from helpers import get_min_mandible_slice, trim_contours_to_match_zs, get_contour_submand
+from helpers import get_start_position_dcm, get_area, get_info_replanned
 import time
+import gc
 
 IMG_RES = [0.51119071245194, 0.51119071245194, 3]
 RADIUS_FRAC = 0.75
@@ -50,12 +53,14 @@ def pipeline_area_body(param_name='submand_area',path_contours,CSV_patient_ids,p
             print('Patient already has csv:' + str_pat_id)
             continue
         else:
+            #GETS PROCESSING TIME FOR THE PIPELINE
             t0 = process_time()
             
             print('Processing patient: ' + str_pat_id)
             contours = []
             key_bodies_to_save = []
-            
+
+            #GETS THE BODY KEYS FROM THE PATH FOLDER WITH THE CONTOURS
             body_list = [d for d in os.listdir(patient_path) if d[0:4] == 'Body']
 
             # e.g. path_full_CBCT_id = '/mnt/iDriveShare/Kayla/CBCT_images/kayla_extracted/'+str_pat_id+'/'
@@ -92,7 +97,8 @@ def pipeline_area_body(param_name='submand_area',path_contours,CSV_patient_ids,p
                 path_CT = path_full_CBCT_id+CT
                 path_rs_CT = get_path_RS_CT(path_CT)
                 bodies.insert(0,'BODY')
-                
+
+                gc.collect()
                 for bodx in bodies:
                     if bodx=='BODY':
                         body_contour = rtdsm.get_pointcloud('BODY', path_rs_CT, False)[0]
@@ -103,18 +109,19 @@ def pipeline_area_body(param_name='submand_area',path_contours,CSV_patient_ids,p
                              
                              if body_in_folder==bodx:
                                  format_single_contour = bodi.split('.')[-1]
-                                 
-                        path_RS0 = patient_path+'/'+bodx+'.'+format_contours 
+
+                                 #SET RS PATH FOR THE 
+                                 path_RS0 = patient_path+'/'+bodx+'.'+format_contours 
                         
-                        if format_contours=='json':
-                            f = open(path_RS0)
-                            data = json.load(f)
-                            f.close()
-                            body_contour = np.array(data[bodx])
-                            contours.append(body_contour)
-                        else:
-                            body_contour = rtdsm.get_pointcloud(bodx, path_RS0, False)[0]
-                            contours.append(body_contour)
+                                 if format_contours=='json':
+                                    f = open(path_RS0)
+                                    data = json.load(f)
+                                    f.close()
+                                    body_contour = np.array(data[bodx])
+                                    contours.append(body_contour)
+                                else:
+                                    body_contour = rtdsm.get_pointcloud(bodx, path_RS0, False)[0]
+                                    contours.append(body_contour)
         
             #GETS THE KEY LABEL FOR THE MANDIBLE CONTOUR            
             key_mandible = get_key_mandible(str_pat_id,path_rs)
@@ -127,53 +134,62 @@ def pipeline_area_body(param_name='submand_area',path_contours,CSV_patient_ids,p
             
             # ================================================================================
             # CALCULATE PARAMETERS
+            #SEARCH THE SAME Z RANGE FOR THE BODY CONTOURS
             z_min,z_max = search_cuts_z(contours)
-            #GETS CONTOUR FOR FRACTION 0
-            contour_BODY = contours[0]
-            
+          
             for key_body_n in range(0,len(key_bodies_to_save)):
                 params = []
-                        
-                t1 = process_time()
-      
+                #GETS FOV RADIUS FROM THE PATH 
                 r = get_info_fov(str_pat_id)
                 
                 if key_bodies_to_save[key_body_n]=='BODY':
+                    #GETS THE BODY CONTOUR FOR FRACTION 0 (CT SIM)
                     b1 = contours[key_body_n]
+                    #GETS THE NEXT BODY CONTOUR FX > 0
                     b2 = contours[1]
-                    t1 = process_time()
-                    #distances = get_distances_from_contours(contours_PTV, contours_body)
+
+                    #DEFINES THE POINT CLOUDS FOR EACH BODY CONTOUR
                     body1 = pv.PolyData(b1)
                     body2 = pv.PolyData(b2)
-       
-                    h,k = get_center(body1,body2,r)
 
-                    s_body1,s_body2 = get_equal_bodyv2(body2,body1,z_max,z_min,h,k,r)
+                    #GETS THE FOV CENTER 
+                    h,k = get_center_fov(path_CBCTs,str_pat_id)
+                    
+                    #BOOLEAN OPERATION TO GET THE SAME CT AND CBCT SHAPE DUE TO THE FOV
+                    s_body1,s_body2 = get_CT_CBCT_equal_body(body2,body1,z_max,z_min,h,k,r)
 
                     gc.collect()
         
                 else:
+                    #GETS THE BODY CONTOUR FOR THE GIVEN RT FRACTION 
+                    
                     b1 = contours[key_body_n]
+                    #GETS THE BODY FOR THE FRACTION 1
                     b2 = contours[1]
-                  
+
+                    #SETS THE POINT CLOUDS
                     body1 = pv.PolyData(b1)
                     body2 = pv.PolyData(b2)
 
-
-                    b2_1,b1_1 = trim_contours_to_match_zs(body2.points,body1.points,z_min,z_max)
-                    s_body1 = b1_1
+                    #TRIM THE BODY CONTOURS TO HAVE THE SAME Z RANGE
+                    b2_1,s_body1 = trim_contours_to_match_zs(body2.points,body1.points,z_min,z_max)
                     gc.collect()
 
+                #GETS THE Z VALUE (SLICE VALUE) WHERE THE MANDIBLE IS 
                 z_m = get_min_mandible_slice(pv.PolyData(s_body1),mandible)
-                ptosxy = get_contour_submand(s_body1,z_m)
                 
-                slice1 = np.array(ptosxy)[:,0:2]
+                #GETS THE MANDIBLE CONTOUR
+                ptosxy_mandible = get_contour_submand(s_body1,z_m)
+                slice_mandible = np.array(ptosxy_mandible)[:,0:2]
+
+                #GETS THE IMAGE PATH OF THE PATIENT 
+                image_path = get_info_replanned(str_pat_id,key_body_n,path_CBCTs)
+
+                #GETS THE PIXEL SPACING, AND THE POINTS IN THE SPACE: X,Y,Z
+                start_x2, start_y2, start_z2, pixel_spacing2 = get_start_position_dcm(image_path) 
                 
-                CT_path = get_info_replanned(str_pat_id,key_body_n)
-                
-                start_x2, start_y2, start_z2, pixel_spacing2 = get_start_position_dcm(CT_path) 
-                
-                area = get_area(slice1,start_x2,start_y2,pixel_spacing2)
+                #CALCULATES THE AREA FROM THE GIVEN MANDIBLE CONTOUR
+                area = get_area(slice_mandible,start_x2,start_y2,pixel_spacing2)
                 
                 print('\tProcess time of parameters (' + key_bodies_to_save[key_body_n] + str(process_time()-t1) + ' s')
   
@@ -190,6 +206,10 @@ def pipeline_area_body(param_name='submand_area',path_contours,CSV_patient_ids,p
     
 
 if __name__ == "__main__":
-    pipeline_area_body()
+    path_contours = '/mnt/iDriveShare/OdetteR/Registration_and_contours'
+    CSV_patient_ids =  '/mnt/iDriveShare/OdetteR/Registration_and_contours/IDS_News_Partial.csv'
+    path_CBCTs = '/mnt/iDriveShare/Kayla/CBCT_images/kayla_extracted/'
+
+    pipeline_area_body(path_contours,CSV_patient_ids,path_CBCTs)
 
 
