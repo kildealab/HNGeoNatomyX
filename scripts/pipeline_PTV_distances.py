@@ -71,7 +71,7 @@ def pipeline_dist_body(param_name='xvalues',path_contours, CSV_patient_ids,path_
             path_CT = path_full_CBCT_id+CT
             
             if len(body_list)==0:
-                path_rs = get_path_RS(str_pat_id, path_k)
+                path_rs = get_path_RS(str_pat_id, path_contours)
                 bodies_rs = get_body_keys(path_rs)
                 bodies_sorted_rs = sort_body_keys(bodies_rs)
                 for body in bodies_sorted_rs:
