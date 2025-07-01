@@ -23,6 +23,10 @@ from skimage.draw import polygon
 import random
 import sys
 from shapely import Polygon, intersection
+import scipy
+from scipy.spatial.distance import directed_hausdorff
+import point_cloud_utils as pcu
+
 
 
 '''Gets the RS path from the RT structure file.  pat_id  is the patient ID and path_src is the path of the folder'''
@@ -30,8 +34,9 @@ def get_path_RS(pat_id, path_src):
     path_patient = os.path.join(path_src, pat_id)  #FORMAT: path_src + '/'+pat_id  
     file_RS = [x for x in os.listdir(path_patient) if 'RS' in x][0]  # finds the RS file with the name RS.######.dcm
     return os.path.join(path_patient, file_RS)
-    
-def get_path_RS_v5(path_CT):  
+
+'''Gets the RS path (Rt structure file) for the CT folder'''
+def get_path_RS_CT(path_CT):  
     file_RS = [x for x in os.listdir(path_CT) if 'RS' in x][0]
     return os.path.join(path_CT, file_RS)
     
@@ -185,7 +190,6 @@ and then cuts them within a selected range and a margin of
 3 times the z spacing'''
 def trim_contours_to_match_z(contours_1, contours_2): # 1: body, 2: PTV
     spacing_z = get_contour_z_spacing(contours_1)
-    #print(spacing_z)
     max_z = max(contours_1[:,2]) - 3*spacing_z
     min_z = min(contours_1[:,2]) + 3*spacing_z
     contours_1 = np.array([x for x in contours_1 if x[2] < max_z and x[2] > min_z])
@@ -397,14 +401,7 @@ def get_info_fov(path_patient):
         files2.append(os.path.join(path2, j))
     dc_file = pydicom.read_file(files2[0])
     return dc_file.ReconstructionDiameter
-    
-def get_info_replanned(patient,index,path_k='/mnt/iDriveShare/Kayla/CBCT_images/kayla_extracted/'):
-    patient_path  = path_k + patient+'/'
-    CT, CBCT_list = get_name_files(patient_path)
-    CTs_names = [CT]+CBCT_list
-    path_complete = patient_path+ CTs_names[index]
-    return path_complete
-    
+
 def centers(x1, y1, x2, y2, r):
     q = np.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)
     x3 = (x1 + x2) / 2
@@ -582,7 +579,7 @@ def trim_contours_to_match_zs(contours_1, contours_2,z_min,z_max): # 1: body, 2:
     return contours_1, contours_2
     
     
-def get_equal_bodyv2(body2,body1,z_max,z_min,h,k,r):
+def get_CT_CBCT_equal_body_2(body2,body1,z_max,z_min,h,k,r):
     body_2 = pv.PolyData(body2).connectivity(largest=True)
 
     d1 = pv.PolyData(body1).connectivity(largest=True)
@@ -631,7 +628,7 @@ def get_equal_bodyv2(body2,body1,z_max,z_min,h,k,r):
  
     return bbody2,bbody1
 
-def get_equal_bodyv2(body2,body1,z_max,z_min,h,k,r):
+def get_CT_CBCT_equal_body(body2,body1,z_max,z_min,h,k,r):
     body_2 = pv.PolyData(body2).connectivity(largest=True)
 
     d1 = pv.PolyData(body1).connectivity(largest=True)
@@ -750,12 +747,60 @@ def get_keys_v2(name,patient,path_RS0):
                         pat_h.append(key)
         return pat_h
 
+def get_keys_v2(name,patient,path_RS0):
+        #PATH_K = '/mnt/iDriveShare/Kayla/CBCT_images/kayla_extracted/'+CT+'/'
+        pat_h = []
+        
+        keys_body = get_body_keys(path_RS0)
+        sorted_keys_body = sort_body_keys(keys_body)
+        ROI_keys = get_ROI_keys(path_RS0)
+        
+        for key in ROI_keys:
+            try:
+                key2 = key.split('_')
+            except:
+                key2 = key.split('-')
+            for k in key2:
+                if '~' in k:
+                    for p in k.lower().split('~'):
+                        if p==str(name):
+                            #if patient not in pat_h:\n",
+                            pat_h.append(key)
+                else:
+                    if k.lower()==str(name):
+                        #if patient not in pat_h:\n",
+                        pat_h.append(key)
+        return pat_h
+
+def get_keysall(patient,path_RS):
+    pat_h = []
+    #keys_body = get_body_keys(path_RS)
+    #sorted_keys_body = sort_body_keys(keys_body)
+    ROI_keys = get_ROI_keys(path_RS)
+        
+    return ROI_keys
+    
 def get_min_mandible_slice(s_body,mandible):
     m_m = min(mandible.points[:,2])
     roi_z = np.argmin(abs((s_body.points)[:,2] - (m_m)))
     m_b1 = (s_body.points)[:,2][roi_z]
     return m_b1
 
+def translation_z(structure,z_value):
+    matrix = np.array(([1,0,0,0],[0,1,0,0],[0,0,1,-z_value]))
+    new = []
+    for j in structure:
+        new.append(list(j[0:3])+[1])
+    new2 = []
+    for j in new:
+        new2.append(matrix@j)
+    return new2
+
+def change_z_coordinates(structure,z_value):
+    #z_value = get_zmin_mandible(mandible,strcuture)
+    new_structure = translation_z(structure,z_value)
+    return new_structure
+    
 def get_point_with_max_y_around_given_xv2(x, points):
     target_x = x
     max_y = -1
@@ -997,13 +1042,58 @@ def get_body_keys_not_RS(file_list):
     sorted_keys = sort_body_keys(body_keys)
     return sorted_keys
 
+def get_z_bottom_neck(z_min,key_bodies_to_save,contours):
+    if z_min>=-27:
+        z_neck = z_min
+        return z_neck
+    else:
+        neck_zss = []
+        for key_body_n in range(1,len(key_bodies_to_save)):
+            body = contours[key_body_n]
+            gc.collect()
+              
+            h,k = get_center(body,r)
+            min_z = get_z_out_fov(body,h,k,r,z_min)
+            neck_zss.append(min_z)
+       
+            if min(neck_zss)>=-27:
+                z_neck = -27
+                return z_neck
+            else:
+                z_neck = min(neck_zss)
+                return z_neck
+
+def get_elongation3D(body,body0):
+
+    x_min = min(np.array(body0)[:,0])
+    x_max = max(np.array(body0)[:,0])
+
+    y_min = min(np.array(body0)[:,1])
+    y_max = max(np.array(body0)[:,1])
+    
+    z_min = min(np.array(body0)[:,2])
+    z_max = max(np.array(body0)[:,2])
+
+    central_z = np.mean([z_min,z_max])
+    central_x = np.mean([x_min,x_max])
+    central_y = np.mean([y_min,y_max])
+    
+    dists = np.sqrt((np.array(body)[:,0]-central_x)**2+(np.array(body)[:,1]-central_y)**2+(np.array(body)[:,2]-central_z)**2)
+    
+    R_mean = (np.mean(dists))
+
+    R_min = (np.min(dists))
+    R_max = (np.max(dists))
+
+    return R_max,R_min,R_max/R_min,R_mean
+    
+#CHECK FORMAT TYPE OF THE CONTOUR FILES SAVED, IF THEY ARE SAVED SEPARATELY
+#IT CAN BE .dcm and .nii
 def get_format(file_list):
     formatt = file_list[0].split('.')[1]    
-    return formatt
+    return format
 
-
-
-    
+#GETS THE NAME FILES OF EACH CT OR CBCT MEDICAL IMAGE
 def get_name_files(patient_path):
     replan = False
     CT_list = [d for d in os.listdir(patient_path) if d[9:11] == 'CT' and len(d) == 23]
@@ -1038,7 +1128,7 @@ def get_name_files(patient_path):
         return CT_list[0],CBCT_list
 
 '''Gets the key for the mandible RT structure (contour)'''
-def get_key_mandible(patient,path_RS0):
+def get_key_mandible(path_RS0):
   
     keys = get_ROI_keys(path_RS0)
 
@@ -1048,7 +1138,7 @@ def get_key_mandible(patient,path_RS0):
 
     return key_ff[0]
     
-
+   
 def get_info_replanned(patient,index,path_CBCT_images):
     patient_path  = path_CBCT_images + patient+'/'
     CT, CBCT_list = get_name_files(patient_path)
@@ -1085,73 +1175,81 @@ def get_start_position_dcm(CT_path):
     return start_x, start_y, start_z, pixel_spacing
 
  
-def get_center2(path_CBCT_images,str_pat_id):
+def get_center_fov(path_CBCT_images,str_pat_id):
     isos = rtdsm.get_pointcloud('AcqIsocenter', path_CBCT_images+'/'+str_pat_id+'/iso.dcm', False)[0]
     h = isos[0][0]
     k = isos[0][1]
 
     return h,k
 
-def get_mask_grid(contours, img_res,max_away=400.):
-    #img_res = [IMG_RES[0], IMG_RES[1], get_contour_z_spacing(contours)]
-    #STEP1: Get the min X,Y values to set the top corner of the slices
-    Xmin,Ymin = np.nanmin(contours[:,0]),np.nanmin(contours[:,1])
-    Zmin = np.nanmin(contours[:,2])
-    CornerOrg = [Xmin - 2*img_res[0], Ymin - 2*img_res[1]]
-
-    #STEP2: convert the XY values to index positions in a 3D array 
-    contours[:,0] = np.round((contours[:,0]-CornerOrg[0])/img_res[0])
-    contours[:,1] = np.round((contours[:,1]-CornerOrg[1])/img_res[1])
-
-    #STEP3: Determine how many slices are needed to cover the full structure and make an empty grid
-    uniqueSlices = np.unique(contours[:,2][~np.isnan(contours[:,2])])
-    nSlices = len(uniqueSlices)
-    GridMaxInd = np.nanmax(contours[:,:2])   #the max of the X and Y index values
-    MaskGrid = np.zeros((int(nSlices),int(GridMaxInd +2),int(GridMaxInd+2))) #NOTE: using ZYX here
-    
-    #STEP4: Make a list of the indices where the slice number changes
-    deltaslice = contours[:,2] - np.roll(contours[:,2],1)
-    Slices = np.where(deltaslice != 0)[0] #indexes where a new polygon begins
-    for i in range(len(Slices)):
-        CurrentSlice = contours[Slices[i],2]
-        sliceInd = np.where(uniqueSlices == CurrentSlice)[0]
-        if np.isnan(CurrentSlice):
-            continue
-        #get the list of points for that polygon
-        if i == len(Slices)-1:
-            iPoints = contours[Slices[i]:,:2]
-        else:
-            iPoints = contours[Slices[i]:Slices[i+1],:2] #just need the X and Y points
-        # split iPoints into cluster
-        idx_breaks = [0]
-        if len(iPoints) > 1:
-            for i in range(len(iPoints)-1):
-                if distance.euclidean(iPoints[i], iPoints[i+1]) < max_away:
-                    continue
-                else:
-                    idx_breaks.append(i+1)
-        for i in range(len(idx_breaks)): #Make a polygon mask from the points
-            start = idx_breaks[i]
-            if i == len(idx_breaks)-1:
-                rr, cc = polygon(iPoints[start:,1], iPoints[start:,0])
-            else:
-                end = idx_breaks[i+1]
-                rr, cc = polygon(iPoints[start:end,1], iPoints[start:end,0]) #r AKA row is Y, c AKA col is X
-            MaskGrid[sliceInd,rr, cc] = 1
-    return MaskGrid
-
-def get_volume(contours, img_res, max_away=400.):
-    volume_voxel = img_res[0] * img_res[1] * img_res[2]
-    grid_mask = get_mask_grid(contours.copy(),img_res, max_away)
-    volume = volume_voxel * np.sum(grid_mask)
-    return volume
-
-#MASK METRICS RELATED FUNCTIONS
+################################
+# TREATMENT MASK METRICS RELATED FUNCTIONS
+#####################
 def get_dist_mask_body(mask,body):
     tree = KDTree(body.points)
     d_kdtree, idx = tree.query(mask.points)
    
     return np.max(d_kdtree),np.mean(d_kdtree),np.std(d_kdtree)
+    
+def get_equal_body_for_mask(body1,h,k,r):
+    d1 = pv.PolyData(body1).connectivity(largest=True)
+
+    bx = d1.points[:,0]
+    by = d1.points[:,1]
+    bz = d1.points[:,2]
+
+    indexes = (bx-h)**2+(by-k)**2<=(r*0.8)**2
+
+    bx2 = bx[indexes==True]
+    by2 = by[indexes==True]
+    bz2 = bz[indexes==True]
+
+    points22 = list(zip(bx2,by2,bz2))
+    d11 = pv.PolyData(points22)
+
+    theta = np.linspace(0,2*np.pi,300)
+
+    x = r*0.5 * np.cos( theta ) +h
+    y = r*0.5 * np.sin( theta ) +k
+
+    body_crop = [] #array points (cloud)
+    zs = [i for i in d11.points[:,2]]
+    zss = sorted(list(dict.fromkeys(zs)))
+    for z in zss:
+        ptosxy = []
+        for p in d11.points:
+            if z==p[2]:
+                ptosxy.append([float(p[0]),float(p[1])])
+        pp1= Polygon(ptosxy).buffer(0)
+        pp2 = Polygon(list(zip(x,y)))
+        pp3 = intersection(pp1,pp2)
+        try:
+            bx,by = pp3.exterior.coords.xy[0],pp3.exterior.coords.xy[1]
+        except:
+            coords = [[len(list(x.exterior.coords)),list(x.exterior.coords)] for x in pp3.geoms]
+            bx,by = np.array((sorted(coords)[-1][-1]))[:,0],np.array((sorted(coords)[-1][-1]))[:,1]
+
+        for j in range(0,len(bx)):
+            body_crop.append((float(bx[j]),float(by[j]),float(z)))
+
+    bbody = pv.PolyData(body_crop)
+   
+    return bbody
+
+def get_mask_out(trim_mask,r,h,k):
+    mask2 = pv.PolyData(trim_mask)
+    bx = mask2.points[:,0]
+    by = mask2.points[:,1]
+    bz = mask2.points[:,2]
+
+    indexes = (bx-h)**2+(by-k)**2<=(r*0.5)**2
+
+    bx2 = bx[indexes==True]
+    by2 = by[indexes==True]
+    bz2 = bz[indexes==True]
+    points22 = list(zip(bx2,by2,bz2))
+    d11 =pv.PolyData(points22)
+    return d11
 
 def get_dist_vector(body1,body2):
     tree = KDTree(body2.points)
@@ -1228,65 +1326,6 @@ def get_center_vectors(body1,body2,):
         ymin = np.min(np.array(valuesy))
     return x,y,r,xmin,ymin,xmed,ymed
     
-def get_equal_body_for_mask(body1,h,k,r):
-    d1 = pv.PolyData(body1).connectivity(largest=True)
-
-    bx = d1.points[:,0]
-    by = d1.points[:,1]
-    bz = d1.points[:,2]
-
-    indexes = (bx-h)**2+(by-k)**2<=(r*0.8)**2
-
-    bx2 = bx[indexes==True]
-    by2 = by[indexes==True]
-    bz2 = bz[indexes==True]
-
-    points22 = list(zip(bx2,by2,bz2))
-    d11 = pv.PolyData(points22)
-
-    theta = np.linspace(0,2*np.pi,300)
-
-    x = r*0.5 * np.cos( theta ) +h
-    y = r*0.5 * np.sin( theta ) +k
-
-    body_crop = [] #array points (cloud)
-    zs = [i for i in d11.points[:,2]]
-    zss = sorted(list(dict.fromkeys(zs)))
-    for z in zss:
-        ptosxy = []
-        for p in d11.points:
-            if z==p[2]:
-                ptosxy.append([float(p[0]),float(p[1])])
-        pp1= Polygon(ptosxy).buffer(0)
-        pp2 = Polygon(list(zip(x,y)))
-        pp3 = intersection(pp1,pp2)
-        try:
-            bx,by = pp3.exterior.coords.xy[0],pp3.exterior.coords.xy[1]
-        except:
-            coords = [[len(list(x.exterior.coords)),list(x.exterior.coords)] for x in pp3.geoms]
-            bx,by = np.array((sorted(coords)[-1][-1]))[:,0],np.array((sorted(coords)[-1][-1]))[:,1]
-
-        for j in range(0,len(bx)):
-            body_crop.append((float(bx[j]),float(by[j]),float(z)))
-
-    bbody = pv.PolyData(body_crop)
-   
-    return bbody
-
-def get_mask_out(trim_mask,r,h,k):
-    mask2 = pv.PolyData(trim_mask)
-    bx = mask2.points[:,0]
-    by = mask2.points[:,1]
-    bz = mask2.points[:,2]
-
-    indexes = (bx-h)**2+(by-k)**2<=(r*0.5)**2
-
-    bx2 = bx[indexes==True]
-    by2 = by[indexes==True]
-    bz2 = bz[indexes==True]
-    points22 = list(zip(bx2,by2,bz2))
-    d11 =pv.PolyData(points22)
-    return d11
 
 def get_area(body_slice,start_x2,start_y2,pixel_spacing2):
     
@@ -1315,4 +1354,160 @@ def get_contour_submand(body,z_min):
         if j[2]==z_min:
             points_xy.append([j[0],j[1]])
     return points_xy
-  
+
+################
+#  PTV RELATED METRICS FUNCTIONS
+############
+def get_index_farthest_point_from_cloud(points, cloud):
+    tree = KDTree(cloud.points)
+    dist_points, idxes_cloud = tree.query(points.points)
+    max_d = max(dist_points)
+    idx_point = np.where(dist_points == max_d)[0][0]
+    idx_cloud = idxes_cloud[idx_point]
+    return idx_point, idx_cloud
+
+def get_index_nearest_point_from_cloud(points, cloud):
+    tree = KDTree(cloud.points)
+    dist_points, idxes_cloud = tree.query(points.points)
+    min_d = min(dist_points)
+    idx_point = np.where(dist_points == min_d)[0][0]
+    idx_cloud = idxes_cloud[idx_point]
+    return idx_point, idx_cloud
+
+def get_distances_of_points_from_cloud(points, cloud):
+    tree = KDTree(cloud.points)
+    dist_points, idxes_cloud = tree.query(points.points)
+    return dist_points
+
+
+def get_distances_from_contours(contours_PTV, contours_body,IMG_RES, r_frac=RADIUS_FRAC, smooth_iter=0):
+    # ================================================================================
+    # trim body and PTV contours to have matching z limits
+    contours_body, contours_PTV = trim_contours_to_match_z(contours_body, contours_PTV)
+    
+    # get pyvista objects of PTV and body
+    cloud_PTV = pv.PolyData(contours_PTV)
+    cloud_body = pv.PolyData(contours_body)
+    
+    # get body surface
+    surface_body = get_surface_marching_cubes(contours_body,IMG_RES).smooth(n_iter=smooth_iter)
+    
+    # split PTV cloud into inner and outer
+    inner_PTV, outer_PTV = split_cloud_by_surface(cloud_PTV, surface_body)
+    xdiff, ydiff = get_bounding_box_dimensions(contours_body)
+    
+    if len(outer_PTV.points) > 0 and xdiff > ydiff:
+        # trim PTV cloud that's protruding outside of FOV
+        num_outer_points_ref = len(outer_PTV.points)
+        cloud_PTV_trim, h, k, r = trim_posterior_PTV(cloud_PTV, contours_body, 1)
+        # redefine outer_PTV and inner_PTV
+        inner_PTV_new, outer_PTV_new = split_cloud_by_surface(cloud_PTV_trim, surface_body)
+        num_outer_points_new = len(outer_PTV_new.points)
+        
+        # if something was trimmed, trim again using smaller bounding cylinder
+        if num_outer_points_new < num_outer_points_ref:
+            cloud_PTV_trim, h, k, r = trim_posterior_PTV(cloud_PTV, contours_body, r_frac)
+            inner_PTV, outer_PTV = split_cloud_by_surface(cloud_PTV_trim, surface_body)
+    # ================================================================================
+        
+    if len(outer_PTV.points) > 0:
+        distances_outer = -1*get_distances_of_points_from_cloud(outer_PTV, cloud_body)
+        distances_inner = get_distances_of_points_from_cloud(inner_PTV, cloud_body)
+        distances = np.concatenate((distances_outer,distances_inner))
+    else:
+        distances = get_distances_of_points_from_cloud(inner_PTV, cloud_body)
+    return distances
+
+
+# snippet from rtdsm's get_cubemarch_surface
+def get_mask_grid(contours, img_res,max_away=400.):
+    #img_res = [IMG_RES[0], IMG_RES[1], get_contour_z_spacing(contours)]
+    #STEP1: Get the min X,Y values to set the top corner of the slices
+    Xmin,Ymin = np.nanmin(contours[:,0]),np.nanmin(contours[:,1])
+    Zmin = np.nanmin(contours[:,2])
+    CornerOrg = [Xmin - 2*img_res[0], Ymin - 2*img_res[1]]
+
+    #STEP2: convert the XY values to index positions in a 3D array 
+    contours[:,0] = np.round((contours[:,0]-CornerOrg[0])/img_res[0])
+    contours[:,1] = np.round((contours[:,1]-CornerOrg[1])/img_res[1])
+
+    #STEP3: Determine how many slices are needed to cover the full structure and make an empty grid
+    uniqueSlices = np.unique(contours[:,2][~np.isnan(contours[:,2])])
+    nSlices = len(uniqueSlices)
+    GridMaxInd = np.nanmax(contours[:,:2])   #the max of the X and Y index values
+    MaskGrid = np.zeros((int(nSlices),int(GridMaxInd +2),int(GridMaxInd+2))) #NOTE: using ZYX here
+    
+    #STEP4: Make a list of the indices where the slice number changes
+    deltaslice = contours[:,2] - np.roll(contours[:,2],1)
+    Slices = np.where(deltaslice != 0)[0] #indexes where a new polygon begins
+    for i in range(len(Slices)):
+        CurrentSlice = contours[Slices[i],2]
+        sliceInd = np.where(uniqueSlices == CurrentSlice)[0]
+        if np.isnan(CurrentSlice):
+            continue
+        #get the list of points for that polygon
+        if i == len(Slices)-1:
+            iPoints = contours[Slices[i]:,:2]
+        else:
+            iPoints = contours[Slices[i]:Slices[i+1],:2] #just need the X and Y points
+        # split iPoints into cluster
+        idx_breaks = [0]
+        if len(iPoints) > 1:
+            for i in range(len(iPoints)-1):
+                if distance.euclidean(iPoints[i], iPoints[i+1]) < max_away:
+                    continue
+                else:
+                    idx_breaks.append(i+1)
+        for i in range(len(idx_breaks)): #Make a polygon mask from the points
+            start = idx_breaks[i]
+            if i == len(idx_breaks)-1:
+                rr, cc = polygon(iPoints[start:,1], iPoints[start:,0])
+            else:
+                end = idx_breaks[i+1]
+                rr, cc = polygon(iPoints[start:end,1], iPoints[start:end,0]) #r AKA row is Y, c AKA col is X
+            MaskGrid[sliceInd,rr, cc] = 1
+    return MaskGrid
+
+def get_volume(contours, img_res, max_away=400.):
+    volume_voxel = img_res[0] * img_res[1] * img_res[2]
+    grid_mask = get_mask_grid(contours.copy(),img_res, max_away)
+    volume = volume_voxel * np.sum(grid_mask)
+    return volume
+
+def get_volumes_from_contours(contours_PTV, contours_body,IMG_RES,r_frac=RADIUS_FRAC, smooth_iter=0):
+    BIG_AWAY = 400
+    SMALL_AWAY = 30
+    # ================================================================================
+    contours_body, contours_PTV = trim_contours_to_match_z(contours_body, contours_PTV)
+    cloud_PTV = pv.PolyData(contours_PTV)
+    cloud_body = pv.PolyData(contours_body)
+    IMG_RES2 = [0.51119071245194, 0.51119071245194, 3]
+    
+    surface_body = get_surface_marching_cubes(contours_body,IMG_RES2).smooth(n_iter=smooth_iter)
+    inner_PTV, outer_PTV = split_cloud_by_surface(cloud_PTV, surface_body)
+    xdiff, ydiff = get_bounding_box_dimensions(contours_body)
+    if len(outer_PTV.points) > 0 and xdiff > ydiff:
+        num_outer_points_ref = len(outer_PTV.points)
+        cloud_PTV_trim, h, k, r = trim_posterior_PTV(cloud_PTV, contours_body, 1)
+        inner_PTV_new, outer_PTV_new = split_cloud_by_surface(cloud_PTV_trim, surface_body)
+        num_outer_points_new = len(outer_PTV_new.points)
+        if num_outer_points_new < num_outer_points_ref:
+            cloud_PTV_trim, h, k, r = trim_posterior_PTV(cloud_PTV, contours_body, r_frac)
+            inner_PTV, outer_PTV = split_cloud_by_surface(cloud_PTV_trim, surface_body)
+    # ================================================================================
+            cloud_PTV = cloud_PTV_trim
+        
+    img_res_body = [IMG_RES[0], IMG_RES[1], get_contour_z_spacing(contours_body)]
+    img_res_PTV = [IMG_RES[0], IMG_RES[1], get_contour_z_spacing(contours_PTV)]
+    
+    vol_body = get_volume(contours_body, img_res_body, BIG_AWAY)
+    vol_PTV = get_volume(cloud_PTV.points, img_res_PTV, BIG_AWAY)
+    if len(outer_PTV.points) > 0:
+        vol_PTV_outer = get_volume(outer_PTV.points, img_res_PTV, SMALL_AWAY)
+        vol_PTV_inner = vol_PTV - vol_PTV_outer
+    else:
+        vol_PTV_outer = 0
+        vol_PTV_inner = vol_PTV
+    return vol_body, vol_PTV_inner, vol_PTV_outer
+
+    
