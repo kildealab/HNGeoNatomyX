@@ -4,13 +4,17 @@ Created on Jul 2024
 
 """
 
+import sys
+sys.path.append('/rtdsm')
+import rtdsm
+
 import helpers 
 from helpers import get_path_RS, get_body_keys, sort_body_keys
 from helpers import get_key_mandible, get_body_keys_not_RS, get_format, get_name_files
 from helpers import get_path_RS_CT,  search_cuts_z, get_info_fov, get_center_fov, get_CT_CBCT_equal_body
 from helpers import get_min_mandible_slice, trim_contours_to_match_zs, get_contour_submand
 from helpers import get_start_position_dcm, get_area, get_info_replanned
-import time
+from time import process_time
 import gc
 
 IMG_RES = [0.51119071245194, 0.51119071245194, 3]
