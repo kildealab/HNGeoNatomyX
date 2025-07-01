@@ -32,23 +32,23 @@ def pipeline_area_body(param_name='submand_area',path_contours,CSV_patient_ids,p
     t_init = process_time()
     
     #CSV_patient_ids = '/mnt/iDriveShare/OdetteR/Registration_and_contours/IDS_News_Partial.csv'
-    ids_news = []
+    ids_patients = []
     
     #READ THE CSV IDS FILE
     with open(CSV_patient_ids, newline='') as csvfile:
         spamreader = csv.reader(csvfile, delimiter=' ', quotechar='|')
         for row in spamreader:
-            ids_news.append(row[0])
+            ids_patients.append(row[0])
             
     #CHECK IF THE PATIENT ALREADY HAS A CSV FILE IN THE DESTINATION FOLDER
     existing_patients = [csv_filename.split('_')[-1].split('.')[0] for csv_filename in os.listdir(PATH_DEST)]
 
     #READ THE IDS AND CREATE THE CSV FILE TO SAVE 
-    for str_pat_id in ids_news:
+    for str_pat_id in ids_patients:
         #e.g. path_contours = '/mnt/iDriveShare/OdetteR/Registration_and_contours'
         patient_path = path_contours+str_pat_id
 
-        # Check if patient already has csv
+        # Check if the patient already has csv
         if str_pat_id in existing_patients:
             print('Patient already has csv:' + str_pat_id)
             continue
