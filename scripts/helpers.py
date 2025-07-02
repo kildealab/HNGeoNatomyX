@@ -259,41 +259,18 @@ def get_closest_x(x, contours):
             closest_x = current_x
     return closest_x
 
-'''For a given set of contours and x value, it returns the maximum y value'''
-def get_max_y(x, contours):
-    target_x = get_closest_x(x, contours)
-    max_y = -1
-    for point in contours:
-        current_x, current_y = point[0:2]
-        if round(current_x,1) == round(target_x,1):
-            if current_y > max_y:
-                max_y = current_y
-    return max_y
 
 # For a given set of contours and x value, return point with maximum y value
-def get_point_with_max_y_around_given_x(x, contours):
+def get_point_with_max_y_around_given_x(x, contours,tolerance):
     target_x = x
     max_y = -1
     for point in contours:
         current_x, current_y = point[0:2]
-        if abs(current_x - x) < 2:
+        if abs(current_x - x) < tolerance:
             if current_y > max_y:
                 max_y = current_y
                 target_x = current_x
     return (target_x, max_y)
-
-#for the lx and ly
-def get_point_with_max_y_around_given_x(x, contours):
-    target_x = x
-    max_y = -1
-    for point in contours:
-        current_x, current_y = point[0:2]
-        if abs(current_x - x) < 0.5:
-            if current_y > max_y:
-                max_y = current_y
-                target_x = current_x
-    return (target_x, max_y)
-
 
 '''Gets maximum and minimum values in a given contour (bounding box)'''
 def get_bounding_box_dimensions(contours):
@@ -307,7 +284,8 @@ def get_bounding_box_dimensions(contours):
     return [diff_x, diff_y]
     
 
-'''path_RT_structure: path of the dcm RT file for a given patient'''
+'''Gets the Reconstruction Diameter from the CBCT dicom files'''
+#BE AWARE THAT THE RECONSTRUCTION DIAMETER SHOULD BE THE SAME FOR ALL THE CBCT IMAGES
 def get_info_fov(path_patient):
     file_RS = [x for x in os.listdir(path_patient) if 'kV' in x][0]
     path2 = os.path.join(path_patient, file_RS)
@@ -325,8 +303,8 @@ def centers(x1, y1, x2, y2, r):
     xx = (r ** 2 - (q / 2) ** 2) ** 0.5 * (y1 - y2) / q
     yy = (r ** 2 - (q / 2) ** 2) ** 0.5 * (x2 - x1) / q
     return ((x3 + xx, y3 + yy))
-
-def get_center(body2,r):
+                  
+def get_estimate_center(body2,r,tolerance):
     d_2 = pv.PolyData(body2).connectivity(largest=True)
     
     max_x = max(d_2.points[:,0])
@@ -334,18 +312,18 @@ def get_center(body2,r):
     max_y = max(d_2.points[:,1])
     
     h = np.mean([max_x,min_x])
-    y1 = get_point_with_max_y_around_given_x(max_x,d_2.points)
-    y2 = get_point_with_max_y_around_given_x(min_x,d_2.points)
+    y1 = get_point_with_max_y_around_given_x(max_x,d_2.points,tolerance)
+    y2 = get_point_with_max_y_around_given_x(min_x,d_2.points,tolerance)
     k1 = y1[1] - np.sqrt(np.abs((r*0.5)**2 - (max_x-h)**2))
     k2 = y2[1] - np.sqrt(np.abs((r*0.5)**2 - (min_x-h)**2))
     
     y9 = get_point_with_max_y_around_given_x(max_x/4,d_2.points)
-    y10 = get_point_with_max_y_around_given_x(min_x/4,d_2.points)
-    y3 = get_point_with_max_y_around_given_x(max_x/2,d_2.points)
-    y4 = get_point_with_max_y_around_given_x(min_x/2,d_2.points)
-    y5 = get_point_with_max_y_around_given_x(0,d_2.points)
-    y6 = get_point_with_max_y_around_given_x(max_x*7/8,d_2.points)
-    y7 = get_point_with_max_y_around_given_x(min_x*7/8,d_2.points)
+    y10 = get_point_with_max_y_around_given_x(min_x/4,d_2.points,tolerance)
+    y3 = get_point_with_max_y_around_given_x(max_x/2,d_2.points,tolerance)
+    y4 = get_point_with_max_y_around_given_x(min_x/2,d_2.points,tolerance)
+    y5 = get_point_with_max_y_around_given_x(0,d_2.points,tolerance)
+    y6 = get_point_with_max_y_around_given_x(max_x*7/8,d_2.points,tolerance)
+    y7 = get_point_with_max_y_around_given_x(min_x*7/8,d_2.points,tolerance)
     
     k3 = y3[1] - np.sqrt(np.abs((r*0.5)**2 - (max_x/2-h)**2))
     k4 = y4[1] - np.sqrt((r*0.5)**2 - (min_x/2-h)**2)
@@ -728,16 +706,18 @@ def get_y_max(x, points):
             if current_y>max_y:
                 max_y = current_y
     return max_y
-    
-def get_max_yv2(x, points):
-    target_x = get_closest_x(x, points)
+
+'''For a given set of contours and x value, it returns the maximum y value'''
+def get_max_y(x, contours):
+    target_x = get_closest_x(x, contours)
     max_y = -1
-    for point in points:
+    for point in contours:
         current_x, current_y = point[0:2]
         if round(current_x,1) == round(target_x,1):
             if current_y > max_y:
                 max_y = current_y
     return max_y
+
     
 def get_y_min(x, points):
     min_y = 10000
@@ -759,7 +739,7 @@ def get_length_bottom(body,z_min):
     min_x = min(np.array(points_xy)[:,0])
     max_x = max(np.array(points_xy)[:,0])
     
-    point1 = (min_x, get_max_yv2(min_x, points_xy))
+    point1 = (min_x, get_max_y(min_x, points_xy))
     point3 = get_point_with_max_y_around_given_xv2(0,points_xy)
     point5 = (max_x, get_max_y(max_x, points_xy))
     point6 = (0,min(np.array(points_xy)[:,1]))
@@ -803,7 +783,7 @@ def get_length_lxy(body,z_min):
     min_y = min(np.array(points_xy)[:,1])
     max_y = max(np.array(points_xy)[:,1])
     
-    point1 = (min_x, get_max_yv2(min_x, points_xy))
+    point1 = (min_x, get_max_y(min_x, points_xy))
     point3 = (get_x_min(max_y,points_xy),max_y)
     point5 = (max_x, get_max_y(max_x, points_xy))
     point6 = (get_x_min(min_y, points_xy),min_y)
@@ -837,7 +817,7 @@ def get_z_bottom_neck(z_min,key_bodies_to_save,contours):
             body = contours[key_body_n]
             gc.collect()
               
-            h,k = get_center(body,r)
+            h,k = get_estimate_center(body,r)
             min_z = get_z_out_fov(body,h,k,r,z_min)
             neck_zss.append(min_z)
        
@@ -970,6 +950,17 @@ def get_center_fov(path_CBCT_images,str_pat_id):
 ################################
 # TREATMENT MASK METRICS RELATED FUNCTIONS
 #####################
+
+def get_treatment_mask_contour(path_treatment_masks,str_pat_id):
+    #e.g /mnt/iDriveShare/OdetteR/Registration_and_contours/mask/'+Mask_'+str_pat_id+'.json'
+
+    f = open(path_treatment_masks+'Mask_'+str_pat_id+'.json')
+    data = json.load(f)
+    f.close()
+    mask = data['Mask']
+    return mask
+
+
 def get_dist_mask_body(mask,body):
     tree = KDTree(body.points)
     d_kdtree, idx = tree.query(mask.points)
@@ -1019,7 +1010,7 @@ def get_equal_body_for_mask(body1,h,k,r):
 
     bbody = pv.PolyData(body_crop)
    
-    return bbody
+    return body
 
 def get_mask_out(trim_mask,r,h,k):
     mask2 = pv.PolyData(trim_mask)
@@ -1033,8 +1024,9 @@ def get_mask_out(trim_mask,r,h,k):
     by2 = by[indexes==True]
     bz2 = bz[indexes==True]
     points22 = list(zip(bx2,by2,bz2))
-    d11 =pv.PolyData(points22)
-    return d11
+    mask_final =pv.PolyData(points22)
+    return mask_final
+
 
 def get_dist_vector(body1,body2):
     tree = KDTree(body2.points)
