@@ -150,7 +150,6 @@ def pipeline_volumes(param_name='body_volume',path_contours, CSV_patient_ids,pat
                     else:
                         contour_body = contours[key_body]
                         contour_body_1 = contours[1]
-                        t1 = process_time()
                         body1 = pv.PolyData(contour_body)
                         body2 = pv.PolyData(contour_body_1)
 
