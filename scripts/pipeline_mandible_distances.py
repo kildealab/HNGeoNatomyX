@@ -138,6 +138,8 @@ def pipeline_dist_mandible(param_name='mandible',path_contours, CSV_patient_ids,
                 
                 dist_points = get_distances_of_points_from_cloud(pv.PolyData(surface_mandible),pv.PolyData(contours[key_body]))
                 
+                print('\tProcess time of parameters (' + key_bodies_to_save[key_body] + '): ' + str(process_time()-t1) + ' s')
+
                 params.append(min(dist_points))
                 params.append(np.median(dist_points))
                 params.append(np.mean(dist_points))
@@ -150,8 +152,13 @@ def pipeline_dist_mandible(param_name='mandible',path_contours, CSV_patient_ids,
             df.to_csv(out_path, index=False)
             print('\t' + param_name + ' printed to csv: ' + out_path)
             print('Elapsed time for patient: ' + str((process_time()-t0)/60) + ' min')
-        #print('DONE! Elapsed time for pipeline: ' + str((process_time()-t_init)/3600) + ' hours')
+        print('DONE! Elapsed time for pipeline: ' + str((process_time()-t_init)/3600) + ' hours')
     
 
 if __name__ == "__main__":
-    pipeline_dist_mandible()
+    #e.g. paths
+    path_contours = '/mnt/iDriveShare/OdetteR/Registration_and_contours'
+    CSV_patient_ids =  '/mnt/iDriveShare/OdetteR/Registration_and_contours/IDS_News_Partial.csv'
+    path_CBCTs = '/mnt/iDriveShare/Kayla/CBCT_images/kayla_extracted/'
+    
+    pipeline_dist_mandible(path_contours,CSV_patients_ids,path_CBCTs)
