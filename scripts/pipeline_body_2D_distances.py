@@ -30,8 +30,9 @@ def pipeline_area_body(param_name='body2D_distances',path_contours,CSV_patients_
     existing_patients = [csv_filename.split('_')[-1].split('.')[0] for csv_filename in os.listdir(PATH_DEST)]
 
     for str_pat_id in ids_patients:
-        patient_path = '/mnt/iDriveShare/OdetteR/Registration_and_contours/Contours/'+str_pat_id
-
+        #e.g. path_contours = '/mnt/iDriveShare/OdetteR/Registration_and_contours'
+        patient_contours_path = path_contours+str_pat_id 
+        
         # check if patient already has csv
         if str_pat_id in existing_patients:
             print('Patient already has csv:' + str_pat_id)
@@ -43,7 +44,7 @@ def pipeline_area_body(param_name='body2D_distances',path_contours,CSV_patients_
             contours = []
             key_bodies_to_save = []
             
-            body_list = [d for d in os.listdir(patient_path) if d[0:4] == 'Body']
+            body_list = [d for d in os.listdir(patient_contours_path) if d[0:4] == 'Body']
 
             # e.g. path_full_CBCT_id = '/mnt/iDriveShare/Kayla/CBCT_images/kayla_extracted/'+str_pat_id+'/'
             path_full_CBCT_id = path_CBCTs+str_pat_id+'/'
@@ -83,7 +84,7 @@ def pipeline_area_body(param_name='body2D_distances',path_contours,CSV_patients_
                             body_in_folder = body_in_list.split('.')[0]  
                             if bodies[bodx]==body_in_folder:
                                 format_single_contour = body_list[bodx].split('.')[-1]
-                                path_RS0 = patient_path+'/'+bodies[bodx]+'.'+format_single_contour
+                                path_RS0 = patient_contours_path+'/'+bodies[bodx]+'.'+format_single_contour
 
                                 #CHECKS WHICH IS THE FORMAT THAT THE CONTOURS ARE SAVED: .json or .dcm
                                 if format_single_contour=='json':
