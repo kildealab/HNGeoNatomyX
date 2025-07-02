@@ -213,17 +213,6 @@ def trim_contours_to_match_zs_edge(contours_1,contours_2,z_min,z_max):
     contours_2 = np.array([x for x in contours_2 if x[2] <= max_z and x[2] >= min_z])
     
     return contours_1,contours_2   
-
-def trim_contours_to_match_zs(contours_1, contours_2,z_min,z_max): # 1: body, 2: PTV
-    spacing_z = get_contour_z_spacing(contours_1)
- 
-    max_z = z_max - spacing_z
-    min_z = z_min + spacing_z
-    
-    contours_1 = np.array([x for x in contours_1 if x[2] < max_z and x[2] > min_z])
-    contours_2 = np.array([x for x in contours_2 if x[2] < max_z and x[2] > min_z])
-    
-    return contours_1, contours_2
     
 def trim_contours_to_match_zv3(contours_1, contours_2,z_min,z_max): # 1: body, 2: PTV
     spacing_z = get_contour_z_spacing(contours_1)
@@ -293,6 +282,7 @@ def get_point_with_max_y_around_given_x(x, contours):
                 target_x = current_x
     return (target_x, max_y)
 
+#for the lx and ly
 def get_point_with_max_y_around_given_x(x, contours):
     target_x = x
     max_y = -1
@@ -456,6 +446,8 @@ def search_cuts_z(contours):
         z_mins.append(min(j[:,2]))
     return max(z_mins),min(z_maxs)
     
+#IMPORTANT: SOME BODIES PRESENT EDGES AT THE BOTTOM DUE TO THE AUTOMATIC CONTOURING, TO AVOID THOSE EDGES WE 
+#TRIM THE BODIES +3 MM AT THE BOTTOM AND -3 MM AT THE TOP!
 def trim_contours_to_match_zs(contours_1, contours_2,z_min,z_max): # 1: body, 2: PTV
     spacing_z = get_contour_z_spacing(contours_1)
  
@@ -653,11 +645,9 @@ def get_keys_v2(name,patient,path_RS0):
                 if '~' in k:
                     for p in k.lower().split('~'):
                         if p==str(name):
-                            #if patient not in pat_h:\n",
                             pat_h.append(key)
                 else:
                     if k.lower()==str(name):
-                        #if patient not in pat_h:\n",
                         pat_h.append(key)
         return pat_h
 
@@ -669,11 +659,20 @@ def get_keysall(patient,path_RS):
         
     return ROI_keys
     
-def get_min_mandible_slice(s_body,mandible):
-    m_m = min(mandible.points[:,2])
-    roi_z = np.argmin(abs((s_body.points)[:,2] - (m_m)))
-    m_b1 = (s_body.points)[:,2][roi_z]
-    return m_b1
+def get_min_mandible_slice(body,mandible):
+    minimum_mandible = min(mandible.points[:,2])
+    z_position = np.argmin(abs((body.points)[:,2] - (minimum_mandible)))
+    resulted_slice = (body.points)[:,2][z_position]
+    return resulted_slice
+
+def get_min_mandible_slice_from_surface(s_body1,mandible_contour):
+    zs_body = s_body1[:,2].copy()
+    zs_body_clean = zs_body[~(np.isnan(zs_body))]
+    zs_mandible =  mandible_contour[:,2].copy()
+    z_min_mandible = min(zs_mandible)
+    z_position = np.argmin(abs(zs_body_clean-z_min_mandible)) 
+    resulted_slice =  zs_body_clean[z_position]
+    return resulted_slice
 
 def translation_z(structure,z_value):
     matrix = np.array(([1,0,0,0],[0,1,0,0],[0,0,1,-z_value]))
@@ -711,7 +710,6 @@ def get_closest_xv2(x, points):
             min_abs_diff = abs_diff
             closest_x = current_x
     return closest_x
-    
 
 def get_x_max(y, points):
     max_x = -10000
@@ -806,19 +804,12 @@ def get_length_lxy(body,z_min):
     max_y = max(np.array(points_xy)[:,1])
     
     point1 = (min_x, get_max_yv2(min_x, points_xy))
-    #point1 = get_point_with_min_y_around_given_xv2(min_x/2, points_xy)
-    #point2 = get_point_with_max_y_around_given_xv2(min_x/2, points_xy)
-    #point3 = get_point_with_max_y_around_given_xv2(0,points_xy)
     point3 = (get_x_min(max_y,points_xy),max_y)
-    #point4 = get_point_with_max_y_around_given_xv2(max_x/2, points_xy)
     point5 = (max_x, get_max_y(max_x, points_xy))
-    #point5 = get_point_with_min_y_around_given_xv2(max_x/2, points_xy)
     point6 = (get_x_min(min_y, points_xy),min_y)
     
     x1, y1 = point1
-    #x2, y2 = point2
     x3, y3 = point3
-    #x4, y4 = point4
     x5, y5 = point5
     x6,y6 = point6
 
@@ -827,101 +818,6 @@ def get_length_lxy(body,z_min):
             
     return lx,ly
 
-
-def get_length_lx_planev2(body,z_min):
-    points_xy = []
-    for j in body.points:
-        if j[2]==z_min:
-            points_xy.append([j[0],j[1]])
-
-
-    value = 0
-
-    values_lx = []
-    for k in points_xy:
-        x1,y1 = k[0],k[1]
-
-        #value = 0
-        for p in points_xy:
-            x,y = p[0],p[1]
-            if abs(y1-y)<2:
-                lxx = np.sqrt((x - x1)**2)
-                #if value<lxx:
-                value = lxx
-                p1x = x
-                p1y = y
-                p2y = y1
-                p2x = x1
-                values_lx.append([value,p1x,p1y,p2x,p2y])
-
-    maxx = sorted(values_lx)[-1]
-    return maxx[0]
-
-def get_length_ly_planev2(body,z_min):
-    points_xy = []
-
-    for j in body.points:
-        if j[2]==z_min:
-            points_xy.append([j[0],j[1]])
-
-    value = 0
-
-    values_ly = []
-    for k in points_xy:
-        x1,y1 = k[0],k[1]
-        #value = 0
-        for p in points_xy:
-            x,y = p[0],p[1]
-            if abs(x1-x)<2:
-                lyy = np.sqrt((y - y1)**2)
-                #if value<lyy:
-                value = lyy
-                p1x = x
-                p1y = y
-                p2y = y1
-                p2x = x1
-                values_ly.append([value,p1x,p1y,p2x,p2y])
-    maxx = sorted(values_ly)[-1]
-    return maxx[0]
-
-def get_length_lxy(body,z_min):
-
-    spacing = get_contour_z_spacing(body.points)
-    points_xy = []
-    
-    
-    for j in body.points:
-        if j[2]==z_min:
-            points_xy.append([j[0],j[1]])
-            
-    min_x = min(np.array(points_xy)[:,0])
-    max_x = max(np.array(points_xy)[:,0])
-    
-    min_y = min(np.array(points_xy)[:,1])
-    max_y = max(np.array(points_xy)[:,1])
-    
-    point1 = (min_x, get_max_yv2(min_x, points_xy))
-    #point1 = get_point_with_min_y_around_given_xv2(min_x/2, points_xy)
-    #point2 = get_point_with_max_y_around_given_xv2(min_x/2, points_xy)
-    #point3 = get_point_with_max_y_around_given_xv2(0,points_xy)
-    point3 = (get_x_min(max_y,points_xy),max_y)
-    #point4 = get_point_with_max_y_around_given_xv2(max_x/2, points_xy)
-    point5 = (max_x, get_max_y(max_x, points_xy))
-    #point5 = get_point_with_min_y_around_given_xv2(max_x/2, points_xy)
-    point6 = (get_x_min(min_y, points_xy),min_y)
-    
-    x1, y1 = point1
-    #x2, y2 = point2
-    x3, y3 = point3
-    #x4, y4 = point4
-    x5, y5 = point5
-    x6,y6 = point6
-
-    lx = np.sqrt((x1-x5)**2+(y1-y5)**2)
-    ly = np.sqrt((x3-x6)**2+(y3-y6)**2)
-            
-    return lx,ly
-    
 def get_body_keys_not_RS(file_list):
     body_keys = []
     for k in file_list:
@@ -1269,7 +1165,6 @@ def get_distances_of_points_from_cloud(points, cloud):
     dist_points, idxes_cloud = tree.query(points.points)
     return dist_points
 
-
 # For 3 given points in a circle, return the center (h,k) and radius r
 def get_h_k_r(point1, point2, point3):
     x1, y1 = point1
@@ -1384,10 +1279,9 @@ def get_distances_from_contours(contours_PTV, contours_body,IMG_RES, r_frac=RADI
         distances = get_distances_of_points_from_cloud(inner_PTV, cloud_body)
     return distances
 
-
+#CODE TO CALCULATE VOLUMES
 # snippet from rtdsm's get_cubemarch_surface
 def get_mask_grid(contours, img_res,max_away=400.):
-    #img_res = [IMG_RES[0], IMG_RES[1], get_contour_z_spacing(contours)]
     #STEP1: Get the min X,Y values to set the top corner of the slices
     Xmin,Ymin = np.nanmin(contours[:,0]),np.nanmin(contours[:,1])
     Zmin = np.nanmin(contours[:,2])
@@ -1509,7 +1403,6 @@ def get_equal_body_fov(body1,h,k,r):
         for p in d11.points:
             if z==p[2]:
                 ptosxy.append([float(p[0]),float(p[1])])
-        #pp1= Polygon(ptosxy)
         pp1= Polygon(ptosxy).buffer(0)
         pp2 = Polygon(list(zip(x,y)))
         pp3 = intersection(pp1,pp2)
@@ -1556,3 +1449,42 @@ def get_max_between_contours_by2Dv2(body1,body2):
         distances.append(distance[0])
     max_index = distances.index(np.max(distances))
     return np.max(distances),np.mean(distances),np.median(distances)
+
+def get_haussdorff_distance(body1,body2):
+    hausdorff_a_to_b = pcu.one_sided_hausdorff_distance(body1, body2)
+    hausdorff_b_to_a = pcu.one_sided_hausdorff_distance(body2, body1)
+    
+    return hausdorff_a_to_b,hausdorff_b_to_a
+
+def get_chamfer_distance(body1,body2):
+    chamfer = pcu.chamfer_distance(body1, body2)
+    return chamfer
+
+def get_max_dist_body(body1,body2):
+    tree = KDTree(body2.points)
+    d_kdtree, idx = tree.query(body1.points)
+    return np.max(d_kdtree)
+
+def get_min_dist_body(body1,body2):
+    tree = KDTree(body2.points)
+    d_kdtree, idx = tree.query(body1.points)
+    idx_point = np.where(d_kdtree == np.min(d_kdtree))[0][0]
+    idx_cloud = idx[idx_point]
+    point1 = body1.points[idx_point]
+    point2 = body2.points[idx_cloud]
+    
+    return np.min(d_kdtree)
+
+def get_mean_dist_body(body1,body2):
+    tree = KDTree(body2.points)
+    d_kdtree, idx = tree.query(body1.points)
+    return np.mean(d_kdtree)
+
+def get_volume_body_from_contours(contours_body,IMG_RES):
+    # ================================================================================
+    cloud_body = pv.PolyData(contours_body)
+    img_res_body = [IMG_RES[0], IMG_RES[1], 3]
+
+    vol_body = get_volume(contours_body, img_res_body, BIG_AWAY)
+
+    return vol_body
