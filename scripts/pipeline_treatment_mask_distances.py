@@ -15,7 +15,7 @@ import helpers
 from helpers import get_path_RS, get_body_keys, sort_body_keys, get_keysall
 from helpers import get_name_files, get_body_keys_not_RS, get_info_fov
 from helpers import get_path_RS_CT,  search_cuts_z, get_center_fov, get_equal_body_for_mask
-from helpers import trim_contours_to_match_zs, get_dist_mask_body, get_mask_out, get_estimate_center
+from helpers import trim_contours_to_match_zs_edge, get_dist_mask_body, get_mask_out, get_estimate_center
 
 PATH_DEST = 'distancesMask/'
 if not os.path.isdir(PATH_DEST):
@@ -136,7 +136,7 @@ def pipeline_mask_distances(param_name='distancesMask',path_contours, CSV_patien
                         h,k = get_center_fov(path_k,str_pat_id)
                     
                         body_sim = get_equal_body_for_mask(contour_body,h,k,r)
-                        trim_body2,trim_mask2 = trim_contours_to_match_zs(body_sim.points,pv.PolyData(mask).points,z_min,z_max)
+                        trim_body2,trim_mask2 = trim_contours_to_match_zs_edge(body_sim.points,pv.PolyData(mask).points,z_min,z_max)
                 
                         mask_final = get_mask_out(trim_mask2,r,h,k)
                     
@@ -157,7 +157,7 @@ def pipeline_mask_distances(param_name='distancesMask',path_contours, CSV_patien
                         contour_body = contours[key_body]
                         h,k = get_estimate_center(contour_body,r)
                     
-                        trim_body2,trim_mask2 = trim_contours_to_match_zs(contour_body,pv.PolyData(mask).points,z_min,z_max)
+                        trim_body2,trim_mask2 = trim_contours_to_match_zs_edge(contour_body,pv.PolyData(mask).points,z_min,z_max)
                    
                         mask_final = get_mask_out(trim_mask2,r,h,k)
      
