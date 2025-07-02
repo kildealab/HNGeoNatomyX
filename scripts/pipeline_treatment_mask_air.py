@@ -15,7 +15,7 @@ from helpers import get_path_RS, get_body_keys, sort_body_keys, get_keysall
 from helpers import get_name_files, get_body_keys_not_RS, get_info_fov
 from helpers import get_path_RS_CT,  search_cuts_z, get_center_fov, get_equal_body_fov
 from helpers import trim_contours_to_match_zs, get_start_position_dcm, get_volume, get_treatment_mask_contour
-from helpers import trim_contours_to_match_zs_edge, get_mask_out, get_info_replanned
+from helpers import trim_contours_to_match_zs_edge, get_mask_out, get_info_replanned, get_equal_body_for_mask
 
 IMG_RES = [0.51119071245194, 0.51119071245194, 3]
   
@@ -110,8 +110,11 @@ def pipeline_air_mask(param_name='air_mask',,path_contours, CSV_patient_ids,path
             out_path = os.path.join(PATH_DEST,out_file) 
 
             # ================================================================================
-            # CALCULATE PARAMETERS\
+            # CALCULATE PARAMETERS
 
+            #NOTE THAT ALL THE CBCTs MUST HAVE THE SAME RECONSTRUCTION DIAMETER/RADIUS
+            #IF NOT PLEASE USE THE MODIFIED VERSION get_info_fov_minimum
+            #WHICH SEARCHES IN ALL THE CBCTs FILES THE MINIMUM RADIUS
             r = get_info_fov(str_pat_id)
             
             CT_path = get_info_replanned(str_pat_id,0)
@@ -170,7 +173,7 @@ def pipeline_air_mask(param_name='air_mask',,path_contours, CSV_patient_ids,path
                               params.append(volume)
                     
                               # RECORD PARAMETERS
-                              df[key_bodies_to_save[key_body_n]] = params
+                              df[key_bodies_to_save[key_body]] = params
                     
    
                 
