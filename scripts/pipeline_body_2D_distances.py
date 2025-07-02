@@ -133,7 +133,7 @@ def pipeline_area_body(param_name='body2D_distances',path_contours,CSV_patients_
                         trim_body,trim_body2 = trim_contours_to_match_zs(body_sim.points,body_sim.points,z_min,z_max)            
                         gc.collect()                        
                         d_max,d_mean,d_median = get_max_between_contours_by2Dv2(trim_body,trim_body2)
-                        print('\tProcess time of parameters (' + key_bodies_to_save[key_body_n] + '): ' + str(process_time()-t1) + ' s')
+                        print('\tProcess time of parameters (' + key_bodies_to_save[key_body] + '): ' + str(process_time()-t1) + ' s')
 
                         gc.collect()
                  
@@ -152,7 +152,7 @@ def pipeline_area_body(param_name='body2D_distances',path_contours,CSV_patients_
                         
                         d_max,d_mean,d_median = get_max_between_contours_by2Dv2(trim_body,trim_body2)
                         gc.collect()
-                        print('\tProcess time of parameters (' + key_bodies_to_save[key_body_n] + '): ' + str(process_time()-t1) + ' s')
+                        print('\tProcess time of parameters (' + key_bodies_to_save[key_body] + '): ' + str(process_time()-t1) + ' s')
 
                         params.append(d_max)
                         params.append(d_mean)
