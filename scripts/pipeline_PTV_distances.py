@@ -100,7 +100,7 @@ def pipeline_dist_body(param_name='xvalues',path_contours, CSV_patient_ids,path_
                             body_in_folder = body_in_list.split('.')[0]  
                             if bodies[bodx]==body_in_folder:
                                 format_single_contour = body_list[bodx].split('.')[-1]
-                                path_RS0 = patient_path+'/'+bodies[bodx]+'.'+format_single_contour
+                                path_RS0 = patient_contours_path+'/'+bodies[bodx]+'.'+format_single_contour
 
                                 #CHECKS IF THE CONTOUR POINTS ARE IN JSON OR DCM
                                 if format_single_contour=='json':
