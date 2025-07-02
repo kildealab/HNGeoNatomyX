@@ -55,7 +55,7 @@ def pipeline_volumes(param_name='body_volume',path_contours, CSV_patient_ids,pat
             contours = []
             key_bodies_to_save = []
             
-            body_list = [d for d in os.listdir(patient_path) if d[0:4] == 'Body']
+            body_list = [d for d in os.listdir(patient_contours_path) if d[0:4] == 'Body']
             # e.g. path_full_CBCT_id = '/mnt/iDriveShare/Kayla/CBCT_images/kayla_extracted/'+str_pat_id+'/'
             path_full_CBCT_id = path_CBCTs+str_pat_id+'/'
             
@@ -95,7 +95,7 @@ def pipeline_volumes(param_name='body_volume',path_contours, CSV_patient_ids,pat
                             body_in_folder = body_in_list.split('.')[0]  
                             if bodies[bodx]==body_in_folder:
                                 format_single_contour = body_list[bodx].split('.')[-1]
-                                path_RS0 = patient_path+'/'+bodies[bodx]+'.'+format_single_contour
+                                path_RS0 = patient_contours_path+'/'+bodies[bodx]+'.'+format_single_contour
 
                                 #CHECKS WHICH IS THE FORMAT THAT THE CONTOURS ARE SAVED: .json or .dcm
                                 if format_single_contour=='json':
