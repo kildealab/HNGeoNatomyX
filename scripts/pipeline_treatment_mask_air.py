@@ -189,4 +189,4 @@ if __name__ == "__main__":
       path_contours = '/mnt/iDriveShare/OdetteR/Registration_and_contours'
       CSV_patient_ids =  '/mnt/iDriveShare/OdetteR/Registration_and_contours/IDS_News_Partial.csv'
       path_CBCTs = '/mnt/iDriveShare/Kayla/CBCT_images/kayla_extracted/'
-      pipeline_air_mask(path_contours,CSV_patients_ids,path_CBCTs)
+      pipeline_air_mask(path_contours,CSV_patients_ids,path_CBCTs,path_treatment_masks)
