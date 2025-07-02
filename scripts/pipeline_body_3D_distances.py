@@ -191,6 +191,7 @@ def pipeline_body3D_distances(param_name='body3D_distances',path_contours, CSV_p
             df.to_csv(out_path, index=False)
             print('\t' + param_name + ' printed to csv: ' + out_path)
             print('Elapsed time for patient: ' + str((process_time()-t0)/60) + ' min')
+            gc.collect()
         print('DONE! Elapsed time for pipeline: ' + str((process_time()-t_init)/3600) + ' hours')
                 
 if __name__ == "__main__":
