@@ -156,7 +156,7 @@ def pipeline_body3D_distances(param_name='body3D_distances',path_contours, CSV_p
                     t1 = process_time()
                     if key_bodies_to_save[key_body]=='BODY':
                         contour_body = contours[0]                        
-                        h,k = get_center_fov(path_k,str_pat_id)
+                        h,k = get_center_fov(path_contours,str_pat_id)
                         body_sim = get_equal_body_fov(contour_body,h,k,r)
                         gc.collect()
                         
@@ -169,7 +169,7 @@ def pipeline_body3D_distances(param_name='body3D_distances',path_contours, CSV_p
                         params.append(chamfer)
                
                     else:
-                        h,k = get_center_fov(path_k,str_pat_id)
+                        h,k = get_center_fov(path_contours,str_pat_id)
                         body_sim = get_equal_body_fov(contour_body0,h,k,r)
                         gc.collect()
                         trim_body,trim_body2 = trim_contours_to_match_zs(body_sim.points,contour_body,z_min,z_max)            
