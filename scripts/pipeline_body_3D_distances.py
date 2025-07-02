@@ -110,21 +110,22 @@ def pipeline_body3D_distances(param_name='body3D_distances',path_contours, CSV_p
                         body_contour = rtdsm.get_pointcloud('BODY', path_rs_b0, False)[0]
                         contours.append(body_contour)
                     else:
-                        body_in_folder = body_list[bodx].split('.')[0]     
-                        format_single_contour = body_list[bodx].split('.')[-1]
-                        path_RS0 = patient_path+'/'+bodies[bodx]+'.'+format_single_contour
-                        gc.collect()
-                        #CHECKS WHICH IS THE FORMAT THAT THE CONTOURS ARE SAVED: .json or .dcm
-                        if format_single_contour=='json':
-                            f = open(path_RS0)
-                            data = json.load(f)
-                            f.close()
-                            body_contour = np.array(data[bodies[bodx]])
-                            contours.append(body_contour)
-                        else:
-                            body_contour = rtdsm.get_pointcloud(bodies[bodx], path_RS0, False)[0]
-                            contours.append(body_contour)
-                            gc.collect()
+                        for body_in_list in body_list:
+                            body_in_folder = body_in_list.split('.')[0]  
+                            if bodies[bodx]==body_in_folder:
+                                format_single_contour = body_list[bodx].split('.')[-1]
+                                path_RS0 = patient_path+'/'+bodies[bodx]+'.'+format_single_contour
+
+                                #CHECKS WHICH IS THE FORMAT THAT THE CONTOURS ARE SAVED: .json or .dcm
+                                if format_single_contour=='json':
+                                    f = open(path_RS0)
+                                    data = json.load(f)
+                                    f.close()
+                                    body_contour = np.array(data[bodies[bodx]])
+                                    contours.append(body_contour)
+                                else:
+                                    body_contour = rtdsm.get_pointcloud(bodies[bodx], path_RS0, False)[0]
+                                    contours.append(body_contour)
                             
                 key_bodies_to_save = bodies.copy()
                             
