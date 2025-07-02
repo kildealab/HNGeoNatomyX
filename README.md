@@ -178,7 +178,7 @@ Several examples are included in Jupyter Notebook format to demonstrate how to r
 #### Treatment Mask-Related Metrics Pipeline
 | Script | Description |
 |-----------|-------------|
-| [pipeline_treatment_mask_distances.py.py](/scripts/pipeline_treatment_mask_distances.py) | Computes $`max`${$`B_{mask}`$}, $`\bar{B}_{mask}`$, and $`\sigma_{B_{mask}}`$. The results are saved as CSV files labelled 'distancesMask_'+ID* in a folder called **'distancesMask'**|
+| [pipeline_treatment_mask_distances.py](/scripts/pipeline_treatment_mask_distances.py) | Computes $`max`${$`B_{mask}`$}, $`\bar{B}_{mask}`$, and $`\sigma_{B_{mask}}`$. The results are saved as CSV files labelled 'distancesMask_'+ID* in a folder called **'distancesMask'**|
 | [pipeline_treatment_mask_air.py](/scripts/pipeline_treatment_mask_air.py) |  Computes $`V^{air}_{Body-to-mask}`$. The results are saved as CSV files labelled 'airMask_'+ID* in a folder called **'airMask'** | 
 
 #### PTV-Related Metrics Pipelines
