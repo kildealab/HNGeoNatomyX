@@ -142,7 +142,7 @@ def pipeline_volumes(param_name='body_volume',path_contours, CSV_patient_ids,pat
                     t1 = process_time()
                     if key_bodies_to_save[key_body_n]=='BODY':
                         contour_body = contours[0]                        
-                        h,k = get_center_fov(path_k,str_pat_id)
+                        h,k = get_center_fov(path_contours,str_pat_id)
                         body_sim = get_equal_body_fov(contour_body,h,k,r)
                         trim_body,trim_body2 = trim_contours_to_match_zs(body_sim.points,body_sim.points,z_min,z_max)   
                         
