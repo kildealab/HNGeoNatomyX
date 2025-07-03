@@ -186,7 +186,7 @@ def pipeline_params_volume_neck(param_name='neck_volume_area', path_contours,CSV
                     contours_neck.append(trim_body)           
             
             z_min_necks,z_max_necks = search_cuts_z(contours_neck)
-            CT_path = get_info_replanned(str_pat_id,0)
+            CT_path = get_info_replanned(str_pat_id,0,path_CBCTs)
                 
             start_x, start_y, start_z, pixel_spacing = get_start_position_dcm(CT_path)
             
@@ -200,7 +200,7 @@ def pipeline_params_volume_neck(param_name='neck_volume_area', path_contours,CSV
                 surface_area_neck  = get_surface_area(neck_contour,pixel_spacing)
                 
                 compactness = surface_area_neck**3/vol_neck**2
-                mean_area = get_area_across_slices(key_body_n,str_pat_id,neck_contour)
+                mean_area = get_area_across_slices(key_body_n,str_pat_id,neck_contour,path_CBCTs)
                 
                 gc.collect()
             
