@@ -118,7 +118,11 @@ def pipeline_area_body(param_name='body2D_distances',path_contours,CSV_patients_
             # CALCULATE PARAMETERS
             
             z_min,z_max = search_cuts_z(contours)
-            r = get_info_fov(str_pat_id)
+
+            #NOTE THAT ALL THE CBCTs MUST HAVE THE SAME RECONSTRUCTION DIAMETER/RADIUS
+            #IF NOT PLEASE USE THE MODIFIED VERSION get_info_fov_minimum
+            #WHICH SEARCHES IN ALL THE CBCTs FILES THE MINIMUM RADIUS
+            r = get_info_fov(path_full_CBCT_id)
             
             for key_body in range(0,len(key_bodies_to_save)):
                 print('Working on '+key_bodies_to_save[key_body])
