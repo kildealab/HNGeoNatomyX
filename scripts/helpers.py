@@ -110,6 +110,18 @@ def get_patient_slope_for_num_fx(row_data, num_fx, fx_start=1):
     else:
         slope = np.NAN
     return slope
+
+    
+def get_point_with_max_y_around_given_xv2(x, points):
+    target_x = x
+    max_y = -1
+    for point in points:
+        current_x, current_y = point[0:2]
+        if abs(current_x - x) < 2:
+            if current_y > max_y:
+                max_y = current_y
+                target_x = current_x
+    return (target_x, max_y)
     
 '''Gets the domain keys in the CSV file saved format'''
 def get_domain_from_keys(keys):
