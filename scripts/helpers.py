@@ -195,16 +195,7 @@ def trim_contours_to_match_z(contours_1, contours_2): # 1: body, 2: PTV
     contours_1 = np.array([x for x in contours_1 if x[2] < max_z and x[2] > min_z])
     contours_2 = np.array([x for x in contours_2 if x[2] < max_z and x[2] > min_z])
     return contours_1, contours_2
-
-def trim_contours_to_match_zsv2(contours_1,contours_2,z_min): 
    
-    #max_z = z_max 
-    min_z = z_min 
-    
-    contours_1 = np.array([x for x in contours_1 if x[2] >= min_z])
-    contours_2 = np.array([x for x in contours_2 if x[2] >= min_z])
-    return contours_1,contours_2 
-    
 def trim_contours_to_match_zs_edge(contours_1,contours_2,z_min,z_max): 
     max_z = z_max 
     min_z = z_min 
@@ -296,6 +287,20 @@ def get_info_fov(path_patient):
     dc_file = pydicom.read_file(files2[0])
     return dc_file.ReconstructionDiameter
 
+def get_info_fov_minimum(patient,body_keys,pathpatient):
+    file_RS = sorted([x for x in os.listdir(path_patient) if 'kV' in x])
+    rs = []
+    for p in range(0,len(body_keys)):
+        path2 = os.path.join(path_patient, file_RS[p])
+        files = [x for x in os.listdir(path2) if 'CT' in x]
+        files2 = []
+        for j in files:
+            files2.append(os.path.join(path2, j))
+        dc_file = pydicom.read_file(files2[0])
+        r = dc_file.ReconstructionDiameter
+        rs.append(float(r))
+    return min(rs)
+    
 def centers(x1, y1, x2, y2, r):
     q = np.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)
     x3 = (x1 + x2) / 2
@@ -372,10 +377,7 @@ def get_min_dist_body(body1,body2):
     
     return np.min(d_kdtree),point1,point2
 
-def get_max_dist_body(body1,body2):
-    tree = KDTree(body2.points)
-    d_kdtree, idx = tree.query(body1.points)
-    return np.max(d_kdtree)
+##
 
 def get_mean_dist_body(body1,body2):
     tree = KDTree(body2.points)
@@ -639,8 +641,10 @@ def get_keysall(patient,path_RS):
     
 def get_min_mandible_slice(body,mandible):
     minimum_mandible = min(mandible.points[:,2])
-    z_position = np.argmin(abs((body.points)[:,2] - (minimum_mandible)))
-    resulted_slice = (body.points)[:,2][z_position]
+    zs_body = (body.points)[:,2]
+    zs_body_clean = zs_body[~(np.isnan(zs_body))]
+    z_position = np.argmin(abs(zs_body_clean - minimum_mandible))
+    resulted_slice = zs_body_clean[z_position]
     return resulted_slice
 
 def get_min_mandible_slice_from_surface(s_body1,mandible_contour):
@@ -663,7 +667,6 @@ def translation_z(structure,z_value):
     return new2
 
 def change_z_coordinates(structure,z_value):
-    #z_value = get_zmin_mandible(mandible,strcuture)
     new_structure = translation_z(structure,z_value)
     return new_structure
     
@@ -807,9 +810,23 @@ def get_body_keys_not_RS(file_list):
     sorted_keys = sort_body_keys(body_keys)
     return sorted_keys
 
+#############################################
+# NECK RELATED METRICS
+############################################
+def trim_contours_to_match_zs_neck(contours_1, contours_2,z_min,z_max): # 1: body, 2: PTV
+
+    spacing_z = get_contour_z_spacing(contours_1)
+
+    max_z = z_max 
+    min_z = z_min + 3*spacing_z
+
+    contours_1 = np.array([x for x in contours_1 if x[2] <= max_z and x[2] >= min_z])
+    contours_2 = np.array([x for x in contours_2 if x[2] <= max_z and x[2] >= min_z])
+    return contours_1, contours_2
+    
 def get_z_bottom_neck(z_min,key_bodies_to_save,contours):
     if z_min>=-27:
-        z_neck = z_min
+        z_neck = -27
         return z_neck
     else:
         neck_zss = []
@@ -821,12 +838,34 @@ def get_z_bottom_neck(z_min,key_bodies_to_save,contours):
             min_z = get_z_out_fov(body,h,k,r,z_min)
             neck_zss.append(min_z)
        
-            if min(neck_zss)>=-27:
-                z_neck = -27
-                return z_neck
-            else:
-                z_neck = min(neck_zss)
-                return z_neck
+        if min(neck_zss)>=-27:
+            z_neck = -27
+            return z_neck
+        else:
+            z_neck = min(neck_zss)
+            return z_neck
+
+def get_surface_area(contours_body,IMG_RES):
+    surface_body = get_surface_marching_cubes(contours_body,IMG_RES).smooth(n_iter=0)
+    s_area = surface_body.area
+    return s_area
+
+
+def get_area_across_slices(key_body_n,str_pat_id,s_body,path_CBCTs):
+    CT_path = get_info_replanned(str_pat_id,1,path_CBCTs)
+                
+    start_x, start_y, start_z, pixel_spacing = get_start_position_dcm(CT_path)
+    s_body1 = get_surface_marching_cubes(s_body,IMG_RES[0:2])
+    zs = sorted(list(set(s_body1.points[:,2])))
+    areas = []
+    for z in zs:
+      ptosxy = get_contour_slice(s_body1,z)
+                
+      slice1 = np.array(ptosxy)[:,0:2]
+    
+      area = get_area(slice1,start_x,start_y,IMG_RES[0:2])
+      areas.append(area)
+    return np.mean(areas)
 
 def get_elongation3D(body,body0):
 
@@ -966,7 +1005,7 @@ def get_dist_mask_body(mask,body):
     d_kdtree, idx = tree.query(mask.points)
    
     return np.max(d_kdtree),np.mean(d_kdtree),np.std(d_kdtree)
-    
+
 def get_equal_body_for_mask(body1,h,k,r):
     d1 = pv.PolyData(body1).connectivity(largest=True)
 
