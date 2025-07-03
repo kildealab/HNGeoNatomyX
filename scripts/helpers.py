@@ -379,16 +379,6 @@ def get_elongation_only_central(body,z_m,z_m2,contour0):
 
     return R_max,R_min,R_max/R_min,R_mean
 
-def get_elongation_only_central3D(body,contour0):
-    iso = contour0.center
-    dists = np.sqrt((np.array(body.points)[:,0]-iso[0])**2+(np.array(body.points)[:,1]-iso[1])**2+(np.array(body.points)[:,2]-iso[2])**2)
-    R_mean = (np.mean(dists))
-
-    R_min = (np.min(dists))
-    R_max = (np.max(dists))
-        
-    return R_max,R_min,R_mean 
-
 def search_cuts_z(contours):
     z_maxs = []
     z_mins = []
