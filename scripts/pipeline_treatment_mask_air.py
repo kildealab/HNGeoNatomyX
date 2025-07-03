@@ -161,7 +161,7 @@ def pipeline_air_mask(param_name='air_mask',,path_contours, CSV_patient_ids,path
                               df[key_bodies_to_save[0]] = params
                         else:
                               contour_body = contours[key_body]
-                              h,k = get_estimate_center(contour_body,r,0.5)
+                              h,k = get_estimate_center(contour_body,r)
                   
                               trim_body2,trim_mask2 = trim_contours_to_match_zs_edge(contour_body,pv.PolyData(mask).points,z_min,z_max)
                               #REMOVING MASK THAT IS OUTSIDE FOV 
