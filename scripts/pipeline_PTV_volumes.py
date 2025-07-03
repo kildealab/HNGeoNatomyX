@@ -19,8 +19,10 @@ from helpers import search_cuts_z, get_start_position_dcm, get_info_fov
 from helpers import get_path_RS_CT, get_volumes_from_contours
 
 #SET THE RESOLUTION OF THE VOXEL IN THE CBCT MEDICAL IMAGE 
-#IN OUR CENTRE WAS THE FOLLOWING (ALL SHOULD BE THE SAME)
+#THIS RESOLUTION IS FOR CROPPING PUPORSES OF THE PTV OUTSIDE THE BODY
+#ADJUST AT CONVENIENCE. THE VOLUME CALCULATION IS DONE WITH EACH IMAGE RESOLUTION
 IMG_RES = [0.51119071245194, 0.51119071245194, 3]
+
 RADIUS_FRAC = 0.75 #CHANGE THIS PARAMETER ONLY IF THE METRICS ARE NOT PROPERLY CALCULATED
 #I.E., IF YOU GET AN ERROR. THIS RADIUS IS TO CALCULATE THE RELATIVE PTV CHANGES
 
@@ -180,7 +182,7 @@ def pipeline_volumes(param_name='volumesPTV',path_contours,CSV_patients_ids,path
 
 if __name__ == "__main__":
     #e.g. paths
-    path_contours = '/mnt/iDriveShare/OdetteR/Registration_and_contours'
+    path_contours = '/mnt/iDriveShare/OdetteR/Registration_and_contours/Contours/'
     CSV_patient_ids =  '/mnt/iDriveShare/OdetteR/Registration_and_contours/IDS_News_Partial.csv'
     path_CBCTs = '/mnt/iDriveShare/Kayla/CBCT_images/kayla_extracted/'
     
