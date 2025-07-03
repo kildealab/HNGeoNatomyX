@@ -127,7 +127,11 @@ def pipeline_volumes(param_name='body_volume',path_contours, CSV_patient_ids,pat
             CT_path = get_info_replanned(str_pat_id,0)
                 
             start_x, start_y, start_z, pixel_spacing = get_start_position_dcm(CT_path) 
-            r = get_info_fov(str_pat_id)
+            
+            #NOTE THAT ALL THE CBCTs MUST HAVE THE SAME RECONSTRUCTION DIAMETER/RADIUS
+            #IF NOT PLEASE USE THE MODIFIED VERSION get_info_fov_minimum
+            #WHICH SEARCHES IN ALL THE CBCTs FILES THE MINIMUM RADIUS
+            r = get_info_fov(path_full_CBCT_id)
             
             for key_body_n in range(0,len(key_bodies_to_save)):
                 print('Working on '+key_bodies_to_save[key_body])
