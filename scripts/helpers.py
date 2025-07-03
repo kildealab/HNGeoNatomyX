@@ -354,12 +354,6 @@ def get_estimate_center(body2,r,tolerance):
     h2 = hc
     k2 = np.max([kc,k])
     return h2,k2
-
-
-def get_mean_dist_body(body1,body2):
-    tree = KDTree(body2.points)
-    d_kdtree, idx = tree.query(body1.points)
-    return np.mean(d_kdtree)
     
 def get_elongation_only_central(body,z_m,z_m2,contour0):
     points_xy = []
@@ -1384,10 +1378,6 @@ def get_max_dist_body(body1,body2):
     d_kdtree, idx = tree.query(body1.points)
     return np.max(d_kdtree)
 
-def get_mean_dist_body(body1,body2):
-    tree = KDTree(body2.points)
-    d_kdtree, idx = tree.query(body1.points)
-    return np.mean(d_kdtree)
 
 def get_volume_body_from_contours(contours_body,IMG_RES):
     # ================================================================================
