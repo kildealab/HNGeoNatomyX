@@ -25,7 +25,7 @@ PATH_DEST = 'elongationsubmand_metrics/'
 if not os.path.isdir(PATH_DEST):
     os.makedirs(PATH_DEST)
 
-def pipeline_Rmin_Rmax(param_name='elongationsubmand',file_ids,path_contours = '/mnt/iDriveShare/OdetteR/Registration_and_contours/Contours/'):
+def pipeline_Rmin_Rmax(param_name='elongationsubmand',path_contours,CSV_patients_ids,path_CBCTs):
 
     t_init = process_time()
     #CSV_patient_ids = '/mnt/iDriveShare/OdetteR/Registration_and_contours/IDS_News_Partial.csv'
