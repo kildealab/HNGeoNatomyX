@@ -531,28 +531,6 @@ def get_CT_CBCT_equal_body(body2,body1,z_max,z_min,h,k,r):
     s_body1 = pv.PolyData(s_body11).connectivity(largest=True)
     return s_body1,s_body2
 
-def get_keys(name,patient):
-    pat_h = []
-    path_RS = get_path_RS(patient,PATH_SRC)
-    keys_body = get_body_keys(path_RS)
-    sorted_keys_body = sort_body_keys(keys_body)
-    ROI_keys = get_ROI_keys(path_RS)
-
-    for key in ROI_keys:
-        try:
-            key2 = key.split('_')
-        except:
-            key2 = key.split('-')
-        for k in key2:
-            try:
-                for p in k.lower().split('~'):
-                    if p==str(name):
-                        pat_h.append(key)
-            except:
-                    if k.lower()==str(name):
-                        pat_h.append(key)
-    return pat_h
-
 def get_keys_v2(name,patient,path_RS0):
     pat_h = []
     ROI_keys = get_ROI_keys(path_RS0)
