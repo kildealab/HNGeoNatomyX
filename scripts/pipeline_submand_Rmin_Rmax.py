@@ -131,7 +131,11 @@ def pipeline_Rmin_Rmax(param_name='elongationsubmand',file_ids,path_contours = '
 
             z_min,z_max = search_cuts_z(contours)
             
-            r = get_info_fov(str_pat_id)
+            #NOTE THAT ALL THE CBCTs MUST HAVE THE SAME RECONSTRUCTION DIAMETER/RADIUS
+            #IF NOT PLEASE USE THE MODIFIED VERSION get_info_fov_minimum
+            #WHICH SEARCHES IN ALL THE CBCTs FILES THE MINIMUM RADIUS
+            r = get_info_fov(path_full_CBCT_id)
+            
             body_contour_0 = []
             for key_body in range(0,len(key_bodies_to_save)):
                 
