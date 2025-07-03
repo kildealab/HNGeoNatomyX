@@ -555,7 +555,8 @@ def get_length_bottom(body,z_min):
     max_x = max(np.array(points_xy)[:,0])
     
     point1 = (min_x, get_max_y(min_x, points_xy))
-    point3 = get_point_with_max_y_around_given_xv2(0,points_xy)
+    #TOLERANCE = 2; ADJUST IF IT IS NECESSARY
+    point3 = get_point_with_max_y_around_given_x(0,points_xy,2)
     point5 = (max_x, get_max_y(max_x, points_xy))
     point6 = (0,min(np.array(points_xy)[:,1]))
     
