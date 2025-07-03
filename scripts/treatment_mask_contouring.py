@@ -93,7 +93,7 @@ def add_coords(positions, ct_path,slice_number):
 
     z = float(get_slice(ct_path)[slice_number][2])
     for x1 in range(0,len(x)):
-        contour_m.append([x[x1],y[x1],z])
+        contour_mask.append([x[x1],y[x1],z])
     
 def get_mask_nifti(roi_array,start_x,start_y,pixel_spacing):
     x = []
@@ -119,33 +119,13 @@ def save_mask_contour(contour_mask,patient_id_str):
     mesh = pv.PolyData(contour_mask)
     mesh.connectivity(largest=True)
     mask_json = {'Mask' : contour_mask}
-    with open("registered/mask/Mask_"+patient_id_str+".json", "w") as outfile:
+    with open("registered/mask/Mask_"+str(patient_id_str)+".json", "w") as outfile:
         json.dump(mask_json, outfile)
-    print('save at '+ "registered/mask/Mask_"+patient_id_str+".json")
+    print('save at '+ "registered/mask/Mask_"+str(patient_id_str)+".json")
     return
-######################
 
-#path_CBCTs = '/mnt/iDriveShare/Kayla/CBCT_images/kayla_extracted/' # Path to patient directories
-patients = os.listdir(path_CBCTs)
-files = [f for f in os.listdir(path_CBCTs) if os.path.isfile(f)]
-patients_path = [path_CBCTs+patient+"/" for patient in patients]
-
-patient_number_id_folder = insert('Insert patient number: ')
-
-ct_path = get_info_CT(patients_path[patients.index(patient_number_id_folder )])
-ct_files = [pydicom.dcmread(os.path.join(ct_path2, f)) for f in os.listdir(ct_path2) if 'CT' in f]
-path_RS = get_path_RS(ct_path)
-
-# Sort the CT files in ascending order by their image position (z-axis)
-ct_files.sort(key=lambda x: x.ImagePositionPatient[2])
-ct_file = ct_files[0]
 
 def contour_slice(ct_files,ct_path,slice_value,h_center,k_center,min_radius,max_radius,thres_grey,plot=True):
-    #e.g. h_center,k_center,min_angle,max_angle,min_radius,max_radius,thres_grey = 250,350,-175,-5,55,250,60
-    
-    #MINIMUM SLICE WHERE YOU CAN VISUALIZE THE MASK. THIS VALUE CAN BE CHANGED DEPENDING ON EACH IMAGE.
-    minimum_slice_with_mask= 20
-    #for slice_value in range(minimum_slice_with_mask,len(ct_files)):
     print('------- CURRENTLY WORKING ON SLICE NUMBER'+ str(j)+'------')
     
     points_to_use = []
@@ -212,10 +192,46 @@ def contour_slice(ct_files,ct_path,slice_value,h_center,k_center,min_radius,max_
     
     positions,mask_pointsx,mask_pointsy = get_contour_mask(masked_img2,h_center,k_center,min_radius,max_radius,thres_grey)
 
-    mask_t = np.zeros(img.shape[:2], dtype="uint8") 
-    cv2.drawContours(mask_t, np.array(positions), 0, 255, -1)
+    if plot==True:
+        plt.imshow(masked_img2,camp='gray')
+        plt.title('Mask to be contoured including BODY and TREATMENT MASK EDGE')
+        plt.scatter(mask_pointsx,mask_pointsy,c='r',s=1)
+        plt.show()
 
-add_coords(positions, ct_path2,slice_value)
+    return positions
+
+######################
+
+
+#path_CBCTs = '/mnt/iDriveShare/Kayla/CBCT_images/kayla_extracted/' # Path to patient directories
+patients = os.listdir(path_CBCTs)
+files = [f for f in os.listdir(path_CBCTs) if os.path.isfile(f)]
+patients_path = [path_CBCTs+patient+"/" for patient in patients]
+
+patient_id_str = insert('Insert patient number: ')
+
+ct_path = get_info_CT(patients_path[patients.index(patient_id_str)])
+ct_files = [pydicom.dcmread(os.path.join(ct_path, f)) for f in os.listdir(ct_path) if 'CT' in f]
+path_RS = get_path_RS(ct_path)
+
+# Sort the CT files in ascending order by their image position (z-axis)
+ct_files.sort(key=lambda x: x.ImagePositionPatient[2])
+ct_file = ct_files[0]
+contour_mask = []
+
+#e.g. h_center,k_center,min_angle,max_angle,min_radius,max_radius,thres_grey = 250,350,-175,-5,55,250,60
+
+
+#MINIMUM SLICE WHERE YOU CAN VISUALIZE THE MASK. THIS VALUE CAN BE CHANGED DEPENDING ON EACH IMAGE.
+minimum_slice_with_mask= 20
+for slice_value in range(minimum_slice_with_mask,len(ct_files)):
+
+    contour_slice(ct_files,ct_path,slice_value,h_center,k_center,min_radius,max_radius,thres_grey)
+    add_coords(positions, ct_path,slice_value)
+    
+save_mask_contour(contour_mask,patient_id_str)
+
+    
 
     
 
