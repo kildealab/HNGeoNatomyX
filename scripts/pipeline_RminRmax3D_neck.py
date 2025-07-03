@@ -54,7 +54,7 @@ def pipeline_elongation_neck(param_name='elongation3Dneck',path_contours,CSV_pat
             contours = []
             key_bodies_to_save = []
             
-            body_list = [d for d in os.listdir(patient_path) if d[0:4] == 'Body']
+            body_list = [d for d in os.listdir(patient_contours_path) if d[0:4] == 'Body']
             # e.g. path_full_CBCT_id = '/mnt/iDriveShare/Kayla/CBCT_images/kayla_extracted/'+str_pat_id+'/'
             path_full_CBCT_id = path_CBCTs+str_pat_id+'/'
          
@@ -97,8 +97,8 @@ def pipeline_elongation_neck(param_name='elongation3Dneck',path_contours,CSV_pat
                 for bodx in range(0,len(bodies)):
                     if bodies[bodx]=='BODY':
                         body_contour = rtdsm.get_pointcloud('BODY', path_rs_b0, False)[0]
-                        z_val = get_min_mandible_slice(body_contour,mandible_cloud)
-                        new_body = change_z_coordinates(body_contour,z_val)
+                        z_slice_mandible = get_min_mandible_slice(body_contour,mandible_contour)
+                        new_body = change_z_coordinates(body_contour,z_slice_mandible)
                         new_body = pv.PolyData(new_body).points
                         gc.collect()
                         contours.append(new_body)
@@ -118,7 +118,7 @@ def pipeline_elongation_neck(param_name='elongation3Dneck',path_contours,CSV_pat
                                 body_contour = np.array(data[bodies[bodx]])
                                      
                                 z_slice_mandible = get_min_mandible_slice(body_contour,mandible_contour)
-                                new_body = change_z_coordinates(body_contour,z_val)
+                                new_body = change_z_coordinates(body_contour,z_slice_mandible )
                                 new_body = pv.PolyData(new_body).points
                                 contours.append(new_body)
                             
@@ -126,7 +126,7 @@ def pipeline_elongation_neck(param_name='elongation3Dneck',path_contours,CSV_pat
                                 body_contour = rtdsm.get_pointcloud(bodies[bodx], path_RS0, False)[0]
                                 z_slice_mandible = get_min_mandible_slice(body_contour,mandible_contour)
                                      
-                                new_body = change_z_coordinates(body_contour,z_val)
+                                new_body = change_z_coordinates(body_contour,z_slice_mandible )
                                 new_body = pv.PolyData(new_body).points
                                      
                                 contours.append(new_body)
