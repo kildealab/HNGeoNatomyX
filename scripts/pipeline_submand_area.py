@@ -143,8 +143,12 @@ def pipeline_area_body(param_name='submand_area',path_contours,CSV_patient_ids,p
             for key_body_n in range(0,len(key_bodies_to_save)):
                 t1 = process_time()
                 params = []
-                #GETS FOV RADIUS FROM THE PATH 
-                r = get_info_fov(str_pat_id)
+                
+            #NOTE THAT ALL THE CBCTs MUST HAVE THE SAME RECONSTRUCTION DIAMETER/RADIUS
+            #IF NOT PLEASE USE THE MODIFIED VERSION get_info_fov_minimum
+            #WHICH SEARCHES IN ALL THE CBCTs FILES THE MINIMUM RADIUS
+                
+                r = get_info_fov(path_full_CBCT_id)
                 
                 if key_bodies_to_save[key_body_n]=='BODY':
                     #GETS THE BODY CONTOUR FOR FRACTION 0 (CT SIM)
