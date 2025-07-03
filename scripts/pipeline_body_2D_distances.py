@@ -1,3 +1,9 @@
+"""
+Created on Jul 2024 
+@author: Odette Rios-Ibacache 
+
+"""
+
 import sys
 sys.path.append('/rtdsm')
 import rtdsm
@@ -16,7 +22,7 @@ PATH_DEST = 'body2D_distances/'
         
 ROWS = ['dmax2D','dmean2D','dmedian2D']
 def pipeline_area_body(param_name='body2D_distances',path_contours,CSV_patients_ids,path_CBCTs):
-    t_init = process_time()
+    t_init = process_time() 
     #CSV_patient_ids = '/mnt/iDriveShare/OdetteR/Registration_and_contours/IDS_News_Partial.csv'
     ids_patients = []
     
