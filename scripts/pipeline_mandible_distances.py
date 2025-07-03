@@ -124,7 +124,7 @@ def pipeline_dist_mandible(param_name='mandible',path_contours, CSV_patient_ids,
             # ================================================================================
             # CALCULATE PARAMETERS
 
-            CT_path = get_info_replanned(str_pat_id,0)
+            CT_path = get_info_replanned(str_pat_id,0,path_CBCTs)
                 
             start_x, start_y, start_z, pixel_spacing = get_start_position_dcm(CT_path) 
             surface_mandible = get_surface_marching_cubes(mandible_contour ,pixel_spacing)
