@@ -1363,12 +1363,6 @@ def get_max_between_contours_by2Dv2(body1,body2):
     max_index = distances.index(np.max(distances))
     return np.max(distances),np.mean(distances),np.median(distances)
 
-def get_haussdorff_distance(body1,body2):
-    hausdorff_a_to_b = pcu.one_sided_hausdorff_distance(body1, body2)
-    hausdorff_b_to_a = pcu.one_sided_hausdorff_distance(body2, body1)
-    
-    return hausdorff_a_to_b,hausdorff_b_to_a
-
 def get_chamfer_distance(body1,body2):
     chamfer = pcu.chamfer_distance(body1, body2)
     return chamfer
