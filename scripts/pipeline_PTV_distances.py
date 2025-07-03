@@ -14,7 +14,7 @@ import pandas as pd
 
 import helpers 
 from helpers import get_path_RS, get_body_keys, sort_body_keys, get_keysall
-from helpers import get_name_files, get_body_keys_not_RS
+from helpers import get_name_files, get_body_keys_not_RS, get_info_replanned
 from helpers import get_path_RS_CT,  search_cuts_z, get_distances_from_contours
 
 #SET AN STANDARD RESOLUTION IN X AND Y OF THE MEDICAL PROTOCOL
@@ -167,7 +167,7 @@ def pipeline_dist_body(param_name='xvalues',path_contours, CSV_patient_ids,path_
 
 if __name__ == "__main__":
     #e.g. paths
-    path_contours = '/mnt/iDriveShare/OdetteR/Registration_and_contours'
+    path_contours = '/mnt/iDriveShare/OdetteR/Registration_and_contours/Contours/'
     CSV_patient_ids =  '/mnt/iDriveShare/OdetteR/Registration_and_contours/IDS_News_Partial.csv'
     path_CBCTs = '/mnt/iDriveShare/Kayla/CBCT_images/kayla_extracted/'
     
