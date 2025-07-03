@@ -9,10 +9,11 @@ sys.path.append('/rtdsm')
 import rtdsm
 from time import process_time
 import gc, os, csv
+import pandas as pd
 
 import helpers 
 from helpers import get_path_RS, get_body_keys, sort_body_keys, get_keysall
-from helpers import get_name_files, get_body_keys_not_RS, get_info_fov
+from helpers import get_name_files, get_body_keys_not_RS, get_info_fov, get_info_replanned
 from helpers import get_path_RS_CT,  search_cuts_z, get_center_fov, get_z_bottom_neck
 from helpers import get_start_position_dcm, trim_contours_to_match_zs_neck, get_equal_body_fov
 from helpers import get_key_mandible, get_min_mandible_slice, change_z_coordinates
@@ -223,7 +224,7 @@ def pipeline_params_volume_neck(param_name='neck_volume_area', path_contours,CSV
 
 if __name__ == "__main__":
     #e.g. paths
-    path_contours = '/mnt/iDriveShare/OdetteR/Registration_and_contours'
+    path_contours = '/mnt/iDriveShare/OdetteR/Registration_and_contours/Contours/'
     CSV_patient_ids =  '/mnt/iDriveShare/OdetteR/Registration_and_contours/IDS_News_Partial.csv'
     path_CBCTs = '/mnt/iDriveShare/Kayla/CBCT_images/kayla_extracted/'
     pipeline_params_volume_neck(path_contours,CSV_patients_ids,path_CBCTs)
