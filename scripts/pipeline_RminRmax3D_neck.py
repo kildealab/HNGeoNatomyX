@@ -172,7 +172,7 @@ def pipeline_elongation_neck(param_name='elongation3Dneck',path_contours,CSV_pat
                     contours_neck.append(trim_body)          
 
             z_min_necks,z_max_necks = search_cuts_z(contours_neck)
-            CT_path = get_info_replanned(str_pat_id,0)
+            CT_path = get_info_replanned(str_pat_id,0,path_CBCTs)
                 
             start_x, start_y, start_z, pixel_spacing = get_start_position_dcm(CT_path)
             for key_body_n in range(0,len(contours_neck)):
