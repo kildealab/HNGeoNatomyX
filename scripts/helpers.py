@@ -478,7 +478,7 @@ def get_CT_CBCT_equal_body_2(body2,body1,z_max,z_min,h,k,r):
  
     return bbody2,bbody1
 
-def get_CT_CBCT_equal_body(body2,body1,z_max,z_min,h,k,r):
+def get_CT_CBCT_equal_body(body2,body1,z_max,z_min,h,k,r,IMG_RES):
     body_2 = pv.PolyData(body2).connectivity(largest=True)
 
     d1 = pv.PolyData(body1).connectivity(largest=True)
@@ -524,10 +524,10 @@ def get_CT_CBCT_equal_body(body2,body1,z_max,z_min,h,k,r):
 
     bbody = pv.PolyData(body_crop)
     bbody2,bbody1 = trim_contours_to_match_zs(body_2.points, bbody.points,z_min,z_max)
-    s_body22 = get_surface_marching_cubes(bbody2)
+    s_body22 = get_surface_marching_cubes(bbody2,IMG_RES)
     s_body2 = pv.PolyData(s_body22).connectivity(largest=True)
 
-    s_body11 = get_surface_marching_cubes(bbody1)
+    s_body11 = get_surface_marching_cubes(bbody1,IMG_RES)
     s_body1 = pv.PolyData(s_body11).connectivity(largest=True)
     return s_body1,s_body2
 
