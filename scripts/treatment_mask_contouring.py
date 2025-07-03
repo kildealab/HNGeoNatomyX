@@ -17,7 +17,11 @@ from skimage import data
 from skimage.morphology import disk
 from skimage.filters import median
 import pydicom as dcm
+import sys
+sys.path.append('/rtdsm')
 import rtdsm
+
+import pyvista as pv
 from matplotlib import pyplot as plt
 
 from skimage.morphology import erosion, dilation, opening, closing, white_tophat  
@@ -55,13 +59,14 @@ def get_info_CT(path_patient):
     full_path = os.path.join(path_patient, file_RS)
     return full_path
     
-def get_contour_mask(masked_img,h_center,k_center,min_radius,max_radius,thres_grey):
+def get_contour_mask(masked_img,params_contour):
+    h_center,k_center,min_angle,max_angle,min_radius,max_radius,thres_grey = params_contour
     positions = []
 
     values_angles = np.linspace(min_angle,max_angle,200)
     values_radius = np.linspace(min_radius,max_radius,200)
  
-    for angle in values:
+    for angle in values_angles:
         count = 0 
         posx = 0
         posy = 0
@@ -85,7 +90,7 @@ def get_contour_mask(masked_img,h_center,k_center,min_radius,max_radius,thres_gr
     
     return positions,mask_pointsx,mask_pointsy
     
-def add_coords(positions, ct_path,slice_number):
+def add_coords(positions, ct_path,slice_number,contour_mask):
     
     mask_m = positions.copy()
     start_x, start_y, start_z, spacing,p = get_start_position_dcm(ct_path)
@@ -94,6 +99,7 @@ def add_coords(positions, ct_path,slice_number):
     z = float(get_slice(ct_path)[slice_number][2])
     for x1 in range(0,len(x)):
         contour_mask.append([x[x1],y[x1],z])
+    return contour_mask
     
 def get_mask_nifti(roi_array,start_x,start_y,pixel_spacing):
     x = []
@@ -119,22 +125,24 @@ def save_mask_contour(contour_mask,patient_id_str):
     mesh = pv.PolyData(contour_mask)
     mesh.connectivity(largest=True)
     mask_json = {'Mask' : contour_mask}
-    with open("registered/mask/Mask_"+str(patient_id_str)+".json", "w") as outfile:
+    with open("masks/Mask_"+str(patient_id_str)+".json", "w") as outfile:
         json.dump(mask_json, outfile)
     print('save at '+ "registered/mask/Mask_"+str(patient_id_str)+".json")
     return
 
 
-def contour_slice(ct_files,ct_path,slice_value,h_center,k_center,min_radius,max_radius,thres_grey,plot=True):
-    print('------- CURRENTLY WORKING ON SLICE NUMBER'+ str(slice_value)+'------')
+def contour_slice(ct_files,ct_path,path_RS,slice_value,contours_params,plot=True):
+    print('------- CURRENTLY WORKING ON SLICE NUMBER '+ str(slice_value)+'------')
+
+    h_center,k_center,min_angle,max_angle,min_radius,max_radius,thres_grey = contours_params
     
     points_to_use = []
     ct_file = ct_files[slice_value]
     img = ct_file.pixel_array
 
     if plot==True:
-        plt.imshow(img,camp='gray')
-        plt.title('Slice to be contour including BODY and TREATMENT MASK EDGE')
+        plt.imshow(img,cmap='gray')
+        plt.title('Slice to be contour')
         plt.show()
         
     normalized_img = cv2.normalize(img, None, alpha = -200, beta = img.max(), norm_type = cv2.NORM_MINMAX, dtype = cv2.CV_32F)
@@ -186,15 +194,16 @@ def contour_slice(ct_files,ct_path,slice_value,h_center,k_center,min_radius,max_
     masked_img2 = cv2.bitwise_and(img_erosed_2,img_erosed_2,mask = mask_r)
 
     if plot==True:
-        plt.imshow(masked_img2,camp='gray')
-        plt.title('Mask to be contoured including BODY and TREATMENT MASK EDGE')
+        plt.imshow(masked_img2,cmap='gray')
+        plt.title('''Mask to be contoured including 
+                    BODY and TREATMENT MASK EDGE''')
         plt.show()
     
     positions,mask_pointsx,mask_pointsy = get_contour_mask(masked_img2,h_center,k_center,min_radius,max_radius,thres_grey)
 
     if plot==True:
-        plt.imshow(masked_img2,camp='gray')
-        plt.title('Mask to be contoured including BODY and TREATMENT MASK EDGE')
+        plt.imshow(masked_img2,cmap='gray')
+        plt.title('Treatment mask contoured')
         plt.scatter(mask_pointsx,mask_pointsy,c='r',s=1)
         plt.show()
 
@@ -202,6 +211,10 @@ def contour_slice(ct_files,ct_path,slice_value,h_center,k_center,min_radius,max_
 
 ######################
 '''
+PATH_DEST = 'masks/'
+if not os.path.isdir(PATH_DEST):
+    os.makedirs(PATH_DEST)
+    
 patient_id_str = input('Insert patient number: ')
 
 #path_CBCTs = '/mnt/iDriveShare/Kayla/CBCT_images/kayla_extracted/' # Path to patient directories
@@ -220,14 +233,14 @@ ct_file = ct_files[0]
 contour_mask = []
 
 #e.g. h_center,k_center,min_angle,max_angle,min_radius,max_radius,thres_grey = 250,350,-175,-5,55,250,60
-
+contours_params = 250,350,-175,-5,55,250,60
 
 #MINIMUM SLICE WHERE YOU CAN VISUALIZE THE MASK. THIS VALUE CAN BE CHANGED DEPENDING ON EACH IMAGE.
 minimum_slice_with_mask= 20
 for slice_value in range(minimum_slice_with_mask,len(ct_files)):
 
-    contour_slice(ct_files,ct_path,slice_value,h_center,k_center,min_radius,max_radius,thres_grey)
-    add_coords(positions, ct_path,slice_value)
+    positions = contour_slice(ct_files,ct_path,slice_value,h_center,k_center,min_radius,max_radius,thres_grey)
+    contour_mask = add_coords(positions, ct_path,slice_value)
     
 save_mask_contour(contour_mask,patient_id_str)
 '''
