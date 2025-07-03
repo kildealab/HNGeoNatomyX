@@ -161,7 +161,7 @@ def pipeline_lx_ly_submandibular(param_name='lx_ly',path_contours, CSV_patient_i
                         gc.collect()
 
 
-                    CT_path = get_info_replanned(str_pat_id,0)
+                    CT_path = get_info_replanned(str_pat_id,0,path_CBCTs)
                     start_x, start_y, start_z, pixel_spacing = get_start_position_dcm(CT_path) 
                     
                     surface_body1 = get_surface_marching_cubes(trim_body2,pixel_spacing)
