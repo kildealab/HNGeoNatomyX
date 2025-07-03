@@ -202,13 +202,13 @@ def contour_slice(ct_files,ct_path,slice_value,h_center,k_center,min_radius,max_
 
 ######################
 '''
+patient_id_str = input('Insert patient number: ')
 
 #path_CBCTs = '/mnt/iDriveShare/Kayla/CBCT_images/kayla_extracted/' # Path to patient directories
 patients = os.listdir(path_CBCTs)
 files = [f for f in os.listdir(path_CBCTs) if os.path.isfile(f)]
 patients_path = [path_CBCTs+patient+"/" for patient in patients]
 
-patient_id_str = insert('Insert patient number: ')
 
 ct_path = get_info_CT(patients_path[patients.index(patient_id_str)])
 ct_files = [pydicom.dcmread(os.path.join(ct_path, f)) for f in os.listdir(ct_path) if 'CT' in f]
