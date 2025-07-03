@@ -55,6 +55,14 @@ def pipeline_air_mask(param_name='air_mask',,path_contours, CSV_patient_ids,path
             
             body_list = [d for d in os.listdir(patient_contours_path) if d[0:4] == 'Body']
 
+            # e.g. path_full_CBCT_id = '/mnt/iDriveShare/Kayla/CBCT_images/kayla_extracted/'+str_pat_id+'/'
+            path_full_CBCT_id = path_CBCTs+str_pat_id
+         
+            #GETS THE NAME FILES OF EACH CT OR CBCT MEDICAL IMAGE
+            CT,CBCTs = get_name_files(path_full_CBCT_id)
+                
+            #SET THE PATH OF THE CT 
+            path_CT = path_full_CBCT_id+'/'+CT
             # e.g. path_treatment_masks =  /mnt/iDriveShare/OdetteR/Registration_and_contours/mask/
             mask_contour = get_treatment_mask_contour(path_treatment_masks,str_pat_id)
            
@@ -115,7 +123,7 @@ def pipeline_air_mask(param_name='air_mask',,path_contours, CSV_patient_ids,path
             #NOTE THAT ALL THE CBCTs MUST HAVE THE SAME RECONSTRUCTION DIAMETER/RADIUS
             #IF NOT PLEASE USE THE MODIFIED VERSION get_info_fov_minimum
             #WHICH SEARCHES IN ALL THE CBCTs FILES THE MINIMUM RADIUS
-            r = get_info_fov(str_pat_id)
+            r = get_info_fov(path_full_CBCT_id)
             
             CT_path = get_info_replanned(str_pat_id,0)
                 
