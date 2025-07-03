@@ -899,23 +899,6 @@ def get_mask_out(trim_mask,r,h,k):
     mask_final =pv.PolyData(points22)
     return mask_final
 
-
-def get_dist_vector(body1,body2):
-    tree = KDTree(body2.points)
-    d_kdtree, idx = tree.query(body1.points)
-    body1["distances"] = d_kdtree
-    vectors = []
-    for j in d_kdtree:
-        idx_point = np.where(d_kdtree == j)[0][0]
-        idx_cloud = idx[idx_point]
-        point1 = body1.points[idx_point]
-        point2 = body2.points[idx_cloud]
-        vectors.append(point2 - point1)
-    x = np.mean((np.array(vectors)[:,0]))
-    y = np.mean((np.array(vectors)[:,1]))
-    z = np.mean((np.array(vectors)[:,2]))
-    return x,y,z 
-
 def get_area(body_slice,start_x2,start_y2,pixel_spacing2):
     
     px,py = get_mask_nifti(body_slice,start_x2,start_y2,pixel_spacing2)
