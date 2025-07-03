@@ -130,7 +130,8 @@ def pipeline_Rmin_Rmax(param_name='elongationsubmand',file_ids,path_contours = '
             # CALCULATE METRICS
 
             z_min,z_max = search_cuts_z(contours)
-            r = get_info_fov(str_pat_id)#,key_bodies_to_save[1:])
+            
+            r = get_info_fov(str_pat_id)
             body_contour_0 = []
             for key_body in range(0,len(key_bodies_to_save)):
                 
@@ -144,7 +145,7 @@ def pipeline_Rmin_Rmax(param_name='elongationsubmand',file_ids,path_contours = '
                     if key_bodies_to_save[key_body]=='BODY':
                         contour_body = contours[0]
                              
-                        h,k = get_center_fov(path_k,str_pat_id)
+                        h,k = get_center_fov(path_contours,str_pat_id)
                         body_sim = get_equal_body_fov(contour_body,h,k,r)
                         trim_body1,trim_body2 = trim_contours_to_match_zs(body_sim.points,body_sim.points,z_min,z_max)
 
