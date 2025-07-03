@@ -38,7 +38,7 @@ def pipeline_distances_neck(param_name='distances3Dneck', path_contours,CSV_pati
     existing_patients = [csv_filename.split('_')[-1].split('.')[0] for csv_filename in os.listdir(PATH_DEST)]
 
     for str_pat_id in ids_patients:
-        #e.g. path_contours = '/mnt/iDriveShare/OdetteR/Registration_and_contours'
+        #e.g. path_contours = '/mnt/iDriveShare/OdetteR/Registration_and_contours/Contours/'
         patient_contours_path = path_contours+str_pat_id 
         
         # check if patient already has csv
@@ -218,7 +218,7 @@ def pipeline_distances_neck(param_name='distances3Dneck', path_contours,CSV_pati
 
 if __name__ == "__main__":
     #e.g. paths
-    path_contours = '/mnt/iDriveShare/OdetteR/Registration_and_contours'
+    path_contours = '/mnt/iDriveShare/OdetteR/Registration_and_contours/Contours/'
     CSV_patient_ids =  '/mnt/iDriveShare/OdetteR/Registration_and_contours/IDS_News_Partial.csv'
     path_CBCTs = '/mnt/iDriveShare/Kayla/CBCT_images/kayla_extracted/'
     pipeline_distances_neck(path_contours,CSV_patients_ids,path_CBCTs)
