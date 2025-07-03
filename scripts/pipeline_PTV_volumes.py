@@ -18,7 +18,7 @@ from helpers import get_name_files, get_body_keys_not_RS, get_info_replanned
 from helpers import search_cuts_z, get_start_position_dcm, get_info_fov
 from helpers import get_path_RS_CT, get_volumes_from_contours
 
-#SET THE RESOLUTION OF THE VOXEL IN THE CT MEDICAL IMAGE (CT SIM)
+#SET THE RESOLUTION OF THE VOXEL IN THE CBCT MEDICAL IMAGE 
 #IN OUR CENTRE WAS THE FOLLOWING (ALL SHOULD BE THE SAME)
 IMG_RES = [0.51119071245194, 0.51119071245194, 3]
 RADIUS_FRAC = 0.75 #CHANGE THIS PARAMETER ONLY IF THE METRICS ARE NOT PROPERLY CALCULATED
