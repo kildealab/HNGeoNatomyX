@@ -15,29 +15,7 @@ import helpers
 from helpers import get_path_RS, get_body_keys, sort_body_keys, get_keysall
 from helpers import get_name_files, get_body_keys_not_RS, get_info_fov, get_info_replanned
 from helpers import get_path_RS_CT,  search_cuts_z, get_center_fov, get_equal_body_fov
-from helpers import trim_contours_to_match_zs, get_chamfer_distance, get_max_dist_body
-
-def trim_contours_to_match_zs(contours_1, contours_2,z_min,z_max): # 1: body, 2: PTV
-    spacing_z = get_contour_z_spacing(contours_1)
- 
-    max_z = z_max - spacing_z
-    min_z = z_min + spacing_z
-    
-    contours_1 = np.array([x for x in contours_1 if x[2] < max_z and x[2] > min_z])
-    contours_2 = np.array([x for x in contours_2 if x[2] < max_z and x[2] > min_z])
-    
-    return contours_1, contours_2
-
-
-def trim_contours_to_match_zs(contours_1,contours_2,z_min,z_max): 
-    spacing_z = get_contour_z_spacing(contours_1)
- 
-    max_z = z_max 
-    min_z = z_min 
-    
-    contours_1 = np.array([x for x in contours_1 if x[2] < max_z and x[2] > min_z])
-    contours_2 = np.array([x for x in contours_2 if x[2] < max_z and x[2] > min_z])
-    return contours_1,contours_2 
+from helpers import trim_contours_to_match_zs_edge, get_chamfer_distance, get_max_dist_body
 
 
 PATH_DEST = 'body3D_distances/'
@@ -164,7 +142,7 @@ def pipeline_body3D_distances(param_name='body3D_distances',path_contours, CSV_p
                         body_sim = get_equal_body_fov(contour_body,h,k,r)
                         gc.collect()
                         
-                        trim_body,trim_body2 = trim_contours_to_match_zs(body_sim.points,body_sim.points,z_min,z_max)            
+                        trim_body,trim_body2 = trim_contours_to_match_zs_edge(body_sim.points,body_sim.points,z_min,z_max)            
                         dmax = get_max_dist_body(pv.PolyData(trim_body),pv.PolyData(trim_body2))
                         chamfer = get_chamfer_distance(trim_body,trim_body2)
                         print('\tProcess time of parameters (' + key_bodies_to_save[key_body_n] + '): ' + str(process_time()-t1) + ' s')
@@ -176,7 +154,7 @@ def pipeline_body3D_distances(param_name='body3D_distances',path_contours, CSV_p
                         h,k = get_center_fov(path_contours,str_pat_id)
                         body_sim = get_equal_body_fov(contour_body0,h,k,r)
                         gc.collect()
-                        trim_body,trim_body2 = trim_contours_to_match_zs(body_sim.points,contour_body,z_min,z_max)            
+                        trim_body,trim_body2 = trim_contours_to_match_zs_edge(body_sim.points,contour_body,z_min,z_max)            
                       
                         dmax = get_max_dist_body(pv.PolyData(trim_body),pv.PolyData(trim_body2))
                         chamfer = get_chamfer_distance(trim_body,trim_body2)
