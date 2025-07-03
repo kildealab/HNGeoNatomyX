@@ -122,7 +122,7 @@ def pipeline_mask_distances(param_name='distancesMask',path_contours, CSV_patien
             #NOTE THAT ALL THE CBCTs MUST HAVE THE SAME RECONSTRUCTION DIAMETER/RADIUS
             #IF NOT PLEASE USE THE MODIFIED VERSION get_info_fov_minimum
             #WHICH SEARCHES IN ALL THE CBCTs FILES THE MINIMUM RADIUS    
-            r = get_info_fov(str_pat_id)
+            r = get_info_fov(path_full_CBCT_id)
             
             for key_body in range(0,len(key_bodies_to_save)):
                 contour_body = contours[key_body]
