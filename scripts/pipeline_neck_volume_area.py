@@ -105,7 +105,7 @@ def pipeline_params_volume_neck(param_name='neck_volume_area', path_contours,CSV
                 mandible_contour = rtdsm.get_pointcloud(key_mandible,path_rs_b0,False)[0]
                 
                 for bodx in range(0,len(bodies)):
-                    if bodx=='BODY':
+                    if bodies[bodx]=='BODY':
                         body_contour = rtdsm.get_pointcloud('BODY', path_rs_b0, False)[0]
                         z_slice_mandible = get_min_mandible_slice(body_contour,mandible_contour)
                        
