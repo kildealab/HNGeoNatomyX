@@ -167,6 +167,7 @@ Patient medical images (CT sims and CBCTs) were stored using the [dicoPATH](http
 Several examples are included in Jupyter Notebook format to demonstrate how to run the scripts for contouring and extracting the metrics, as well as to provide context for the methodology used. 
 
 #### Treatment Mask Contouring 
+The treatment mask contouring script is called [treatment_mask_contouring.py](/scripts/treatment_mask_contouring.py). You can find an example on how to use in [/scripts/treatment_mask_contouring_example.ipynb]
 
 #### Body-Related Metrics Pipelines
 | Script | Description |
