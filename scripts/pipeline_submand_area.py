@@ -214,7 +214,7 @@ def pipeline_area_body(param_name='submand_area',path_contours,CSV_patient_ids,p
     
 
 if __name__ == "__main__":
-    path_contours = '/mnt/iDriveShare/OdetteR/Registration_and_contours'
+    path_contours = '/mnt/iDriveShare/OdetteR/Registration_and_contours/Contours/'
     CSV_patient_ids =  '/mnt/iDriveShare/OdetteR/Registration_and_contours/IDS_News_Partial.csv'
     path_CBCTs = '/mnt/iDriveShare/Kayla/CBCT_images/kayla_extracted/'
 
