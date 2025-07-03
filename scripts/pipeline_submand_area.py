@@ -51,7 +51,7 @@ def pipeline_area_body(param_name='submand_area',path_contours,CSV_patient_ids,p
 
     #READ THE IDS AND CREATE THE CSV FILE TO SAVE 
     for str_pat_id in ids_patients:
-        #e.g. path_contours = '/mnt/iDriveShare/OdetteR/Registration_and_contours'
+        #e.g. path_contours = '/mnt/iDriveShare/OdetteR/Registration_and_contours/Contours/'
         patient_contours_path = path_contours+str_pat_id
 
         # Check if the patient already has csv
