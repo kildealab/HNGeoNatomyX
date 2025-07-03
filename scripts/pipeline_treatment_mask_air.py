@@ -125,7 +125,7 @@ def pipeline_air_mask(param_name='air_mask',,path_contours, CSV_patient_ids,path
             #WHICH SEARCHES IN ALL THE CBCTs FILES THE MINIMUM RADIUS
             r = get_info_fov(path_full_CBCT_id)
             
-            CT_path = get_info_replanned(str_pat_id,0)
+            CT_path = get_info_replanned(str_pat_id,0,path_CBCTs)
                 
             start_x, start_y, start_z, pixel_spacing = get_start_position_dcm(CT_path)
             for key_body in range(0,len(key_bodies_to_save)):
