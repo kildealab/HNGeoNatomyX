@@ -504,17 +504,6 @@ def get_point_with_max_y_around_given_xv2(x, points):
                 target_x = current_x
     return (target_x, max_y)
 
-def get_closest_xv2(x, points):
-    closest_x = points[0][0]
-    min_abs_diff = 10000
-    for point in points:
-        current_x = point[0]
-        abs_diff = abs(current_x - x)
-        if abs_diff < min_abs_diff:
-            min_abs_diff = abs_diff
-            closest_x = current_x
-    return closest_x
-
 def get_x_max(y, points):
     max_x = -10000
     for point in points:
