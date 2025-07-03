@@ -156,7 +156,7 @@ def pipeline_dist_mandible(param_name='mandible',path_contours, CSV_patient_ids,
 
 if __name__ == "__main__":
     #e.g. paths
-    path_contours = '/mnt/iDriveShare/OdetteR/Registration_and_contours'
+    path_contours = '/mnt/iDriveShare/OdetteR/Registration_and_contours/Contours/'
     CSV_patient_ids =  '/mnt/iDriveShare/OdetteR/Registration_and_contours/IDS_News_Partial.csv'
     path_CBCTs = '/mnt/iDriveShare/Kayla/CBCT_images/kayla_extracted/'
     
