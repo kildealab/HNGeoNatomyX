@@ -51,7 +51,7 @@ def pipeline_mask_distances(param_name='distancesMask',path_contours, CSV_patien
             contours = []
             key_bodies_to_save = []
             
-            body_list = [d for d in os.listdir(patient_path) if d[0:4] == 'Body']
+            body_list = [d for d in os.listdir(patient_contours_path) if d[0:4] == 'Body']
 
             # e.g. path_full_CBCT_id = '/mnt/iDriveShare/Kayla/CBCT_images/kayla_extracted/'+str_pat_id+'/'
             path_full_CBCT_id = path_CBCTs+str_pat_id+'/'
@@ -133,7 +133,7 @@ def pipeline_mask_distances(param_name='distancesMask',path_contours, CSV_patien
                 else:
                     if key_bodies_to_save[key_body]=='BODY':
                         contour_body = contours[0]                        
-                        h,k = get_center_fov(path_k,str_pat_id)
+                        h,k = get_center_fov(patient_contours,str_pat_id)
                     
                         body_sim = get_equal_body_for_mask(contour_body,h,k,r)
                         trim_body2,trim_mask2 = trim_contours_to_match_zs_edge(body_sim.points,pv.PolyData(mask).points,z_min,z_max)
