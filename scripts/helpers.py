@@ -356,18 +356,6 @@ def get_estimate_center(body2,r,tolerance):
     return h2,k2
 
 
-def get_min_dist_body(body1,body2):
-    tree = KDTree(body2.points)
-    d_kdtree, idx = tree.query(body1.points)
-    idx_point = np.where(d_kdtree == np.min(d_kdtree))[0][0]
-    idx_cloud = idx[idx_point]
-    point1 = body1.points[idx_point]
-    point2 = body2.points[idx_cloud]
-    
-    return np.min(d_kdtree),point1,point2
-
-##
-
 def get_mean_dist_body(body1,body2):
     tree = KDTree(body2.points)
     d_kdtree, idx = tree.query(body1.points)
