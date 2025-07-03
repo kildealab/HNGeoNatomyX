@@ -183,7 +183,7 @@ def pipeline_volumes(param_name='body_volume',path_contours, CSV_patient_ids,pat
 
 if __name__ == "__main__":
     #e.g. paths
-    path_contours = '/mnt/iDriveShare/OdetteR/Registration_and_contours'
+    path_contours = '/mnt/iDriveShare/OdetteR/Registration_and_contours/Contours/'
     CSV_patient_ids =  '/mnt/iDriveShare/OdetteR/Registration_and_contours/IDS_News_Partial.csv'
     path_CBCTs = '/mnt/iDriveShare/Kayla/CBCT_images/kayla_extracted/'
     pipeline_volumes(path_contours, CSV_patient_ids,path_CBCTs)
