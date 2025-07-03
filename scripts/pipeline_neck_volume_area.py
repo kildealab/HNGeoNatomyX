@@ -42,7 +42,7 @@ def pipeline_params_volume_neck(param_name='neck_volume_area', path_contours,CSV
     existing_patients = [csv_filename.split('_')[-1].split('.')[0] for csv_filename in os.listdir(PATH_DEST)]
 
     for str_pat_id in ids_patients:
-        #e.g. path_contours = '/mnt/iDriveShare/OdetteR/Registration_and_contours'
+        #e.g. path_contours = '/mnt/iDriveShare/OdetteR/Registration_and_contours/Contours/'
         patient_contours_path = path_contours+str_pat_id 
         
         # check if patient already has csv
