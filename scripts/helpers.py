@@ -935,47 +935,6 @@ def get_dist_vector_plane_xy(body1,body2):
             vectors2.append(rxy)
     return np.mean(vectors2)
 
-def get_center_vectors(body1,body2,):
-    tree = KDTree(body2.points)
-    d_kdtree, idx = tree.query(body1.points)
-    body1["distances"] = d_kdtree
-    valuesx = []
-    valuesy = []
-
-    for j in d_kdtree:
-        idx_point = np.where(d_kdtree == j)[0][0]
-        idx_cloud = idx[idx_point]
-        point1 = body1.points[idx_point]
-        point2 = body2.points[idx_cloud]
-        if point2[2]==point1[2]:
-            r = np.sqrt(np.sum(point2**2))-np.sqrt(np.sum(point1**2))
-            if r<0:
-               valuex =  - np.abs(point2[0]-point1[0])
-               valuey = - np.abs(point2[1]-point1[1])
-               valuesx.append(valuex)
-               valuesy.append(valuey)
-            elif r>0:
-                valuex = np.abs(point2[0]-point1[0])
-                valuey = np.abs(point2[1]-point1[1])
-                valuesx.append(valuex)
-                valuesy.append(valuey)
-    if np.sum(valuesx)==0 and np.sum(valuesy)==0:
-        x = 0 
-        y = 0
-        xmin = 0
-        ymin = 0
-        xmed = 0
-        ymed = 0
-    else:
-        x = np.mean((np.array(valuesx)))
-        y = np.mean((np.array(valuesy)))
-        xmin = np.min(np.array(valuesx))
-        xmed = np.median(np.array(valuesx))
-        ymed = np.median(np.array(valuesy))
-        ymin = np.min(np.array(valuesy))
-    return x,y,r,xmin,ymin,xmed,ymed
-    
-
 def get_area(body_slice,start_x2,start_y2,pixel_spacing2):
     
     px,py = get_mask_nifti(body_slice,start_x2,start_y2,pixel_spacing2)
