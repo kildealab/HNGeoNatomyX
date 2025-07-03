@@ -107,7 +107,7 @@ def pipeline_distances_neck(param_name='distances3Dneck', path_contours,CSV_pati
                         body_contour = rtdsm.get_pointcloud('BODY', path_rs_b0, False)[0]
                         z_slice_mandible = get_min_mandible_slice(body_contour,mandible_contour)
                        
-                        new_body = change_z_coordinates(body_contour,z_val)
+                        new_body = change_z_coordinates(body_contour,z_slice_mandible)
                         new_body = pv.PolyData(new_body).points
                         gc.collect()
                         contours.append(new_body)
@@ -127,14 +127,14 @@ def pipeline_distances_neck(param_name='distances3Dneck', path_contours,CSV_pati
                                      body_contour = np.array(data[bodies[bodx]])
                                      
                                      z_slice_mandible = get_min_mandible_slice(body_contour,mandible_contour)
-                                     new_body = change_z_coordinates(body_contour,z_val)
+                                     new_body = change_z_coordinates(body_contour,z_slice_mandible)
                                      new_body = pv.PolyData(new_body).points
                                      contours.append(new_body)
                                  else:
                                      body_contour = rtdsm.get_pointcloud(bodies[bodx], path_RS0, False)[0]
                                      z_slice_mandible = get_min_mandible_slice(body_contour,mandible_contour)
                                      
-                                     new_body = change_z_coordinates(body_contour,z_val)
+                                     new_body = change_z_coordinates(body_contour,z_slice_mandible)
                                      new_body = pv.PolyData(new_body).points
                                      
                                      contours.append(new_body)
