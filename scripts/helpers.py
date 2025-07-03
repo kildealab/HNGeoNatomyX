@@ -205,17 +205,6 @@ def trim_contours_to_match_zs_edge(contours_1,contours_2,z_min,z_max):
     
     return contours_1,contours_2   
     
-def trim_contours_to_match_zv3(contours_1, contours_2,z_min,z_max): # 1: body, 2: PTV
-    spacing_z = get_contour_z_spacing(contours_1)
-    #print(spacing_z)
-    max_z = z_max - spacing_z
-    min_z = z_min + spacing_z
-    
-    contours_1 = np.array([x for x in contours_1 if x[2] < max_z and x[2] > min_z])
-    contours_2 = np.array([x for x in contours_2 if x[2] > min_z])
-    
-    return contours_1, contours_2
-    
 '''Gets the surface by using the marching cubes methods and the rtdsm function
 see skidimage marching cubes webpage for more details'''
 def get_surface_marching_cubes(contours,IMG_RES):
