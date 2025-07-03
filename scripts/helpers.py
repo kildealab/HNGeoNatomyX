@@ -410,55 +410,6 @@ def trim_contours_to_match_zs(contours_1, contours_2,z_min,z_max): # 1: body, 2:
     
     return contours_1, contours_2
     
-    
-def get_CT_CBCT_equal_body_2(body2,body1,z_max,z_min,h,k,r):
-    body_2 = pv.PolyData(body2).connectivity(largest=True)
-
-    d1 = pv.PolyData(body1).connectivity(largest=True)
-
-    bx = d1.points[:,0]
-    by = d1.points[:,1]
-    bz = d1.points[:,2]
-
-    indexes = (bx-h)**2+(by-k)**2<=(r*0.8)**2
-
-    bx2 = bx[indexes==True]
-    by2 = by[indexes==True]
-    bz2 = bz[indexes==True]
-
-    points22 = list(zip(bx2,by2,bz2))
-    d11 =pv.PolyData(points22)
-
-    theta = np.linspace(0,2*np.pi,300)
-
-    x = r*0.5 * np.cos( theta ) +h
-    y = r*0.5 * np.sin( theta ) +k
-
-    body_crop = [] #array points (cloud)
-    zs = [i for i in d11.points[:,2]]
-    zss = sorted(list(dict.fromkeys(zs)))
-    for z in zss:
-        ptosxy = []
-        for p in d11.points:
-            if z==p[2]:
-                ptosxy.append([float(p[0]),float(p[1])])
-        #pp1= Polygon(ptosxy)
-        pp1= Polygon(ptosxy).buffer(0)
-        pp2 = Polygon(list(zip(x,y)))
-        pp3 = intersection(pp1,pp2)
-        try:
-            bx,by = pp3.exterior.coords.xy[0],pp3.exterior.coords.xy[1]
-        except:
-            coords = [[len(list(x.exterior.coords)),list(x.exterior.coords)] for x in pp3.geoms]
-            bx,by = np.array((sorted(coords)[-1][-1]))[:,0],np.array((sorted(coords)[-1][-1]))[:,1]
-
-        for j in range(0,len(bx)):
-            body_crop.append((float(bx[j]),float(by[j]),float(z)))
-
-    bbody = pv.PolyData(body_crop)
-    bbody2,bbody1 = trim_contours_to_match_zs(body_2.points, bbody.points,z_min,z_max)
- 
-    return bbody2,bbody1
 
 def get_CT_CBCT_equal_body(body2,body1,z_max,z_min,h,k,r,IMG_RES):
     body_2 = pv.PolyData(body2).connectivity(largest=True)
