@@ -164,7 +164,7 @@ def pipeline_area_body(param_name='submand_area',path_contours,CSV_patient_ids,p
                     h,k = get_center_fov(path_CBCTs,str_pat_id)
                     
                     #BOOLEAN OPERATION TO GET THE SAME CT AND CBCT SHAPE DUE TO THE FOV
-                    s_body1,s_body2 = get_CT_CBCT_equal_body(body2,body1,z_max,z_min,h,k,r)
+                    s_body1,s_body2 = get_CT_CBCT_equal_body(body2,body1,z_max,z_min,h,k,r,IMG_RES)
 
                     gc.collect()
         
