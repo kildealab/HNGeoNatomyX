@@ -201,7 +201,7 @@ def contour_slice(ct_files,ct_path,slice_value,h_center,k_center,min_radius,max_
     return positions
 
 ######################
-
+'''
 
 #path_CBCTs = '/mnt/iDriveShare/Kayla/CBCT_images/kayla_extracted/' # Path to patient directories
 patients = os.listdir(path_CBCTs)
@@ -230,6 +230,7 @@ for slice_value in range(minimum_slice_with_mask,len(ct_files)):
     add_coords(positions, ct_path,slice_value)
     
 save_mask_contour(contour_mask,patient_id_str)
+'''
 
     
 
