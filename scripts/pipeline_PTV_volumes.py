@@ -141,8 +141,10 @@ def pipeline_volumes(param_name='volumesPTV',path_contours,CSV_patients_ids,path
             #THE PIXEL SPACING FROM THE NEXT FUNCTION 
             pixel_spacing = get_start_position_dcm(CT_image_path)
 
-            #GETS THE RADIUS OF THE FOV
-            r = get_info_fov(str_pat_id)
+            #NOTE THAT ALL THE CBCTs MUST HAVE THE SAME RECONSTRUCTION DIAMETER/RADIUS
+            #IF NOT PLEASE USE THE MODIFIED VERSION get_info_fov_minimum
+            #WHICH SEARCHES IN ALL THE CBCTs FILES THE MINIMUM RADIUS
+            r = get_info_fov(path_full_CBCT_id)
          
             for key_body_n in range(0,len(key_bodies_to_save)):
                 params = []
