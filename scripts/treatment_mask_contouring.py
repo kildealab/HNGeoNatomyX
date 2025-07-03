@@ -126,7 +126,7 @@ def save_mask_contour(contour_mask,patient_id_str):
 
 
 def contour_slice(ct_files,ct_path,slice_value,h_center,k_center,min_radius,max_radius,thres_grey,plot=True):
-    print('------- CURRENTLY WORKING ON SLICE NUMBER'+ str(j)+'------')
+    print('------- CURRENTLY WORKING ON SLICE NUMBER'+ str(slice_value)+'------')
     
     points_to_use = []
     ct_file = ct_files[slice_value]
