@@ -513,15 +513,6 @@ def get_x_max(y, points):
                 max_x = current_x
     return max_x
 
-def get_y_max(x, points):
-    max_y = -10000
-    for point in points:
-        current_x, current_y = point[0:2]
-        if round(current_x,1) == round(x,1):
-            if current_y>max_y:
-                max_y = current_y
-    return max_y
-
 '''For a given set of contours and x value, it returns the maximum y value'''
 def get_max_y(x, contours):
     target_x = get_closest_x(x, contours)
