@@ -123,7 +123,7 @@ def pipeline_volumes(param_name='body_volume',path_contours, CSV_patient_ids,pat
             print('CALCULATING THE VOLUMES FOR THE FOLLOWING FRACTIONS AND CONTOURS')
             print(key_bodies_to_save)
 
-            CT_path = get_info_replanned(str_pat_id,0)
+            CT_path = get_info_replanned(str_pat_id,0,path_CBCTs)
                 
             start_x, start_y, start_z, pixel_spacing = get_start_position_dcm(CT_path) 
             
