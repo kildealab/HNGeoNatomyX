@@ -132,7 +132,7 @@ def contour_slice(ct_files,ct_path,slice_value,h_center,k_center,min_radius,max_
     ct_file = ct_files[slice_value]
     img = ct_file.pixel_array
 
-    if plot=True:
+    if plot==True:
         plt.imshow(img,camp='gray')
         plt.title('Slice to be contour including BODY and TREATMENT MASK EDGE')
         plt.show()
@@ -185,7 +185,7 @@ def contour_slice(ct_files,ct_path,slice_value,h_center,k_center,min_radius,max_
     img_erosed_2 = erosion(img_dilated_6, disk_radius_2)
     masked_img2 = cv2.bitwise_and(img_erosed_2,img_erosed_2,mask = mask_r)
 
-    if plot=True:
+    if plot==True:
         plt.imshow(masked_img2,camp='gray')
         plt.title('Mask to be contoured including BODY and TREATMENT MASK EDGE')
         plt.show()
