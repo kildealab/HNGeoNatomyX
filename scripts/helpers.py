@@ -241,12 +241,12 @@ def get_closest_x(x, contours):
 
 
 # For a given set of contours and x value, return point with maximum y value
-def get_point_with_max_y_around_given_x(x, contours,tolerance):
+def get_point_with_max_y_around_given_x(x, contours):
     target_x = x
     max_y = -1
     for point in contours:
         current_x, current_y = point[0:2]
-        if abs(current_x - x) < tolerance:
+        if abs(current_x - x) < 0.5:
             if current_y > max_y:
                 max_y = current_y
                 target_x = current_x
@@ -298,7 +298,7 @@ def centers(x1, y1, x2, y2, r):
     yy = (r ** 2 - (q / 2) ** 2) ** 0.5 * (x2 - x1) / q
     return ((x3 + xx, y3 + yy))
                   
-def get_estimate_center(body2,r,tolerance):
+def get_estimate_center(body2,r):
     d_2 = pv.PolyData(body2).connectivity(largest=True)
     
     max_x = max(d_2.points[:,0])
@@ -306,18 +306,18 @@ def get_estimate_center(body2,r,tolerance):
     max_y = max(d_2.points[:,1])
     
     h = np.mean([max_x,min_x])
-    y1 = get_point_with_max_y_around_given_x(max_x,d_2.points,tolerance)
-    y2 = get_point_with_max_y_around_given_x(min_x,d_2.points,tolerance)
+    y1 = get_point_with_max_y_around_given_x(max_x,d_2.points)
+    y2 = get_point_with_max_y_around_given_x(min_x,d_2.points)
     k1 = y1[1] - np.sqrt(np.abs((r*0.5)**2 - (max_x-h)**2))
     k2 = y2[1] - np.sqrt(np.abs((r*0.5)**2 - (min_x-h)**2))
     
     y9 = get_point_with_max_y_around_given_x(max_x/4,d_2.points)
-    y10 = get_point_with_max_y_around_given_x(min_x/4,d_2.points,tolerance)
-    y3 = get_point_with_max_y_around_given_x(max_x/2,d_2.points,tolerance)
-    y4 = get_point_with_max_y_around_given_x(min_x/2,d_2.points,tolerance)
-    y5 = get_point_with_max_y_around_given_x(0,d_2.points,tolerance)
-    y6 = get_point_with_max_y_around_given_x(max_x*7/8,d_2.points,tolerance)
-    y7 = get_point_with_max_y_around_given_x(min_x*7/8,d_2.points,tolerance)
+    y10 = get_point_with_max_y_around_given_x(min_x/4,d_2.points)
+    y3 = get_point_with_max_y_around_given_x(max_x/2,d_2.points)
+    y4 = get_point_with_max_y_around_given_x(min_x/2,d_2.points)
+    y5 = get_point_with_max_y_around_given_x(0,d_2.points)
+    y6 = get_point_with_max_y_around_given_x(max_x*7/8,d_2.points)
+    y7 = get_point_with_max_y_around_given_x(min_x*7/8,d_2.points)
     
     k3 = y3[1] - np.sqrt(np.abs((r*0.5)**2 - (max_x/2-h)**2))
     k4 = y4[1] - np.sqrt((r*0.5)**2 - (min_x/2-h)**2)
@@ -523,37 +523,6 @@ def get_y_min(x, points):
                 min_y = current_y
     return min_y
     
-def get_length_bottom(body,z_min):
- 
-    points_xy = []
-    
-    for j in body.points:
-        if j[2]==z_min:
-            points_xy.append([j[0],j[1]])
-
-    min_x = min(np.array(points_xy)[:,0])
-    max_x = max(np.array(points_xy)[:,0])
-    
-    point1 = (min_x, get_max_y(min_x, points_xy))
-    #TOLERANCE = 2; ADJUST IF IT IS NECESSARY
-    point3 = get_point_with_max_y_around_given_x(0,points_xy,2)
-    point5 = (max_x, get_max_y(max_x, points_xy))
-    point6 = (0,min(np.array(points_xy)[:,1]))
-    
-    x1, y1 = point1
-    x3, y3 = point3
-    x5, y5 = point5
-    x6,y6 = (0,min(np.array(points_xy)[:,1]))
-    
-    # eqn of circle be a*x^2 + b*y^2 +  c*x*y + d*x + e*y = f = 0
-   
-    lx = np.sqrt((x1-x5)**2+(y1-y5)**2)
-    ly = np.sqrt((x3-x6)**2+(y3-y6)**2)
-   
-    dx = abs(min_x-max_x)
-    dy = abs(y3-y6)
-          
-    return lx,ly,dx,dy
     
 def get_x_min(y, points):
     min_x = 1000
