@@ -15,7 +15,7 @@ from helpers import get_name_files, get_body_keys_not_RS, get_info_fov
 from helpers import get_path_RS_CT,  search_cuts_z, get_center_fov, get_z_bottom_neck
 from helpers import get_start_position_dcm, trim_contours_to_match_zs_neck, get_equal_body_fov
 from helpers import get_key_mandible, get_min_mandible_slice, change_z_coordinates
-from helpers import get_max_dist_body, get_chamfer, trim_contours_to_match_zs_edge
+from helpers import get_max_dist_body, get_chamfer, trim_contours_to_match_zs_edge, get_info_replanned
 
 PATH_DEST = 'distances3Dneck_metrics/'
 if not os.path.isdir(PATH_DEST):
