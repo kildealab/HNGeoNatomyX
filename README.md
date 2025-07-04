@@ -222,10 +222,10 @@ The treatment mask contouring script is called [treatment_mask_contouring.py](/s
 
 <pre> /path/to/metrics/ 
 ├── 📁 metrics
- <p align="left"> │        ├── <img src="/diagrams/csv_icon.png" width="20"> Mask_ID 1....json </p> 
- <p align="left"> │        ├── <img src="/diagrams/csv_icon.png" width="20"> Mask_ID 2....json </p> 
+ <p align="left"> │        ├── <img src="/diagrams/csv_icon.png" width="20"> Mask_ID 1....json
+│        ├── <img src="/diagrams/csv_icon.png" width="20"> Mask_ID 2....json  
 │        ├── ... 
- <p align="left"> │        ├── <img src="/diagrams/csv_icon.png" width="20"> Mask_ID N....json </p> 
+│        ├── <img src="/diagrams/csv_icon.png" width="20"> Mask_ID N....json </p> 
 ...
 </pre>
 
