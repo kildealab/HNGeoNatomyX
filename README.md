@@ -178,9 +178,16 @@ The Acquisition Isocenter of each CBCT should also be registered and saved. The 
 │   ├── 📁 patient ID2
 │        ├── 📄BODY.json 
 │        ├── 📄Body-1.json 
-│        ├── 📄Body-2.json
+│        ├── 📄Body-5.json
 │        ├── ... 
 │        ├── 📄Body-N.json 
+│        └── 📄iso.dcm 
+ │   ├── 📁 patient ID3
+│        ├── 📄BODY.dcm
+│        ├── 📄Body-1.json 
+│        ├── 📄Body-4.json
+│        ├── ... 
+│        ├── 📄Body-N.dcm 
 │        └── 📄iso.dcm 
 ...
 </pre>
