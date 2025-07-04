@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 setup(
-    name='HN-GeoNatomyX',
+    name='HNGeoNatomyX',
     version='0.1.0',
     description='A package to extract geometrical metrics to describe HNC anatomy',
     author='Odette Rios-Ibacache',
