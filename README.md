@@ -221,7 +221,7 @@ Each set of metrics has its own pipeline for each metric category. The output of
 │        ├── <img src="/diagrams/csv_icon.png" width="20"> metric_patientID1.csv
 │        ├── <img src="/diagrams/csv_icon.png" width="20"> metric_patientID2.csv
 │        ├── ... 
-│        └──<img src="/diagrams/csv_icon.png" width="20"> metric_patientIDN.csv 
+│        └── <img src="/diagrams/csv_icon.png" width="20"> metric_patientIDN.csv 
 ... </p> 
 </pre>
 
