@@ -144,7 +144,7 @@ pip install git+https://github.com/kildealab/HN-GeoNatomyX.git
 
 By cloning the GitHub repository
 ```
-git clone https://github.com/kildealab/dicoPATH.git
+git clone https://github.com/kildealab/HN-GeoNatomyX.git
 ```
 
 ## Usage
