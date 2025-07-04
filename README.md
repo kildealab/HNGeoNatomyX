@@ -198,7 +198,7 @@ Examples are included in Jupyter Notebook format to demonstrate how to run the s
 ### Treatment Mask Contouring 
 
 <p align="center">
-<img src="/diagrams/mask_contouring_example.png" width="900">
+<img src="/diagrams/mask_contouring_example.png" width="900"> 
 </p>
 
 The treatment mask contouring script is called [treatment_mask_contouring.py](/scripts/treatment_mask_contouring.py). You can find an example on how to use it in [treatment_mak_contouring_example](/scripts/treatment_mask_contouring_example.ipynb). The final contour of the treatment mask is saved as .JSON file labeled as *'Mask_'+ID.json* (ID: patient identifier) in a folder called **masks**. 
