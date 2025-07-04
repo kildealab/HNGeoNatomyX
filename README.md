@@ -205,10 +205,10 @@ The treatment mask contouring script is called [treatment_mask_contouring.py](/s
 
 <pre> /path/to/masks directories/ 
 ├── 📁 masks
-│        ├── 📄Mask_ID 1....json
-│        ├── 📄Mask_ID 2....json
+│        ├── 📄Mask_ID1....json
+│        ├── 📄Mask_ID2....json
 │        ├── ... 
-│        └── 📄Mask_ID N....json 
+│        └── 📄Mask_IDN....json 
 ...
 </pre>
 
@@ -218,10 +218,10 @@ Each set of metrics has its own pipeline for each metric category. The output of
 <pre> /path/to/metrics/ 
 <p align="left">
 ├── 📁 metrics
-│        ├── <img src="/diagrams/csv_icon.png" width="20"> metric_1.csv
-│        ├── <img src="/diagrams/csv_icon.png" width="20"> metric_2.csv
+│        ├── <img src="/diagrams/csv_icon.png" width="20"> metric_patientID1.csv
+│        ├── <img src="/diagrams/csv_icon.png" width="20"> metric_patientID2.csv
 │        ├── ... 
-│        ├── <img src="/diagrams/csv_icon.png" width="20"> metric_N.csv </p> 
+│        ├── <img src="/diagrams/csv_icon.png" width="20"> metric_patientIDN.csv </p> 
 ...
 </pre>
 
