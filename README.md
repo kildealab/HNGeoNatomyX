@@ -221,7 +221,7 @@ The treatment mask contouring script is called [treatment_mask_contouring.py](/s
 | [pipeline_body_3D_distances.py](/scripts/pipeline_body_3D_distances.py) | Calculates $CD_{Body}$ and $HD_{Body}$ in $mm$ and saves the results as CSV files labelled *'body3D_distances_'+ID* in a folder called **'body3D_distances'** |
 | [pipeline_body_2D_distances.py](/scripts/pipeline_body_2D_distances.py) |  Calculates $D_{Body}$, $`\tilde{D}_{Body}`$, and $`\bar{D}_{Body}`$ in $mm$ and saves the results as CSV files labelled *'body2D_distances_'+ID* in a folder called **'body2D_distances'**  |
 
-#### Treatment Mask-Related Metrics Pipeline
+#### Treatment Mask-Related Metrics Pipelines
 | Script | Description |
 |-----------|-------------|
 | [pipeline_treatment_mask_distances.py](/scripts/pipeline_treatment_mask_distances.py) | Computes $`max`${$`B_{mask}`$}, $`\bar{B}_{mask}`$, and $`\sigma_{B_{mask}}`$. The results are saved as CSV files labelled 'distancesMask_'+ID* in a folder called **'distancesMask'**|
