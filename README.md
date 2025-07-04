@@ -167,11 +167,21 @@ Patient medical images (CT sims and CBCTs) were stored using the [dicoPATH](http
 Several examples are included in Jupyter Notebook format to demonstrate how to run the scripts for contouring and extracting the metrics, as well as to provide context for the methodology used. 
 
 #### Treatment Mask Contouring 
-The treatment mask contouring script is called [treatment_mask_contouring.py](/scripts/treatment_mask_contouring.py). You can find an example on how to use it in [treatment_mak_contouring_example](/scripts/treatment_mask_contouring_example.ipynb)
 
 <p align="center">
 <img src="/diagrams/mask_contouring_example.png" width="900">
 </p>
+
+The treatment mask contouring script is called [treatment_mask_contouring.py](/scripts/treatment_mask_contouring.py). You can find an example on how to use it in [treatment_mak_contouring_example](/scripts/treatment_mask_contouring_example.ipynb). The final contour of the treatment mask is saved as .JSON file labeled as *'Mask_'+ID.json* (ID: patient identifier) in a folder called **mask**. 
+
+<pre> /path/to/patient/directories/ 
+├── 📁 masks
+│        ├── 📄Mask_ID 1....json
+│        ├── 📄Mask_ID 2....json
+│        ├── ... 
+│        └── 📄Mask_ID N....dcm 
+...
+</pre>
 
 #### Body-Related Metrics Pipelines
 | Script | Description |
