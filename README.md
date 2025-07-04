@@ -182,13 +182,14 @@ The Acquisition Isocenter of each CBCT should also be registered and saved. The 
 │        ├── ... 
 │        ├── 📄Body-N.json 
 │        └── 📄iso.dcm 
- │   ├── 📁 patient ID3
+│   ├── 📁 patient ID3
 │        ├── 📄BODY.dcm
 │        ├── 📄Body-1.json 
 │        ├── 📄Body-4.json
 │        ├── ... 
 │        ├── 📄Body-N.dcm 
 │        └── 📄iso.dcm 
+│   ├── ... 
 ...
 </pre>
 
@@ -209,7 +210,7 @@ The treatment mask contouring script is called [treatment_mask_contouring.py](/s
 │        ├── 📄Mask_ID 1....json
 │        ├── 📄Mask_ID 2....json
 │        ├── ... 
-│        └── 📄Mask_ID N....json
+│        └── 📄Mask_ID N....json 
 ...
 </pre>
 
