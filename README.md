@@ -193,7 +193,6 @@ The Acquisition Isocenter of each CBCT should also be registered and saved. The 
 ...
 </pre>
 
-
 ### Running Scripts and Example
 Examples are included in Jupyter Notebook format to demonstrate how to run the scripts for contouring and extracting the metrics, as well as to provide context for the methodology used. 
 
@@ -220,6 +219,15 @@ The treatment mask contouring script is called [treatment_mask_contouring.py](/s
 | [pipeline_body_volume.py](/scripts/pipeline_body_volume.py) | Calculates $V_{Body}$ in $mm^3$ and saves the results as CSV files labelled *'body_volume_'+ID* (ID: patient identifier) in a folder called **'body_volume'**| 
 | [pipeline_body_3D_distances.py](/scripts/pipeline_body_3D_distances.py) | Calculates $CD_{Body}$ and $HD_{Body}$ in $mm$ and saves the results as CSV files labelled *'body3D_distances_'+ID* in a folder called **'body3D_distances'** |
 | [pipeline_body_2D_distances.py](/scripts/pipeline_body_2D_distances.py) |  Calculates $D_{Body}$, $`\tilde{D}_{Body}`$, and $`\bar{D}_{Body}`$ in $mm$ and saves the results as CSV files labelled *'body2D_distances_'+ID* in a folder called **'body2D_distances'**  |
+
+<pre> /path/to/metrics/ 
+├── 📁 metrics
+│        ├── <p align=""><img src="/diagrams/csv_icon.png" width="5"></p> Mask_ID 1....json
+│        ├── 📄Mask_ID 2....json
+│        ├── ... 
+│        └── 📄Mask_ID N....json 
+...
+</pre>
 
 #### Treatment Mask-Related Metrics Pipelines
 | Script | Description |
