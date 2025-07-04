@@ -147,7 +147,7 @@ pip install git+https://github.com/kildealab/HN-GeoNatomyX.git
 Patient medical images (CT sims and CBCTs) were stored using the [dicoPATH](https://github.com/kildealab/dicoPATH) script. The data must be stored in the following format to streamline the use of the code. Each patient directory contains the CT simulation (planning medical image) and the CBCT images per treatment fraction.   Each folder  stores the associated DICOM files and RT structure (RS dicom) file.
 
 <pre> /path/to/patient/directories/ 
-├── 📁patient ID 1
+├── 📁patient ID1
 │   ├── 📁DATE_Planning_CT_name 
 │        ├── 📄CT....dcm 
 │        ├── 📄CT....dcm 
@@ -164,7 +164,27 @@ Patient medical images (CT sims and CBCTs) were stored using the [dicoPATH](http
 </pre>
 
 The pipelines also require contours to be saved in a DCM or JSON file format in a different folder. Each body contour should be saved with its label in the DCM and JSON. Our medical center's convention is to have the first body contour (based on the CT sim) with the name 'BODY' in the RT structure file, while for each CBCT contour, it is referred to as 'Body-fraction treatment' (e.g. Body-5, for treatment fraction 5). **They are stored with the same label in each patient's contours folder**.
-The Acquisition Isocenter of each CBCT should also be registered and saved. In the RT structure file is saved as 'AcqIsocenter' (this can be modified in the corresponding reading function) and saved as 'iso.dcm' in the contours folder.
+The Acquisition Isocenter of each CBCT should also be registered and saved. The point in the RT structure file is saved as 'AcqIsocenter' (this can be modified in the corresponding reading function) and saved as 'iso.dcm' in the contours folder. 
+
+<pre> /path/to/patient/contours directories/ 
+├── 📁Contours
+│   ├── 📁 patient ID1
+│        ├── 📄BODY.dcm 
+│        ├── 📄Body-1.dcm 
+│        ├── 📄Body-2.dcm 
+│        ├── ... 
+│        ├── 📄Body-N.dcm 
+│        └── 📄iso.dcm 
+│   ├── 📁 patient ID2
+│        ├── 📄BODY.json 
+│        ├── 📄Body-1.json 
+│        ├── 📄Body-2.json
+│        ├── ... 
+│        ├── 📄Body-N.json 
+│        └── 📄iso.dcm 
+...
+</pre>
+
 
 ### Running Scripts and Example
 Examples are included in Jupyter Notebook format to demonstrate how to run the scripts for contouring and extracting the metrics, as well as to provide context for the methodology used. 
