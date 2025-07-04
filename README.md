@@ -164,7 +164,7 @@ Patient medical images (CT sims and CBCTs) were stored using the [dicoPATH](http
 </pre>
 
 ### Running Scripts and Example
-Several examples are included in Jupyter Notebook format to demonstrate how to run the scripts for contouring and extracting the metrics, as well as to provide context for the methodology used. 
+Examples are included in Jupyter Notebook format to demonstrate how to run the scripts for contouring and extracting the metrics, as well as to provide context for the methodology used. 
 
 #### Treatment Mask Contouring 
 
