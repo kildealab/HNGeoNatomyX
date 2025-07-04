@@ -193,10 +193,9 @@ The Acquisition Isocenter of each CBCT should also be registered and saved. The 
 ...
 </pre>
 
-### Running Scripts and Example
 Examples are included in Jupyter Notebook format to demonstrate how to run the scripts for contouring and extracting the metrics, as well as to provide context for the methodology used. 
 
-#### Treatment Mask Contouring 
+### Treatment Mask Contouring 
 
 <p align="center">
 <img src="/diagrams/mask_contouring_example.png" width="900">
@@ -213,22 +212,25 @@ The treatment mask contouring script is called [treatment_mask_contouring.py](/s
 ...
 </pre>
 
+### Geometrical Metrics Scripts
+Each set of metrics has its own pipeline for each metric category. The output of each pipeline is a folder with the name of the metrics set and the metrics values saved in CSV files for each patient. 
+
+<pre> /path/to/metrics/ 
+<p align="left">
+├── 📁 metrics
+│        ├── <img src="/diagrams/csv_icon.png" width="20"> metric_1.csv
+│        ├── <img src="/diagrams/csv_icon.png" width="20"> metric_2.csv
+│        ├── ... 
+│        ├── <img src="/diagrams/csv_icon.png" width="20"> metric_N.csv </p> 
+...
+</pre>
+
 #### Body-Related Metrics Pipelines
 | Script | Description |
 | ------------- |-----------|
 | [pipeline_body_volume.py](/scripts/pipeline_body_volume.py) | Calculates $V_{Body}$ in $mm^3$ and saves the results as CSV files labelled *'body_volume_'+ID* (ID: patient identifier) in a folder called **'body_volume'**| 
 | [pipeline_body_3D_distances.py](/scripts/pipeline_body_3D_distances.py) | Calculates $CD_{Body}$ and $HD_{Body}$ in $mm$ and saves the results as CSV files labelled *'body3D_distances_'+ID* in a folder called **'body3D_distances'** |
 | [pipeline_body_2D_distances.py](/scripts/pipeline_body_2D_distances.py) |  Calculates $D_{Body}$, $`\tilde{D}_{Body}`$, and $`\bar{D}_{Body}`$ in $mm$ and saves the results as CSV files labelled *'body2D_distances_'+ID* in a folder called **'body2D_distances'**  |
-
-<pre> /path/to/metrics/ 
-<p align="left">
-├── 📁 metrics
-│        ├── <img src="/diagrams/csv_icon.png" width="20"> Mask_ID 1....json
-│        ├── <img src="/diagrams/csv_icon.png" width="20"> Mask_ID 2....json  
-│        ├── ... 
-│        ├── <img src="/diagrams/csv_icon.png" width="20"> Mask_ID N....json </p> 
-...
-</pre>
 
 #### Treatment Mask-Related Metrics Pipelines
 | Script | Description |
