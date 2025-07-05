@@ -138,12 +138,12 @@ Based on the 3D anatomy and 2D contours of the body and radiotherapy (RT) struct
 
 ## Installation and Package Import
 
-1. To perfome the installation you should clone the latest version from GitHub. Please note that your Python installation should be 3.6 or later. 
+1. To perfome the **installation** you should clone the latest version from GitHub. Please note that your Python installation should be 3.6 or later. 
 ```
 git clone https://github.com/kildealab/HNGeoNatomyX
 ```
 
-2. To import the package in Jupyter Notebook or Python3 file
+2. To **import** the package in Jupyter Notebook or Python3 file
 
 ```
 import sys
