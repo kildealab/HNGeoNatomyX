@@ -11,6 +11,7 @@ import pandas as pd
 from time import process_time
 import gc, os, csv, json
 
+sys.path.append('/path/to/HNGeoNatomyX/scripts')  #e.g. '/Users/odett/HNGeoNatomyX/scripts'
 import helpers 
 from helpers import get_path_RS, get_body_keys, sort_body_keys
 from helpers import get_key_mandible, get_body_keys_not_RS, get_format, get_name_files
