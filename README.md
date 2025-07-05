@@ -139,12 +139,11 @@ Based on the 3D anatomy and 2D contours of the body and radiotherapy (RT) struct
 ## Installation
 By pulling the latest version from GitHub. Please note that your Python installation should be 3.6 or later. 
 ```
-pip install git+https://github.com/kildealab/HNGeoNatomyX.git
+pip install git+https://github.com/kildealab/HNGeoNatomyX
 ```
-
 By cloning the GitHub repository
 ```
-git clone https://github.com/kildealab/HNGeoNatomyX.git
+git clone https://github.com/kildealab/HNGeoNatomyX
 ```
 
 ## Usage
