@@ -6,7 +6,7 @@ A Python script for calculating geometrical metrics from the 3D and 2D shape of 
   *  [Motivation](#Motivation)
   *  [Features](#Features)
   *  [Dependencies](#Dependencies)
-  *  [Installation](#Installation)
+  *  [Installation and Package Import](#InstallationandPackageImport)
   *  [Usage](#Usage)
   *  [License](#License)
   *  [How to Cite](#HowtoCite)
@@ -136,7 +136,7 @@ Based on the 3D anatomy and 2D contours of the body and radiotherapy (RT) struct
   *  [opencv-python](https://opencv.org/get-started/)>=4.11.0.86
   *  [json](https://docs.python.org/3/library/json.html)>=3.13.5
 
-## Installation and Package Use
+## Installation and Package Import
 
 1. To perfome the installation you should clone the latest version from GitHub. Please note that your Python installation should be 3.6 or later. 
 ```
