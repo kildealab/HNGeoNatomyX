@@ -136,10 +136,18 @@ Based on the 3D anatomy and 2D contours of the body and radiotherapy (RT) struct
   *  [opencv-python](https://opencv.org/get-started/)>=4.11.0.86
   *  [json](https://docs.python.org/3/library/json.html)>=3.13.5
 
-## Installation
-By cloning the latest version from GitHub. Please note that your Python installation should be 3.6 or later. 
+## Installation and Package Use
+
+1. To perfome the installation you should clone the latest version from GitHub. Please note that your Python installation should be 3.6 or later. 
 ```
 git clone https://github.com/kildealab/HNGeoNatomyX
+```
+
+2. To import the package in Jupyter Notebook or Python3 file
+
+```
+import sys
+sys.path.append('/path/to/the/folder/HNGeoNatomyX/scripts')
 ```
 
 ## Usage
