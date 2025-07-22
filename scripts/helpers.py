@@ -396,7 +396,7 @@ def translation_z(structure,z_value):
     new_clean = []
     for j in new2:
         new_clean.append(list(j))
-    return new_clean
+    return np.array(new_clean)
 
 def change_z_coordinates(structure,z_value):
     new_structure = translation_z(structure,z_value)
