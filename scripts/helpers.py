@@ -7,6 +7,7 @@ Created on Jul 2024
 import sys
 sys.path.append('/rtdsm')
 import rtdsm
+import math
 from time import process_time
 import scipy
 import json
