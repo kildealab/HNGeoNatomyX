@@ -369,7 +369,7 @@ def get_keysall(patient,path_RS):
     
 def get_min_mandible_slice(body,mandible):
     minimum_mandible = min(mandible[:,2])
-    zs_body = (body.points)[:,2]
+    zs_body = (body)[:,2]
     zs_body_clean = zs_body[~(np.isnan(zs_body))]
     z_position = np.argmin(abs(zs_body_clean - minimum_mandible))
     resulted_slice = zs_body_clean[z_position]
