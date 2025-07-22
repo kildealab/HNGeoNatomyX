@@ -494,6 +494,20 @@ def trim_contours_to_match_zs_neck(contours_1, contours_2,z_min,z_max): # 1: bod
     contours_1 = np.array([x for x in contours_1 if x[2] <= max_z and x[2] >= min_z])
     contours_2 = np.array([x for x in contours_2 if x[2] <= max_z and x[2] >= min_z])
     return contours_1, contours_2
+
+def get_z_out_fov(body,h,k,r,z_min):
+    z1 = sorted(list(set(body[:,2])))
+    z = sorted([x for x in z1 if not math.isnan(x)])
+   
+    body1,contours2 = trim_contours_to_match_zs_edge(body, body,z[0],0)
+    d1 = pv.PolyData(body1).connectivity(largest=True)
+    bx = d1.points[:,0]
+    by = d1.points[:,1]
+    bz = d1.points[:,2]
+
+    indexes2 = (bx-h)**2+(by-k)**2>=(r*0.5*0.90)**2
+    bz2=bz[indexes2==True]
+    return max(bz2)  
     
 def get_z_bottom_neck(z_min,key_bodies_to_save,contours):
     if z_min>=-27:
