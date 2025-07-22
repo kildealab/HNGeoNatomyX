@@ -213,17 +213,16 @@ def get_estimate_center(body2,r):
     
     h = np.mean([max_x,min_x])
     y1 = get_point_with_max_y_around_given_x(max_x,d_2.points)
-    y2 = get_point_with_max_y_around_given_x(min_x,d_2.points)
+    y2 = get_point_with_max_y_around_given_x(min_x,d_2.points)#
+    
     k1 = y1[1] - np.sqrt(np.abs((r*0.5)**2 - (max_x-h)**2))
     k2 = y2[1] - np.sqrt(np.abs((r*0.5)**2 - (min_x-h)**2))
     
-    y9 = get_point_with_max_y_around_given_x(max_x/4,d_2.points)
-    y10 = get_point_with_max_y_around_given_x(min_x/4,d_2.points)
-    y3 = get_point_with_max_y_around_given_x(max_x/2,d_2.points)
-    y4 = get_point_with_max_y_around_given_x(min_x/2,d_2.points)
-    y5 = get_point_with_max_y_around_given_x(0,d_2.points)
+    y9 = get_point_with_max_y_around_given_x(max_x/4,d_2.points) #
+    y3 = get_point_with_max_y_around_given_x(max_x/2,d_2.points) #
+    y4 = get_point_with_max_y_around_given_x(min_x/2,d_2.points) #
     y6 = get_point_with_max_y_around_given_x(max_x*7/8,d_2.points)
-    y7 = get_point_with_max_y_around_given_x(min_x*7/8,d_2.points)
+    y7 = get_point_with_max_y_around_given_x(min_x*7/8,d_2.points) #
     
     k3 = y3[1] - np.sqrt(np.abs((r*0.5)**2 - (max_x/2-h)**2))
     k4 = y4[1] - np.sqrt((r*0.5)**2 - (min_x/2-h)**2)
@@ -235,23 +234,13 @@ def get_estimate_center(body2,r):
  
     radius = r*0.5
     k = np.mean([k1,k2,k3,k4,k6,k7])
-   
-    xx1,yy1 = y6 
-    xx2,yy2 = y7
     
-    xx3,yy3 = y1
+    xx2,yy2 = y7 
     xx4,yy4 = y2
-    
-    xx5,yy5 = y3
-    xx6,yy6 = y4
-
     xx9,yy9 = y9
-    xx10,yy10 = y10
-    xx55,yy55 = y5    
 
     cp = centers(xx9,yy9,xx4,yy4,r*0.5)
     cd = centers(xx2,yy2,xx4,yy4,r*0.5)
-
     chh = centers(xx9,yy9,xx2,yy2,r*0.5)
 
     hc = np.mean([chh[0],cp[0],cd[0]])
