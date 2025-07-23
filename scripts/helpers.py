@@ -35,7 +35,6 @@ from scipy.spatial.distance import directed_hausdorff
 import point_cloud_utils as pcu
 
 
-
 '''Gets the RS path from the RT structure file.  pat_id  is the patient ID and path_src is the path of the folder'''
 def get_path_RS(pat_id, path_src):   
     path_patient = os.path.join(path_src, pat_id)  #FORMAT: path_src + '/'+pat_id  
@@ -527,6 +526,8 @@ def get_surface_area(contours_body,IMG_RES):
 
 
 def get_area_across_slices(key_body_n,str_pat_id,s_body,path_CBCTs):
+    IMG_RES = [0.51119071245194,0.51119071245194,3]
+
     CT_path = get_info_replanned(str_pat_id,1,path_CBCTs)
                 
     start_x, start_y, start_z, pixel_spacing = get_start_position_dcm(CT_path)
