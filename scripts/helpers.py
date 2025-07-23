@@ -524,7 +524,14 @@ def get_surface_area(contours_body,IMG_RES):
     s_area = surface_body.area
     return s_area
 
-
+def get_contour_slice(body,z):
+    points_xy = []
+    for j in body.points:
+        if j[2]==z:
+            points_xy.append([j[0],j[1]])
+            
+    return points_xy
+    
 def get_area_across_slices(key_body_n,str_pat_id,s_body,path_CBCTs):
     IMG_RES = [0.51119071245194,0.51119071245194,3]
 
