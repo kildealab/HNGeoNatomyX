@@ -103,7 +103,7 @@ def pipeline_params_volume_neck(param_name='neck_volume_area', path_contours,CSV
                 bodies.insert(0,'BODY')
                 body_list.insert(0,'BODY')
 
-                key_mandible = get_key_mandible(str_pat_id,path_rs_b0)
+                key_mandible = get_key_mandible(path_rs_b0)
                 mandible_contour = rtdsm.get_pointcloud(key_mandible,path_rs_b0,False)[0]
                 
                 for bodx in range(0,len(bodies)):
