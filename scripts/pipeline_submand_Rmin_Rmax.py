@@ -82,7 +82,7 @@ def pipeline_Rmin_Rmax(param_name='elongationsubmand',path_contours,CSV_patients
                             key_bodies_to_save.append(body)
                             contours.append(body_contour)
                             
-                key_mandible = get_key_mandible(str_pat_id,path_rs)
+                key_mandible = get_key_mandible(path_rs)
                 mandible_contour = rtdsm.get_pointcloud(key_mandible,path_rs,False)[0]
             else:
                 #GETS KEYS THAT ARE NOT IN THE RS FILE
@@ -116,7 +116,7 @@ def pipeline_Rmin_Rmax(param_name='elongationsubmand',path_contours,CSV_patients
                                     contours.append(body_contour)
                             
                 key_bodies_to_save = bodies.copy()
-                key_mandible = get_key_mandible(str_pat_id,path_rs_b0)
+                key_mandible = get_key_mandible(path_rs_b0)
                
                 mandible_contour= rtdsm.get_pointcloud(key_mandible,path_rs_b0,False)[0] 
             
