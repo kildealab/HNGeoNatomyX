@@ -82,7 +82,7 @@ def pipeline_params_volume_neck(param_name='neck_volume_area', path_contours,CSV
                         if body not in key_bodies_to_save:
                             gc.collect()
                             
-                            mandible = get_key_mandible(path_RS0)                            
+                            mandible = get_key_mandible(path_rs)                            
                             mandible_contour = rtdsm.get_pointcloud(mandible, path_rs, False)[0]
                             z_slice_mandible = get_min_mandible_slice(body_contour,mandible_contour)
                             
