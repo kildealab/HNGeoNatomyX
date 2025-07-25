@@ -112,7 +112,7 @@ def pipeline_lx_ly_submandibular(param_name='lx_ly',path_contours, CSV_patient_i
                                     contours.append(body_contour)
 
                 key_bodies_to_save = bodies.copy()
-                key_mandible = get_key_mandible(str_pat_id,path_rs_b0)
+                key_mandible = get_key_mandible(path_rs_b0)
                 mandible = rtdsm.get_pointcloud(key_mandible,path_rs_b0,False)[0]
             
             # initialize dataframe and define output file name
