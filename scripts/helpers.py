@@ -878,6 +878,7 @@ def trim_posterior_PTV(cloud_PTV, contours_body, r_frac=1):
     
     return cloud_PTV_trim, h, k, r*r_frac
 
+RADIUS_FRAC = 0.75
 def get_distances_from_contours(contours_PTV, contours_body,IMG_RES, r_frac=RADIUS_FRAC, smooth_iter=0):
     # ================================================================================
     # trim body and PTV contours to have matching z limits
