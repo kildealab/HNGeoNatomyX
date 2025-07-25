@@ -80,7 +80,7 @@ def pipeline_dist_mandible(param_name='mandible',path_contours, CSV_patient_ids,
                             key_bodies_to_save.append(body)
                             contours.append(body_contour)
                 
-                key_mandible = get_key_mandible(str_pat_id,path_rs)
+                key_mandible = get_key_mandible(path_rs)
                 mandible_contour = rtdsm.get_pointcloud(key_mandible, path_rs, False)[0]
             else:
                 #GETS KEYS THAT ARE NOT IN THE RS FILE
@@ -89,7 +89,7 @@ def pipeline_dist_mandible(param_name='mandible',path_contours, CSV_patient_ids,
                 path_rs_b0 = get_path_RS_CT(path_CT)
                 bodies.insert(0,'BODY')   
             
-                key_mandible = get_key_mandible(str_pat_id,path_rs_b0)
+                key_mandible = get_key_mandible(path_rs_b0)
                 mandible_contour = rtdsm.get_pointcloud(key_mandible, path_rs_b0, False)[0]
                 
                 for bodx in range(0,len(bodies)):
