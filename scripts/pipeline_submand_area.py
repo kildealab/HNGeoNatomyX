@@ -128,7 +128,7 @@ def pipeline_area_body(param_name='submand_area',path_contours,CSV_patient_ids,p
                             contours.append(body_contour)
         
             #GETS THE KEY LABEL FOR THE MANDIBLE CONTOUR            
-            key_mandible = get_key_mandible(str_pat_id,path_rs)
+            key_mandible = get_key_mandible(path_rs)
             #GETS THE POINTCLOUD FOR THE MANDIBLE CONTOUR
             mandible = rtdsm.get_pointcloud(key_mandible,path_rs,False)[0]
         
