@@ -142,13 +142,19 @@ Based on the 3D anatomy and 2D contours of the body and radiotherapy (RT) struct
 ```
 git clone https://github.com/kildealab/HNGeoNatomyX
 ```
+2.  To install the dependecies
+```
+cd HNGeoNatomyX
+pip install -r requirements.txt
+```
 
-2. To **import** the package in Jupyter Notebook or Python3 file
+3. To **import** the package in Jupyter Notebook or Python3 file
 
 ```
 import sys
 sys.path.append('/path/to/the/folder/HNGeoNatomyX/scripts')
 ```
+
 
 ## Usage
 ### Data Format
