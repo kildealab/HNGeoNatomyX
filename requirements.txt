@@ -1,5 +1,4 @@
 pydicom==2.4.4
-rdtsm>=0.1.1
 scipy>=0.24.0
 numpy>=1.19.5
 os>=2.1.4
